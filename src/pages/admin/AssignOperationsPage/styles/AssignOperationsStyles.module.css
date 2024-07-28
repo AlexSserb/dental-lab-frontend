@@ -1,0 +1,12 @@
+.operation {
+    padding: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: grey solid 2px;
+    background-color: #FFFFFF;
+}
+
+.operationSelected {
+    background-color: #dcf0fa;
+}

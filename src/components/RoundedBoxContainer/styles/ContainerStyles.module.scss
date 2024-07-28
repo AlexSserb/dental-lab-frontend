@@ -1,0 +1,23 @@
+.pageContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 10px 16px;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: start;
+
+    &-content {
+        background: white;
+        padding: 20px 20px 16px;
+        z-index: 1;
+        box-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.08),
+            0 4px 24px rgba(0, 0, 0, 0.08);
+        border-radius: 0.8rem;
+    }
+
+    &-grow {
+        flex: 1;
+    }
+}

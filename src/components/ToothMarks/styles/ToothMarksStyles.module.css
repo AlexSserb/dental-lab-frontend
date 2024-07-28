@@ -1,0 +1,29 @@
+.toothMarkBase {
+    display: flex;
+    border: 1px solid black;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    text-wrap: nowrap;
+}
+
+.toothMarkDesktop {
+    width: 30px;
+    height: 30px;
+}
+
+.toothMarkMobile {
+    font-size: x-small;
+    width: 16px;
+    height: 16px;
+}
+
+.markedTooth {
+    background-color: black;
+    color: white;
+}
+
+.notMarkedTooth {
+    background-color: white;
+    color: black;
+}
