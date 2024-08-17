@@ -49,9 +49,11 @@ export const OrderProcessingPage = () => {
     };
 
     const renderOperations = () => {
-        return products[curProdIdx].operations.map(operation => (
-            <OperationItem operation={operation} key={operation.id} />
-        ));
+        return products[curProdIdx].operations
+            .sort((a, b) => a.ordinalNumber - b.ordinalNumber)
+            .map(operation => (
+                <OperationItem operation={operation} key={operation.id} />
+            ));
     };
 
     const renderOrder = () => {
@@ -191,6 +193,7 @@ export const OrderProcessingPage = () => {
                         <Table withTableBorder withColumnBorders>
                             <Table.Thead>
                                 <Table.Tr>
+                                    <Table.Td>№</Table.Td>
                                     <Table.Td>Тип операции</Table.Td>
                                     <Table.Td>Время выполнения</Table.Td>
                                 </Table.Tr>

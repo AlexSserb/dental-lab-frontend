@@ -8,8 +8,12 @@ import ProductType from "types/ProductTypes/ProductType";
 import styles from "components/ToothMarks/styles/ToothMarksStyles.module.css";
 import { ProductBrief } from "types/ProductTypes/Product";
 import { isMobile } from "react-device-detect";
+import profileService from "services/ProfileService";
+import { useUserContext } from "contexts/UserContext/useUserContext";
+import { Customer } from "types/CustomerTypes/Customer";
 
 function useCreateOrderPage() {
+    const { user } = useUserContext();
     const [listOfProducts, setListOfProducts] = useState<ProductBrief[]>([]);
     const [allProductTypes, setAllProductTypes] = useState<ProductType[]>([]);
     const [selectedProductType, setSelectedProductType] = useState<
@@ -17,18 +21,30 @@ function useCreateOrderPage() {
     >(null);
     const [orderCost, setOrderCost] = useState(0);
     const [numberOfProducts, setNumberOfProducts] = useState<number>(1);
+    const [customers, setCustomers] = useState<string[]>([]);
+    const [selectedCustomer, setSelectedCustomer] = useState<string | null>(
+        null
+    );
 
     // States for dental formula
-    const [upperJaw, setUpperJaw] = useState<number[]>([]);
-    const [lowerJaw, setLowerJaw] = useState<number[]>([]);
     const [markedTeeth, setMarkedTeeth] = useState<Set<number>>(new Set());
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        fillUpperJaw();
-        fillLowerJaw();
+    const loadCustomers = () => {
+        if (!user) return;
 
+        profileService.getProfileData(user.email).then(res => {
+            const customers: string[] = res.data.customers.map(
+                (customer: Customer) => {
+                    return { value: customer.id, label: customer.name };
+                }
+            );
+            setCustomers(customers);
+        });
+    };
+
+    const loadProductTypes = () => {
         productTypesService
             .getAll()
             .then(res => {
@@ -40,13 +56,22 @@ function useCreateOrderPage() {
                 }
             })
             .catch(err => console.log(err));
+    };
+
+    useEffect(() => {
+        loadCustomers();
+        loadProductTypes();
     }, []);
 
     const saveProduct = () => {
         const productType = allProductTypes.find(
-            (val, _) => val.name === selectedProductType
+            val => val.name === selectedProductType
         );
         if (!productType) {
+            notifications.show({
+                title: "Error",
+                message: "Тип изделия не выбран",
+            });
             return;
         }
         const sumCost = productType.cost * numberOfProducts;
@@ -68,7 +93,7 @@ function useCreateOrderPage() {
     };
 
     const handleDelete = (product: ProductBrief) => {
-        let list = [...listOfProducts];
+        const list = [...listOfProducts];
         const index = list.indexOf(product);
 
         if (index > -1) {
@@ -76,20 +101,6 @@ function useCreateOrderPage() {
             setListOfProducts(list);
             setOrderCost(orderCost - product.sumCost);
         }
-    };
-
-    // Functions to fill in the dental formula in the form
-    const fillUpperJaw = () => {
-        let arrUpperJaw = [];
-        for (let num = 18; num >= 11; num--) arrUpperJaw.push(num);
-        for (let num = 21; num <= 28; num++) arrUpperJaw.push(num);
-        setUpperJaw(arrUpperJaw);
-    };
-    const fillLowerJaw = () => {
-        let arrLowerJaw = [];
-        for (let num = 48; num >= 41; num--) arrLowerJaw.push(num);
-        for (let num = 31; num <= 38; num++) arrLowerJaw.push(num);
-        setLowerJaw(arrLowerJaw);
     };
 
     const getToothMark = (num: number) => {
@@ -124,9 +135,17 @@ function useCreateOrderPage() {
     };
 
     const sendOrder = () => {
+        if (!selectedCustomer) {
+            notifications.show({
+                title: "Error",
+                message: "Заказчик не выбран",
+            });
+            return;
+        }
+
         orderService
-            .post(listOfProducts)
-            .then(_ => {
+            .post(listOfProducts, selectedCustomer)
+            .then(() => {
                 navigate("/");
                 notifications.show({
                     title: "Success",
@@ -144,8 +163,9 @@ function useCreateOrderPage() {
         setSelectedProductType,
         numberOfProducts,
         setNumberOfProducts,
-        upperJaw,
-        lowerJaw,
+        customers,
+        selectedCustomer,
+        setSelectedCustomer,
         getToothMark,
         orderCost,
         saveProduct,

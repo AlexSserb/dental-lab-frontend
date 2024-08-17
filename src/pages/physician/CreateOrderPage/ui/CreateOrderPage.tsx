@@ -19,6 +19,7 @@ import {
 } from "@mantine/core";
 import useCreateOrderPage from "../hooks/useCreateOrderPage";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
+import useFillJawArrays from "../hooks/useFillJawArrays";
 
 export const CreateOrderPage = () => {
     const {
@@ -29,13 +30,16 @@ export const CreateOrderPage = () => {
         setSelectedProductType,
         numberOfProducts,
         setNumberOfProducts,
-        upperJaw,
-        lowerJaw,
+        customers,
+        selectedCustomer,
+        setSelectedCustomer,
         getToothMark,
         orderCost,
         saveProduct,
         sendOrder,
     } = useCreateOrderPage();
+
+    const { upperJaw, lowerJaw } = useFillJawArrays();
 
     const renderProducts = () => {
         return listOfProducts.map((product, i) => (
@@ -84,7 +88,7 @@ export const CreateOrderPage = () => {
 
     return (
         <Center>
-            <RoundedBoxContainer width="60%" minWidth="370px" padding={20}>
+            <RoundedBoxContainer width="70%" minWidth="370px" padding={20}>
                 <Center>
                     <Title order={3} mb={10}>
                         Оформление заказа
@@ -96,7 +100,6 @@ export const CreateOrderPage = () => {
                             w="100%"
                             label="Тип изделия"
                             required
-                            name="product_type"
                             onChange={value => setSelectedProductType(value)}
                             value={selectedProductType}
                             data={allProductTypes.map(
@@ -139,8 +142,16 @@ export const CreateOrderPage = () => {
                     {listOfProducts.length > 0 ? (
                         <Stack>
                             <Center>
-                                <Title order={3}>Выбранные изделия</Title>
+                                <Title order={3}>Данные о заказе</Title>
                             </Center>
+                            <Select
+                                w="100%"
+                                label="Заказчик"
+                                required
+                                onChange={setSelectedCustomer}
+                                value={selectedCustomer}
+                                data={customers}
+                            />
                             <Text my={10}>
                                 Сумма: {orderCost.toFixed(2)} руб.
                             </Text>

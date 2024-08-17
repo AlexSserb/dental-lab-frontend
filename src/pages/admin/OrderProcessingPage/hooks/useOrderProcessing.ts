@@ -17,9 +17,6 @@ function useOrderProcessing() {
         productService
             .getWithOperationsForOrder(state.order.id)
             .then(res => {
-                for (let i = 0; i < res.data.length; i++) {
-                    res.data[i].number = i;
-                }
                 setProducts(res.data);
             })
             .catch(err => {

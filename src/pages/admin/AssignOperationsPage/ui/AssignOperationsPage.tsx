@@ -118,13 +118,15 @@ export function AssignOperationsPage() {
     };
 
     const renderOpeartions = () => {
-        return operationsToAssign.map(operation => (
-            <OperationItem
-                operation={operation}
-                getOperationStyle={getOperationStyle}
-                selectOperation={selectOperation}
-            />
-        ));
+        return operationsToAssign
+            .sort((a, b) => a.ordinalNumber - b.ordinalNumber)
+            .map(operation => (
+                <OperationItem
+                    operation={operation}
+                    getOperationStyle={getOperationStyle}
+                    selectOperation={selectOperation}
+                />
+            ));
     };
 
     return (

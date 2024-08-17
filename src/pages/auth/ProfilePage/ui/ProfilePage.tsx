@@ -6,6 +6,9 @@ import {
     Text,
     Title,
     Group,
+    MultiSelect,
+    List,
+    Divider,
 } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { IconEdit, IconCircleCheck } from "@tabler/icons-react";
@@ -21,8 +24,13 @@ export function ProfilePage() {
     const {
         saveFirstName,
         saveLastName,
+        saveCustomers,
         isFirstNameEdit,
         isLastNameEdit,
+        isCustomersEdit,
+        customers,
+        selectedCustomers,
+        setSelectedCustomers,
         userData,
         setUserData,
     } = useProfile();
@@ -82,6 +90,46 @@ export function ProfilePage() {
         navigate("/login");
     };
 
+    const renderCustomers = () => {
+        return (
+            <Stack gap="xs">
+                <Group justify="space-between">
+                    {userData.customers.length > 0 ? (
+                        <Text>Прикрепленные заказчики:</Text>
+                    ) : (
+                        <Text>Нет прикрепленных заказчиков</Text>
+                    )}
+
+                    {user?.email === userData.email && (
+                        <Button onClick={saveCustomers}>
+                            {isCustomersEdit ? (
+                                <IconCircleCheck />
+                            ) : (
+                                <IconEdit />
+                            )}
+                        </Button>
+                    )}
+                </Group>
+
+                {isCustomersEdit ? (
+                    <MultiSelect
+                        data={customers}
+                        value={selectedCustomers}
+                        onChange={setSelectedCustomers}
+                    />
+                ) : (
+                    <List spacing="xs">
+                        {userData.customers.map(customer => (
+                            <List.Item key={customer.id}>
+                                {customer.name}
+                            </List.Item>
+                        ))}
+                    </List>
+                )}
+            </Stack>
+        );
+    };
+
     return (
         <Center>
             <RoundedBoxContainer width="33%" minWidth="380px">
@@ -99,6 +147,10 @@ export function ProfilePage() {
                     <Text>Должность: {userData.group}</Text>
 
                     <Text>Дата регистрации: {userData.createdAt}</Text>
+
+                    <Divider />
+                    {renderCustomers()}
+                    <Divider />
 
                     {user?.email === userData.email ? (
                         <>

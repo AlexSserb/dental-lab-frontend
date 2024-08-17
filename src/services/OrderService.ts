@@ -9,8 +9,9 @@ class OrderService {
         return axios.get(API_URL + `orders/${year}/${month}`);
     }
 
-    post(products: ProductBrief[]) {
+    post(products: ProductBrief[], customerId: string) {
         return axios.post(API_URL + "create-order/", {
+            customerId: customerId,
             productTypes: products,
         });
     }

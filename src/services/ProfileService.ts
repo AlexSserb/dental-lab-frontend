@@ -35,6 +35,12 @@ class ProfileService {
     getTechnicians(group_id: number): Promise<AxiosResponse> {
         return axios.get(API_URL + `technicians/${group_id}`);
     }
+
+    attachCustomers(customers: string[]): Promise<AxiosResponse> {
+        return axios.post(API_URL + `customers/attach`, {
+            customers: customers,
+        });
+    }
 }
 
 const profileService = new ProfileService();

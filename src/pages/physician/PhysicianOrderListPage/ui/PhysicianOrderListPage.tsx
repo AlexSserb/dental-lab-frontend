@@ -60,6 +60,11 @@ export const PhysicianOrderListPage = () => {
         ));
     };
 
+    const textInputStyle = {
+        w: "100%",
+        readOnly: true,
+    };
+
     return (
         <Flex gap={10} direction={{ base: "column", sm: "row" }}>
             <RoundedBoxContainer>
@@ -145,37 +150,39 @@ export const PhysicianOrderListPage = () => {
                         ) : (
                             <p>Изделия для заказа</p>
                         )}
-                        <Flex gap={10}>
+                        <Flex
+                            direction={{ base: "column", sm: "row" }}
+                            gap={10}>
                             <TextInput
-                                w="100%"
-                                readOnly
+                                {...textInputStyle}
                                 label="Статус"
                                 value={currOrder?.status?.name}
                             />
                             <TextInput
-                                w="100%"
-                                readOnly
+                                {...textInputStyle}
+                                label="Заказчик"
+                                value={currOrder?.customer?.name ?? ""}
+                            />
+                            <TextInput
+                                {...textInputStyle}
                                 label="Дата"
                                 value={currOrder?.orderDate ?? ""}
                             />
                         </Flex>
-                        <Flex>
+                        <Flex direction={{ base: "column", sm: "row" }}>
                             <TextInput
-                                w="100%"
-                                readOnly
+                                {...textInputStyle}
                                 label="Сумма заказа (руб)"
                                 value={currOrder?.cost?.toFixed(2)}
                             />
                             <TextInput
-                                w="100%"
+                                {...textInputStyle}
                                 mx={10}
-                                readOnly
                                 label="Скидка"
                                 value={(currOrder?.discount ?? 0) + "%"}
                             />
                             <TextInput
-                                w="100%"
-                                readOnly
+                                {...textInputStyle}
                                 label="Итоговая сумма заказа (руб)"
                                 value={(
                                     (currOrder?.cost ?? 0) *

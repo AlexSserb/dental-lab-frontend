@@ -9,6 +9,7 @@
     ],
     "module": "ESNext",
     "skipLibCheck": true,
+    "esModuleInterop": true,
     /* Bundler mode */
     "baseUrl": "./src",
     "moduleResolution": "bundler",

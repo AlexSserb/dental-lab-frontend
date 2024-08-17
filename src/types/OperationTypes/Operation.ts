@@ -9,6 +9,7 @@ type Operation = {
     tech?: User;
     createdAt?: Date;
     execStart: Date | null;
+    ordinalNumber: number;
 };
 
 export default Operation;

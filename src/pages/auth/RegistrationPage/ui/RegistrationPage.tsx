@@ -3,6 +3,7 @@ import {
     Anchor,
     Button,
     Center,
+    MultiSelect,
     Paper,
     Stack,
     TextInput,
@@ -13,7 +14,7 @@ import { RegistrationData } from "../types/RegistrationData";
 import useRegistration from "../hooks/useRegistration";
 
 export function RegistrationPage() {
-    const { message, registerUser } = useRegistration();
+    const { message, registerUser, customers } = useRegistration();
 
     const form = useForm<RegistrationData>({
         mode: "uncontrolled",
@@ -23,6 +24,7 @@ export function RegistrationPage() {
             email: "",
             password: "",
             confirmPassword: "",
+            customers: [],
         },
 
         validate: {
@@ -33,34 +35,37 @@ export function RegistrationPage() {
         },
     });
 
+    const inputStyle = {
+        size: "md",
+        mb: 20,
+    };
+
     return (
         <Center>
-            <Paper w="30%" miw="380" shadow="md" radius="sm" p={30}>
-                <Stack gap={20} align="center">
+            <Paper w="40%" miw="380" shadow="md" radius="sm" px={35} py={20}>
+                <Stack w="100%" gap={20} align="center">
                     <Title>Регистрация</Title>
                     <form
+                        style={{ width: "100%" }}
                         onSubmit={form.onSubmit((values: RegistrationData) =>
                             registerUser(values)
                         )}>
                         <TextInput
-                            size="md"
-                            mb={20}
+                            {...inputStyle}
                             withAsterisk
                             label="Имя"
                             key={form.key("firstName")}
                             {...form.getInputProps("firstName")}
                         />
                         <TextInput
-                            size="md"
-                            mb={20}
+                            {...inputStyle}
                             withAsterisk
                             label="Фамилия"
                             key={form.key("lastName")}
                             {...form.getInputProps("lastName")}
                         />
                         <TextInput
-                            size="md"
-                            mb={20}
+                            {...inputStyle}
                             withAsterisk
                             label="Почта"
                             placeholder="your@email.com"
@@ -69,8 +74,7 @@ export function RegistrationPage() {
                         />
                         <TextInput
                             type="password"
-                            size="md"
-                            mb={20}
+                            {...inputStyle}
                             withAsterisk
                             label="Пароль"
                             key={form.key("password")}
@@ -78,12 +82,18 @@ export function RegistrationPage() {
                         />
                         <TextInput
                             type="password"
-                            size="md"
-                            mb={20}
+                            {...inputStyle}
                             withAsterisk
                             label="Повторите пароль"
                             key={form.key("confirmPassword")}
                             {...form.getInputProps("confirmPassword")}
+                        />
+                        <MultiSelect
+                            data={customers}
+                            key={form.key("customers")}
+                            {...form.getInputProps("customers")}
+                            label="Прикрепите организации"
+                            {...inputStyle}
                         />
                         <Anchor href="/login" mb={20}>
                             Уже есть аккаунт

@@ -30,7 +30,6 @@ function usePhysicianOrderList() {
         getOrdersForUser(orderPage)
             .then((res: AxiosResponse<OrderPage>) => {
                 setOrders(res.data.results);
-                console.log(res.data.results);
                 setTotalPages(res.data.totalPages);
                 if (res.data.results.length > 0) {
                     setCurrOrder(res.data.results[0]);

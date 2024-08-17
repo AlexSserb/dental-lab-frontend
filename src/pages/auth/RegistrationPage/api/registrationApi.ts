@@ -9,5 +9,6 @@ export function postRegistrationData(
         lastName: data.lastName,
         email: data.email,
         password: data.password,
+        customers: data.customers,
     });
 }
