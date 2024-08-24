@@ -14,7 +14,6 @@ function loadAuthTokens(): AuthTokens | undefined {
 function loadUser(): User | undefined {
     const authTokens = localStorage.getItem("authTokens");
     if (authTokens) {
-        console.log(jwtDecode(authTokens));
         return jwtDecode(authTokens);
     }
 }

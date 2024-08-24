@@ -22,11 +22,11 @@ interface ModalSetOperStatusProps {
 }
 
 export const ModalSetOperStatus = ({
-    operation,
-    page,
-    operationStatuses,
-    loadOperations,
-}: ModalSetOperStatusProps) => {
+                                       operation,
+                                       page,
+                                       operationStatuses,
+                                       loadOperations,
+                                   }: ModalSetOperStatusProps) => {
     const [open, setOpen] = useState(false);
     const [selectedOperationStatus, setSelectedOperationStatus] = useState<
         string | null

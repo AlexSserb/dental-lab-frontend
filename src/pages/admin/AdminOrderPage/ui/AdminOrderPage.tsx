@@ -8,7 +8,7 @@ import {
     Stack,
     Table,
     Text,
-    TextInput,
+    TextInput, TextInputProps,
     Title,
 } from "@mantine/core";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
@@ -18,14 +18,23 @@ import { isChiefTech, isDirector, isLabAdmin } from "utils/permissions";
 import useAdminOrder from "../hooks/useAdminOrder";
 import { ProductRow } from "pages/admin/AdminOrderListPage/ui/ProductRow";
 import { calcDiscount, formatCost } from "utils/discounts";
+import { ModalSetOrderStatus } from "../../../../modals/ModalSetOrderStatus/ui/ModalSetOrderStatus.tsx";
+import createReport from "../../../../modals/ModalSetOrderStatus/utils/createReport.tsx";
 
-function ReadOnlyTextInput(props: any) {
+function ReadOnlyTextInput(props: TextInputProps) {
     return <TextInput {...props} readOnly w="100%" />;
 }
 
 export function AdminOrderPage() {
     const { user } = useUserContext();
-    const { products, order } = useAdminOrder();
+    const {
+        products,
+        order,
+        setOrder,
+        loadOrderReport,
+        loadAcceptanceReport,
+        loadInvoiceForPayment,
+    } = useAdminOrder();
     const navigate = useNavigate();
 
     const renderProducts = () => {
@@ -41,14 +50,12 @@ export function AdminOrderPage() {
 
     const getButtonAssignOperations = () => {
         if (
-            order?.status?.number === 2 &&
-            user &&
-            (isLabAdmin(user) || isChiefTech(user) || isDirector(user))
+            (order?.status?.number === 2 || order?.status?.number === 3) &&
+            user && (isLabAdmin(user) || isChiefTech(user) || isDirector(user))
         ) {
             return (
                 <Button
                     variant="contained"
-                    py={10}
                     onClick={() =>
                         navigate("/assign-operations", {
                             state: {
@@ -68,7 +75,6 @@ export function AdminOrderPage() {
             return (
                 <Button
                     variant="contained"
-                    py={10}
                     onClick={() =>
                         navigate("/process-order", {
                             state: {
@@ -81,6 +87,18 @@ export function AdminOrderPage() {
                 </Button>
             );
         }
+    };
+
+    const createOrderReport = () => {
+        return createReport(order, 1, "Загрузить документ \"Наряд\"", loadOrderReport);
+    }
+
+    const createAcceptanceReport = () => {
+        return createReport(order, 4, "Загрузить документ \"Акт сдачи-приема\"", loadAcceptanceReport);
+    };
+
+    const createInvoiceForPayment = () => {
+        return createReport(order, 1, "Загрузить документ \"Счет на оплату\"", loadInvoiceForPayment);
     };
 
     return (
@@ -149,10 +167,14 @@ export function AdminOrderPage() {
                         <ReadOnlyTextInput
                             label="Итоговая сумма заказа (руб)"
                             value={formatCost(
-                                calcDiscount(order?.cost, order?.discount)
+                                calcDiscount(order?.cost, order?.discount),
                             )}
                         />
                     </Flex>
+                    {order && <ModalSetOrderStatus order={order} setOrder={setOrder} />}
+                    {createOrderReport()}
+                    {createAcceptanceReport()}
+                    {createInvoiceForPayment()}
                     {startOrderForm()}
                     {getButtonAssignOperations()}
                 </Stack>

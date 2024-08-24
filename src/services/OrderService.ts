@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Order } from "types/OrderTypes/Order";
 import Product, { ProductBrief } from "types/ProductTypes/Product";
+import OrderStatus from "../types/OrderTypes/OrderStatus.ts";
 
 const API_URL = "api/";
 
@@ -21,6 +22,16 @@ class OrderService {
         return axios.post(API_URL + "confirm-order/", {
             order: order,
             products: products,
+        });
+    }
+
+    getOrderStatuses(): Promise<AxiosResponse<OrderStatus[]>> {
+        return axios.get(API_URL + "order-statuses/");
+    }
+
+    setOrderStatus(orderId: string, statusId: string) {
+        return axios.patch(API_URL + `set-order-status/${orderId}`, {
+            status: statusId,
         });
     }
 }
