@@ -22,16 +22,6 @@ class ProfileService {
         );
     }
 
-    postPasswordChange(
-        oldPassword: string,
-        newPassword: string
-    ): Promise<AxiosResponse> {
-        return axios.post(API_URL + `password-change/`, {
-            oldPassword: oldPassword,
-            newPassword: newPassword,
-        });
-    }
-
     getTechnicians(group_id: number): Promise<AxiosResponse> {
         return axios.get(API_URL + `technicians/${group_id}`);
     }

@@ -22,7 +22,7 @@ export function useAssignOperations() {
         productService
             .getWithOperationsForOrder(state.order.id)
             .then(res => {
-                let operations: Operation[] = [];
+                const operations: Operation[] = [];
                 res.data.forEach(product =>
                     operations.push(
                         ...product.operations.map(operation =>

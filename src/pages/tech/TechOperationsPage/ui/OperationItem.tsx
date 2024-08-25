@@ -1,8 +1,7 @@
 import { Accordion, Divider, Flex, Group, Stack, Text } from "@mantine/core";
 import { ToothMarks } from "components/ToothMarks";
 import { ModalSetOperStatus } from "modals/ModalSetOperStatus";
-import Operation from "types/OperationTypes/Operation";
-import { OperationOption } from "../types/OperationOption";
+import { OperationAndProduct, OperationOption } from "types/OperationTypes/Operation";
 
 const formatExecTime = (execTime: string) => {
     const hours = Number(execTime.substring(0, 2));
@@ -25,7 +24,7 @@ const formatExecStartDateTime = (execStart: string) => {
     );
 };
 
-const getOperExecStart = (oper: Operation) => {
+const getOperExecStart = (oper: OperationAndProduct) => {
     return oper.execStart ? (
         <Text>Назначено на: {formatExecStartDateTime(oper.execStart)}</Text>
     ) : (
@@ -34,7 +33,7 @@ const getOperExecStart = (oper: Operation) => {
 };
 
 type OperationItemProps = {
-    operation: Operation;
+    operation: OperationAndProduct;
     operationStatuses: OperationOption[];
     page: number;
     loadOperations: (page: number) => void;

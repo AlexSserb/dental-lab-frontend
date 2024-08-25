@@ -1,21 +1,12 @@
-import {
-    Button,
-    Modal,
-    Stack,
-    Title,
-    Text,
-    Select,
-    Center,
-    Divider,
-} from "@mantine/core";
+import { Button, Center, Divider, Modal, Select, Stack, Text, Title } from "@mantine/core";
 import { ToothMarks } from "components/ToothMarks";
-import { OperationOption } from "pages/TechOperationsPage/types/OperationOption";
 import { useState } from "react";
 import operationService from "services/OperationService";
-import Operation from "types/OperationTypes/Operation";
+import { OperationAndProduct, OperationOption } from "types/OperationTypes/Operation";
+import { notifications } from "@mantine/notifications";
 
 interface ModalSetOperStatusProps {
-    operation: Operation;
+    operation: OperationAndProduct;
     page: number;
     operationStatuses: OperationOption[];
     loadOperations: (page: number) => void;
@@ -30,19 +21,22 @@ export const ModalSetOperStatus = ({
     const [open, setOpen] = useState(false);
     const [selectedOperationStatus, setSelectedOperationStatus] = useState<
         string | null
-    >(operation?.operationStatus?.name ?? null);
+    >(operation?.operationStatus?.id ?? null);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const handleSubmit = () => {
-        const status = operationStatuses.find(
-            operSt => operSt.value === selectedOperationStatus
-        );
-        if (!status) return;
+        if (!selectedOperationStatus) {
+            notifications.show({
+                title: "Error",
+                message: "Статус операции не выбран.",
+            })
+            return;
+        }
 
         operationService
-            .setOperationStatus(operation.id, status?.key)
-            .then(_ => {
+            .setOperationStatus(operation.id, selectedOperationStatus)
+            .then(() => {
                 loadOperations(page);
             })
             .catch(err => console.log(err));
@@ -65,9 +59,7 @@ export const ModalSetOperStatus = ({
                     <Select
                         onChange={value => setSelectedOperationStatus(value)}
                         value={selectedOperationStatus}
-                        data={operationStatuses.map(
-                            operation => operation.value
-                        )}
+                        data={operationStatuses}
                     />
                     <Button variant="contained" onClick={handleSubmit}>
                         Сохранить

@@ -89,12 +89,12 @@ function useAdminOrderList() {
                 const result: TableRow[] = res.data.map(
                     (order: Order): TableRow => {
                         return {
+                            customer: order.customer.name,
                             user:
                                 order.user.lastName +
                                 " " +
                                 order.user.firstName,
                             status: order.status.name,
-                            discount: order.discount,
                             cost: order.cost,
                             date: order.orderDate,
                             order: order,

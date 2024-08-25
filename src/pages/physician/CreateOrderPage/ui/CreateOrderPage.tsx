@@ -19,7 +19,7 @@ import {
 } from "@mantine/core";
 import useCreateOrderPage from "../hooks/useCreateOrderPage";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
-import useFillJawArrays from "../hooks/useFillJawArrays";
+import useFillJawArrays from "../../../../components/ToothMarks/hooks/useFillJawArrays.tsx";
 
 export const CreateOrderPage = () => {
     const {
@@ -69,16 +69,16 @@ export const CreateOrderPage = () => {
                 <ScrollArea scrollbars="x">
                     <table>
                         <tbody>
-                            <tr>
-                                {upperJaw.map(tooth => {
-                                    return <td>{getToothMark(tooth)}</td>;
-                                })}
-                            </tr>
-                            <tr>
-                                {lowerJaw.map(tooth => {
-                                    return <td>{getToothMark(tooth)}</td>;
-                                })}
-                            </tr>
+                        <tr>
+                            {upperJaw.map(tooth => {
+                                return <td>{getToothMark(tooth)}</td>;
+                            })}
+                        </tr>
+                        <tr>
+                            {lowerJaw.map(tooth => {
+                                return <td>{getToothMark(tooth)}</td>;
+                            })}
+                        </tr>
                         </tbody>
                     </table>
                 </ScrollArea>
@@ -103,7 +103,7 @@ export const CreateOrderPage = () => {
                             onChange={value => setSelectedProductType(value)}
                             value={selectedProductType}
                             data={allProductTypes.map(
-                                productType => productType.name
+                                productType => productType.name,
                             )}
                         />
 

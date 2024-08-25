@@ -40,7 +40,7 @@ class OperationService {
 
     setOperationStatus(operationId: string, statusId: string) {
         return axios.patch(API_URL + `operation/${operationId}/`, {
-            statusId: statusId,
+            status: statusId,
         });
     }
 

@@ -13,7 +13,6 @@ export function useAdminOperations() {
             .getForProduct(product.id)
             .then(res => {
                 setOperations(res.data);
-                console.log(operations);
             })
             .catch(err => console.log(err));
     };

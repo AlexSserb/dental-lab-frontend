@@ -1,10 +1,10 @@
 import { Order } from "types/OrderTypes/Order";
 
 type TableRow = {
+    customer: string;
     user: string;
     date: string;
     status: string;
-    discount: number;
     cost: number;
     order: Order;
 };

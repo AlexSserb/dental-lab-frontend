@@ -130,50 +130,47 @@ export function ProfilePage() {
         );
     };
 
-    return (
-        <Center>
-            <RoundedBoxContainer width="33%" minWidth="380px">
-                <Stack gap={20} p="md">
-                    <Center mb={20}>
-                        <Title>Профиль</Title>
-                    </Center>
+    return <Center>
+        <RoundedBoxContainer width="33%" minWidth="380px">
+            <Stack gap={20} p="md">
+                <Center mb={20}>
+                    <Title>Профиль</Title>
+                </Center>
 
-                    {renderLastName()}
+                {renderLastName()}
 
-                    {renderFirstName()}
+                {renderFirstName()}
 
-                    <Text>Почтовый адрес: {userData.email}</Text>
+                <Text>Почтовый адрес: {userData.email}</Text>
 
-                    <Text>Должность: {userData.group}</Text>
+                <Text>Должность: {userData.group}</Text>
 
-                    <Text>Дата регистрации: {userData.createdAt}</Text>
+                <Text>Дата регистрации: {userData.createdAt}</Text>
 
-                    <Divider />
-                    {renderCustomers()}
-                    <Divider />
+                {userData.group === "Врач" && (
+                    <>
+                        <Divider />
+                        {renderCustomers()}
+                        <Divider />
+                    </>)}
 
-                    {user?.email === userData.email ? (
-                        <>
-                            <ModalChangePassword />
-                            <Button
-                                variant="contained"
-                                onClick={() => handleClickLogoutUser()}>
-                                Выйти
-                            </Button>
-                        </>
-                    ) : (
-                        <Button
-                            variant="contained"
-                            onClick={() =>
-                                navigate("/schedule", {
-                                    state: { techEmail: userData.email },
-                                })
-                            }>
-                            Расписание
-                        </Button>
-                    )}
-                </Stack>
-            </RoundedBoxContainer>
-        </Center>
-    );
+                {user?.email === userData.email ? <>
+                    <ModalChangePassword />
+                    <Button
+                        variant="contained"
+                        onClick={() => handleClickLogoutUser()}>
+                        Выйти
+                    </Button>
+                </> : userData.group !== "Врач" && <Button
+                    variant="contained"
+                    onClick={() =>
+                        navigate("/schedule", {
+                            state: { techEmail: userData.email },
+                        })
+                    }>
+                    Расписание
+                </Button>}
+            </Stack>
+        </RoundedBoxContainer>
+    </Center>;
 }

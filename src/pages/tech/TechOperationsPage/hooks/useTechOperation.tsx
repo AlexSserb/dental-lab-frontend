@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import operationService from "services/OperationService";
-import { OperationOption } from "../types/OperationOption";
-import Operation from "types/OperationTypes/Operation";
+import { OperationAndProduct, OperationOption } from "types/OperationTypes/Operation";
 
 function useTechOperation() {
-    const [operations, setOperations] = useState<Operation[]>([]);
+    const [operations, setOperations] = useState<OperationAndProduct[]>([]);
     const [operationStatuses, setOperationStatuses] = useState<
         OperationOption[]
     >([]);
@@ -15,6 +14,7 @@ function useTechOperation() {
         operationService
             .getForTech(page)
             .then(res => {
+                console.log(res.data)
                 setOperations(res.data.results);
                 setTotalPages(res.data.totalPages);
             })
@@ -25,8 +25,8 @@ function useTechOperation() {
         operationService
             .getOperationStatuses()
             .then(res => {
-                let operations = res.data.map(oper => {
-                    return { key: oper.id, value: oper.name };
+                const operations = res.data.map(oper => {
+                    return { value: oper.id, label: oper.name };
                 });
                 setOperationStatuses(operations);
             })

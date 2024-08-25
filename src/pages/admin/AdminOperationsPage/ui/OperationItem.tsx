@@ -1,4 +1,4 @@
-import { Accordion, Box, Flex, Stack, Table, Text } from "@mantine/core";
+import { Accordion, Box, Divider, Flex, Stack, Table, Text } from "@mantine/core";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
@@ -7,6 +7,7 @@ import {
     OperationHistory,
 } from "types/OperationTypes/Operation";
 import { getDepartmentName } from "utils/getDepartmentInfo";
+import { formatTime } from "../../../../utils/formatDateTime.ts";
 
 type OperationItemProps = {
     oper: FullOperation;
@@ -39,25 +40,28 @@ export function OperationItem({ oper }: OperationItemProps) {
                     </Stack>
                     <Stack>
                         <Text>
-                            Время выполнения:{" "}
-                            {oper.operationType.execTime.substring(0, 2)}:
-                            {oper.operationType.execTime.substring(3, 5)}
+                            Время выполнения: {formatTime(oper.operationType.execTime)}
                         </Text>
-                        <Text>
-                            <>Назначена технику: </>
-                            <Link
-                                to="/profile"
-                                state={{ email: oper.tech?.email }}>
-                                {oper.tech?.lastName} {oper.tech?.firstName}
-                            </Link>
-                        </Text>
+                        {oper.tech ? (
+                            <Text>
+                                <>Назначена технику: </>
+                                <Link
+                                    to="/profile"
+                                    state={{ email: oper.tech?.email }}>
+                                    {oper.tech?.lastName} {oper.tech?.firstName}
+                                </Link>
+                            </Text>
+                        ) : (
+                            <Text>Техник не назначен</Text>
+                        )}
                     </Stack>
                 </Flex>
             </Accordion.Control>
             <Accordion.Panel>
+                <Divider />
                 <Box>
-                    История изменений статусов:
-                    <Table>
+                    <Text py="sm">История изменений статусов:</Text>
+                    <Table withTableBorder withColumnBorders striped>
                         <Table.Thead>
                             <Table.Tr>
                                 <Table.Td>Дата и время</Table.Td>

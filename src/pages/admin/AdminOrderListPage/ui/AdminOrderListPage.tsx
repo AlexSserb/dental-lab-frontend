@@ -7,7 +7,7 @@ import {
     Center,
     Divider,
     Group,
-    Paper,
+    Paper, ScrollArea,
     Stack,
     Text,
     Title,
@@ -46,7 +46,9 @@ export function AdminOrderListPage() {
                         </Button>
                     </Group>
                     {orders.length > 0 ? (
-                        <MantineReactTable table={table} />
+                        <ScrollArea>
+                            <MantineReactTable table={table} />
+                        </ScrollArea>
                     ) : (
                         <Paper>
                             <Center>

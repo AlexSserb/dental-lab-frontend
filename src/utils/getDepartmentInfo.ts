@@ -16,13 +16,13 @@ export function getDepartmentName(code: string) {
 export function getDepartmentIdByCode(code: string) {
     switch (code) {
         case "MO":
-            return 1;
-        case "CA":
-            return 2;
-        case "CE":
-            return 3;
-        case "DE":
             return 4;
+        case "CA":
+            return 5;
+        case "CE":
+            return 6;
+        case "DE":
+            return 7;
         default:
             return -1;
     }
