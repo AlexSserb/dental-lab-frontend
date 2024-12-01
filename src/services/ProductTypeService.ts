@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import ProductType from "types/ProductTypes/ProductType";
 
-const API_URL = "api/product-types/";
+const API_URL = "orders/product-types/";
 
 class ProductTypesService {
     getAll(): Promise<AxiosResponse<ProductType[]>> {

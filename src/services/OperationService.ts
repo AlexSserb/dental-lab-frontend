@@ -9,7 +9,7 @@ import OperationStatus from "types/OperationTypes/OperationStatus";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const API_URL = "api/";
+const API_URL = "orders/";
 
 class OperationService {
     timeZone = dayjs?.tz?.guess();

@@ -34,14 +34,16 @@ function useCreateOrderPage() {
     const loadCustomers = () => {
         if (!user) return;
 
-        profileService.getProfileData(user.email).then(res => {
-            const customers: string[] = res.data.customers.map(
-                (customer: Customer) => {
-                    return { value: customer.id, label: customer.name };
-                }
-            );
-            setCustomers(customers);
-        });
+        profileService.getProfileData(user.email)
+            .then(res => {
+                const customers: string[] = res.data.customers.map(
+                    (customer: Customer) => {
+                        return { value: customer.id, label: customer.name };
+                    }
+                );
+                setCustomers(customers);
+            })
+            .catch(err => console.log(err));
     };
 
     const loadProductTypes = () => {

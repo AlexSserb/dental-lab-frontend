@@ -3,7 +3,7 @@ import { Order } from "types/OrderTypes/Order";
 import Product, { ProductBrief } from "types/ProductTypes/Product";
 import OrderStatus from "../types/OrderTypes/OrderStatus.ts";
 
-const API_URL = "api/";
+const API_URL = "orders/";
 
 class OrderService {
     getOrders(month: number, year: number): Promise<AxiosResponse<Order[]>> {
