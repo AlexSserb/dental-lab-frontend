@@ -3,6 +3,8 @@ import React from "react";
 export type User = {
     email: string;
     groupId: number;
+    isActive: boolean;
+    isVerified: boolean;
 };
 
 export type AuthTokens = {

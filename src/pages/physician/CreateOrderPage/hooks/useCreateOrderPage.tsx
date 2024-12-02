@@ -61,6 +61,8 @@ function useCreateOrderPage() {
     };
 
     useEffect(() => {
+        if (!user?.isVerified) navigate("/registration");
+
         loadCustomers();
         loadProductTypes();
     }, []);

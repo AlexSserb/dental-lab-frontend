@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { RegistrationData } from "../types/RegistrationData";
 
 export function postRegistrationData(
-    data: RegistrationData
+    data: RegistrationData,
 ): Promise<AxiosResponse> {
     return axios.post("/accounts/register/", {
         firstName: data.firstName,
@@ -11,4 +11,9 @@ export function postRegistrationData(
         password: data.password,
         customers: data.customers,
     });
+}
+
+
+export function postEmailVerification(): Promise<AxiosResponse> {
+    return axios.post("/accounts/send-email-verification/");
 }

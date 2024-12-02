@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import { useUserContext } from "contexts/UserContext/useUserContext";
-import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { RegistrationData } from "../types/RegistrationData";
 import { RegistrationError } from "../types/RegistrationError";
@@ -10,10 +9,21 @@ import { CustomerOption } from "types/CustomerTypes/CustomerOption";
 import customerService from "services/CustomerService";
 
 function useRegistration() {
-    const { setAuthTokens, setUser } = useUserContext();
+    const { setAuthTokens, setUser, user } = useUserContext();
     const [message, setMessage] = useState<string>("");
-    const navigate = useNavigate();
     const [customers, setCustomers] = useState<CustomerOption[]>([]);
+
+    const [stepperActive, setStepperActive] = useState(1);
+
+    useEffect(() => {
+        if (user?.isVerified) {
+            setStepperActive(2);
+        } else if (user) {
+            setStepperActive(1);
+        } else {
+            setStepperActive(0);
+        }
+    }, [user]);
 
     useEffect(() => {
         customerService.getAll().then(res => {
@@ -31,7 +41,6 @@ function useRegistration() {
                 setAuthTokens(res.data);
                 setUser(jwtDecode(res.data.access));
                 localStorage.setItem("authTokens", JSON.stringify(res.data));
-                navigate("/");
             })
             .catch((err: AxiosError<RegistrationError>) => {
                 console.log(err);
@@ -49,6 +58,8 @@ function useRegistration() {
         message,
         registerUser,
         customers,
+        stepperActive,
+        setStepperActive,
     };
 }
 

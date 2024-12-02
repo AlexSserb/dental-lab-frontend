@@ -23,6 +23,7 @@ export const routesUnauthorized = (
 export const routesPhysician = (
     <Routes>
         <Route path="/" element={<PhysicianOrderListPage />} />
+        <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/create-order" element={<CreateOrderPage />} />
     </Routes>
@@ -31,6 +32,7 @@ export const routesPhysician = (
 export const routesTech = (
     <Routes>
         <Route path="/" element={<TechOperationsPage />} />
+        <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/schedule" element={<TechSchedulePage />} />
     </Routes>
@@ -39,6 +41,7 @@ export const routesTech = (
 export const routesAdmin = (
     <Routes>
         <Route path="/" element={<AdminOrderListPage />} />
+        <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/order" element={<AdminOrderPage />} />
         <Route
