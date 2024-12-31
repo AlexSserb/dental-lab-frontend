@@ -1,9 +1,10 @@
 import { useUserContext } from "../../../../contexts/UserContext/useUserContext.ts";
-import { Button, Center, em, Group, Paper, Text, Title } from "@mantine/core";
+import { Button, Group, Text, Title } from "@mantine/core";
 import { IconMailFast } from "@tabler/icons-react";
 import { postEmailVerification } from "../api/registrationApi.ts";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
+import RegistrationStepWrapper from "../wrappers/RegistrationStepWrapper.tsx";
 
 const EmailVerificationStep = () => {
     const { user } = useUserContext();
@@ -29,36 +30,22 @@ const EmailVerificationStep = () => {
     };
 
     return (
-        <Center>
-            <Paper
-                miw="300"
-                shadow="md"
-                radius="sm"
-                px={em(40)}
-                py={em(20)}
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: em(40),
-                }}
+        <RegistrationStepWrapper>
+            <Title order={2}>Подтверждение почты</Title>
+            <Text>
+                Ссылка для подтверждения почты была отправлена по адресу {user?.email}
+            </Text>
+            <Button
+                disabled={disable}
+                onClick={sendEmailVerification}
+                variant={"contained"}
             >
-                <Title order={2}>Подтверждение почты</Title>
-                <Text>
-                    Ссылка для подтверждения почты была отправлена по адресу {user?.email}
-                </Text>
-                <Button
-                    disabled={disable}
-                    onClick={sendEmailVerification}
-                    variant={"contained"}
-                >
-                    <Group gap={15}>
-                        <IconMailFast />
-                        Отправить еще раз
-                    </Group>
-                </Button>
-            </Paper>
-        </Center>
+                <Group gap={15}>
+                    <IconMailFast />
+                    Отправить еще раз
+                </Group>
+            </Button>
+        </RegistrationStepWrapper>
     );
 };
 
