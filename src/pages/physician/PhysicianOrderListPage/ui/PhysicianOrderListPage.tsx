@@ -10,7 +10,7 @@ import {
     Paper,
     ScrollArea,
     Stack,
-    Table,
+    Table, Textarea,
     TextInput,
     Title,
 } from "@mantine/core";
@@ -31,7 +31,6 @@ export const PhysicianOrderListPage = () => {
     } = usePhysicianOrderList();
     const navigate = useNavigate();
 
-    // Main variable to render orders on the screen
     const renderOrders = () => {
         let i = 1;
         return orders.map(order => (
@@ -74,9 +73,7 @@ export const PhysicianOrderListPage = () => {
                     </Title>
                     <Button
                         variant="contained"
-                        onClick={() => {
-                            navigate("/create-order");
-                        }}
+                        onClick={() => navigate("/create-order")}
                         m={15}
                         w="50%">
                         Оформить заказ
@@ -190,6 +187,11 @@ export const PhysicianOrderListPage = () => {
                                 ).toFixed(2)}
                             />
                         </Flex>
+                        <Textarea
+                            {...textInputStyle}
+                            label="Комментарий к заказу"
+                            value={currOrder?.comment}
+                        />
                     </Stack>
                 </Flex>
             </RoundedBoxContainer>

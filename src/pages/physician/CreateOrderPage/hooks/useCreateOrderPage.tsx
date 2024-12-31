@@ -2,89 +2,50 @@ import { notifications } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import orderService from "services/OrderService";
-import productTypesService from "services/ProductTypeService";
 import ProductType from "types/ProductTypes/ProductType";
 
 import styles from "components/ToothMarks/styles/ToothMarksStyles.module.css";
 import { ProductBrief } from "types/ProductTypes/Product";
 import { isMobile } from "react-device-detect";
-import profileService from "services/ProfileService";
 import { useUserContext } from "contexts/UserContext/useUserContext";
-import { Customer } from "types/CustomerTypes/Customer";
 
 function useCreateOrderPage() {
     const { user } = useUserContext();
     const [listOfProducts, setListOfProducts] = useState<ProductBrief[]>([]);
-    const [allProductTypes, setAllProductTypes] = useState<ProductType[]>([]);
     const [selectedProductType, setSelectedProductType] = useState<
-        string | null
+        ProductType | null
     >(null);
     const [orderCost, setOrderCost] = useState(0);
     const [numberOfProducts, setNumberOfProducts] = useState<number>(1);
-    const [customers, setCustomers] = useState<string[]>([]);
     const [selectedCustomer, setSelectedCustomer] = useState<string | null>(
-        null
+        null,
     );
+    const [comment, setComment] = useState("");
 
     // States for dental formula
     const [markedTeeth, setMarkedTeeth] = useState<Set<number>>(new Set());
 
     const navigate = useNavigate();
 
-    const loadCustomers = () => {
-        if (!user) return;
-
-        profileService.getProfileData(user.email)
-            .then(res => {
-                const customers: string[] = res.data.customers.map(
-                    (customer: Customer) => {
-                        return { value: customer.id, label: customer.name };
-                    }
-                );
-                setCustomers(customers);
-            })
-            .catch(err => console.log(err));
-    };
-
-    const loadProductTypes = () => {
-        productTypesService
-            .getAll()
-            .then(res => {
-                const products = res.data;
-
-                setAllProductTypes(products);
-                if (products.length > 0) {
-                    setSelectedProductType(products[0].name);
-                }
-            })
-            .catch(err => console.log(err));
-    };
-
     useEffect(() => {
         if (!user?.isVerified) navigate("/registration");
-
-        loadCustomers();
-        loadProductTypes();
     }, []);
 
     const saveProduct = () => {
-        const productType = allProductTypes.find(
-            val => val.name === selectedProductType
-        );
-        if (!productType) {
+        if (!selectedProductType) {
             notifications.show({
                 title: "Error",
                 message: "Тип изделия не выбран",
             });
             return;
         }
-        const sumCost = productType.cost * numberOfProducts;
+        const sumCost = selectedProductType.cost * numberOfProducts;
         setOrderCost(orderCost + sumCost);
 
         const product: ProductBrief = {
-            productTypeId: productType.id,
-            productTypeName: productType.name,
-            productTypeCost: productType.cost,
+            productTypeId: selectedProductType.id,
+            productTypeName: selectedProductType.name,
+            productTypeCost: selectedProductType.cost,
             sumCost: sumCost,
             amount: numberOfProducts,
             teeth: [...markedTeeth],
@@ -148,7 +109,7 @@ function useCreateOrderPage() {
         }
 
         orderService
-            .post(listOfProducts, selectedCustomer)
+            .post(listOfProducts, selectedCustomer, comment)
             .then(() => {
                 navigate("/");
                 notifications.show({
@@ -161,15 +122,14 @@ function useCreateOrderPage() {
 
     return {
         listOfProducts,
-        allProductTypes,
         handleDelete,
-        selectedProductType,
         setSelectedProductType,
         numberOfProducts,
         setNumberOfProducts,
-        customers,
         selectedCustomer,
         setSelectedCustomer,
+        comment,
+        setComment,
         getToothMark,
         orderCost,
         saveProduct,

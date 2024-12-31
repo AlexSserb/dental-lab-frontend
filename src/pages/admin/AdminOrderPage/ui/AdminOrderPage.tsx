@@ -8,7 +8,9 @@ import {
     Stack,
     Table,
     Text,
-    TextInput, TextInputProps,
+    Textarea,
+    TextInput,
+    TextInputProps,
     Title,
 } from "@mantine/core";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
@@ -90,15 +92,15 @@ export function AdminOrderPage() {
     };
 
     const createOrderReport = () => {
-        return createReport(order, 1, "Загрузить документ \"Наряд\"", loadOrderReport);
-    }
+        return createReport(order, 1, "Документ \"Наряд\"", loadOrderReport);
+    };
 
     const createAcceptanceReport = () => {
-        return createReport(order, 4, "Загрузить документ \"Акт сдачи-приема\"", loadAcceptanceReport);
+        return createReport(order, 4, "Документ \"Акт сдачи-приема\"", loadAcceptanceReport);
     };
 
     const createInvoiceForPayment = () => {
-        return createReport(order, 1, "Загрузить документ \"Счет на оплату\"", loadInvoiceForPayment);
+        return createReport(order, 1, "Документ \"Счет на оплату\"", loadInvoiceForPayment);
     };
 
     return (
@@ -171,12 +173,18 @@ export function AdminOrderPage() {
                             )}
                         />
                     </Flex>
+                    {order?.comment && (
+                        <Textarea
+                            label="Комментарий к заказу"
+                            value={order?.comment}
+                        />
+                    )}
                     {order && <ModalSetOrderStatus order={order} setOrder={setOrder} />}
+                    {startOrderForm()}
+                    {getButtonAssignOperations()}
                     {createOrderReport()}
                     {createAcceptanceReport()}
                     {createInvoiceForPayment()}
-                    {startOrderForm()}
-                    {getButtonAssignOperations()}
                 </Stack>
             </Box>
         </RoundedBoxContainer>

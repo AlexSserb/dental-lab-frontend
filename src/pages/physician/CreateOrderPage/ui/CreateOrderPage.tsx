@@ -1,38 +1,38 @@
 import { IconSquareX } from "@tabler/icons-react";
 import { ToothMarks } from "components/ToothMarks";
 import {
+    Box,
     Button,
     Center,
-    Text,
-    Paper,
-    Select,
-    Stack,
-    Table,
-    TextInput,
-    Title,
     Divider,
-    Box,
-    ScrollArea,
-    UnstyledButton,
     Flex,
     Group,
+    Paper,
+    ScrollArea,
+    Stack,
+    Table,
+    Text, Textarea,
+    TextInput,
+    Title,
+    UnstyledButton,
 } from "@mantine/core";
 import useCreateOrderPage from "../hooks/useCreateOrderPage";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import useFillJawArrays from "../../../../components/ToothMarks/hooks/useFillJawArrays.tsx";
+import CustomerSelect from "../../../../components/CustomerSelect/CustomerSelect.tsx";
+import ProductTypeSelect from "../../../../components/ProductTypeSelect/ProductTypeSelect.tsx";
 
 export const CreateOrderPage = () => {
     const {
         listOfProducts,
-        allProductTypes,
         handleDelete,
-        selectedProductType,
         setSelectedProductType,
         numberOfProducts,
         setNumberOfProducts,
-        customers,
         selectedCustomer,
         setSelectedCustomer,
+        comment,
+        setComment,
         getToothMark,
         orderCost,
         saveProduct,
@@ -90,27 +90,18 @@ export const CreateOrderPage = () => {
         <Center>
             <RoundedBoxContainer width="70%" minWidth="370px" padding={20}>
                 <Center>
-                    <Title order={3} mb={10}>
+                    <Title order={3} mb={15}>
                         Оформление заказа
                     </Title>
                 </Center>
+
                 <Box>
                     <Flex gap={10}>
-                        <Select
-                            w="100%"
-                            label="Тип изделия"
-                            required
-                            onChange={value => setSelectedProductType(value)}
-                            value={selectedProductType}
-                            data={allProductTypes.map(
-                                productType => productType.name,
-                            )}
-                        />
+                        <ProductTypeSelect onChange={setSelectedProductType} />
 
                         <TextInput
                             w="100%"
                             label="Количество"
-                            required
                             type="number"
                             min="1"
                             max="32"
@@ -123,7 +114,6 @@ export const CreateOrderPage = () => {
                     </Flex>
 
                     <br />
-
                     <Text>Зубная формула</Text>
                     <Group>{renderTeethMarks()}</Group>
                     <br />
@@ -135,7 +125,7 @@ export const CreateOrderPage = () => {
                         onClick={() => saveProduct()}>
                         Добавить изделие
                     </Button>
-                    <Divider my={30} />
+                    <Divider my={20} />
                 </Box>
 
                 <Box>
@@ -144,15 +134,17 @@ export const CreateOrderPage = () => {
                             <Center>
                                 <Title order={3}>Данные о заказе</Title>
                             </Center>
-                            <Select
-                                w="100%"
-                                label="Заказчик"
-                                required
-                                onChange={setSelectedCustomer}
-                                value={selectedCustomer}
-                                data={customers}
+                            <Textarea
+                                label="Комментарий к заказу"
+                                maxLength={512}
+                                value={comment}
+                                onChange={e => setComment(e.target.value)}
                             />
-                            <Text my={10}>
+                            <CustomerSelect
+                                value={selectedCustomer}
+                                onChange={setSelectedCustomer}
+                            />
+                            <Text>
                                 Сумма: {orderCost.toFixed(2)} руб.
                             </Text>
                             <Button
