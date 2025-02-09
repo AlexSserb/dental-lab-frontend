@@ -11,5 +11,5 @@ export function getOrdersForUser(
 export function getProductsForOrder(
     id: string
 ): Promise<AxiosResponse<Product[]>> {
-    return axios.get(`/orders/products/${id}`);
+    return axios.get(`/products/${id}`);
 }

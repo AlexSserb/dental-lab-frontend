@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { FullProduct } from "types/ProductTypes/Product";
 
-const API_URL = "orders/products/";
+const API_URL = "products/";
 
 class ProductService {
     getForOrder(orderId: string) {

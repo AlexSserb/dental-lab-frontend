@@ -6,17 +6,7 @@ import { useRef, useState } from "react";
 
 import { useLocation } from "react-router-dom";
 
-import {
-    Box,
-    Button,
-    Center,
-    Divider,
-    Drawer,
-    Flex,
-    Stack,
-    Text,
-    Title,
-} from "@mantine/core";
+import { Box, Button, Center, Divider, Drawer, Flex, Stack, Text, Title } from "@mantine/core";
 import { DateInput, DateTimePicker } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
@@ -24,7 +14,7 @@ import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import { useUserContext } from "contexts/UserContext/useUserContext";
 import { isMobile } from "react-device-detect";
 import operationService from "services/OperationService";
-import { isChiefTech, isDirector, isLabAdmin } from "utils/permissions";
+import { isLabAdmin } from "utils/permissions";
 import { OperationForSchedule } from "../../../../types/OperationTypes/OperationForSchedule";
 import { formatDate, formatTime } from "../../../../utils/formatDateTime";
 import getHeaderToolbar from "../utils/getHeaderToolbar";
@@ -35,8 +25,7 @@ export const TechSchedulePage = () => {
     const { state } = useLocation();
     const techEmail = state?.techEmail || user?.email;
 
-    const isEditable =
-        isDirector(user!) || isLabAdmin(user!) || isChiefTech(user!);
+    const isEditable = isLabAdmin(user!);
     const calendarRef = useRef<FullCalendar | null>(null);
     const calendarApi = calendarRef.current?.getApi();
 
@@ -77,7 +66,7 @@ export const TechSchedulePage = () => {
     const setOperationExecStart = (operation: OperationForSchedule) => {
         operationService
             .setOperationExecStart(operation.id, operation.start.toUTCString())
-            .then(_ => close())
+            .then(() => close())
             .catch(err => console.log(err));
     };
 

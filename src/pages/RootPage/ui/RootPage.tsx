@@ -11,7 +11,6 @@ import {
     routesUnauthorized,
 } from "../routes";
 import {
-    isChiefTech,
     isLabAdmin,
     isPhysician,
     isRegularTech,
@@ -29,7 +28,7 @@ export function RootPage() {
     const getRoutes = () => {
         if (!user) return routesUnauthorized;
         if (isPhysician(user)) return routesPhysician;
-        if (isRegularTech(user) || isChiefTech(user)) return routesTech;
+        if (isRegularTech(user)) return routesTech;
         if (isLabAdmin(user)) return routesAdmin;
     };
 

@@ -9,11 +9,9 @@ import OperationStatus from "types/OperationTypes/OperationStatus";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const API_URL = "orders/";
+const API_URL = "operations/";
 
 class OperationService {
-    timeZone = dayjs?.tz?.guess();
-
     getForTech(page: number) {
         return axios.get(API_URL + `operations-for-tech/?page=${page}`);
     }
@@ -22,9 +20,9 @@ class OperationService {
         return axios.get(API_URL + `operations-for-product/${productId}`);
     }
 
-    getForSchedule(userEmail: string, date: string) {
+    getForSchedule(date: string, userEmail: string) {
         return axios.get(
-            API_URL + `operations-for-schedule/${userEmail}/${date}`
+            API_URL + `operations-for-schedule/${date}/${userEmail}`
         );
     }
 

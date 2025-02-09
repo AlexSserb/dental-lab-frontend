@@ -16,7 +16,7 @@ import {
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import { useUserContext } from "contexts/UserContext/useUserContext";
 import { useNavigate } from "react-router-dom";
-import { isChiefTech, isDirector, isLabAdmin } from "utils/permissions";
+import { isLabAdmin } from "utils/permissions";
 import useAdminOrder from "../hooks/useAdminOrder";
 import { ProductRow } from "pages/admin/AdminOrderListPage/ui/ProductRow";
 import { calcDiscount, formatCost } from "utils/discounts";
@@ -53,7 +53,7 @@ export function AdminOrderPage() {
     const getButtonAssignOperations = () => {
         if (
             (order?.status?.number === 2 || order?.status?.number === 3) &&
-            user && (isLabAdmin(user) || isChiefTech(user) || isDirector(user))
+            user && isLabAdmin(user)
         ) {
             return (
                 <Button

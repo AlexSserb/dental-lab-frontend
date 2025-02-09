@@ -4,18 +4,7 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { useRef, useState } from "react";
 
-import {
-    Box,
-    Button,
-    Center,
-    Divider,
-    Flex,
-    Group,
-    Select,
-    Stack,
-    Text,
-    Title,
-} from "@mantine/core";
+import { Box, Button, Center, Divider, Flex, Group, Select, Stack, Text, Title } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import operationService from "services/OperationService";
@@ -24,16 +13,14 @@ import Operation from "types/OperationTypes/Operation";
 import { OperationForSchedule } from "types/OperationTypes/OperationForSchedule";
 import { User } from "types/User";
 import { formatDate, formatTime } from "utils/formatDateTime";
-import {
-    getDepartmentIdByCode,
-    getDepartmentName,
-} from "utils/getDepartmentInfo";
+import { getDepartmentIdByCode, getDepartmentName } from "utils/getDepartmentInfo";
 import { showErrorNotification } from "utils/notifications";
 import { useAssignOperations } from "../hooks/useAssignOperations";
 import styles from "../styles/AssignOperationsStyles.module.css";
 import OperationItem from "./OperationItem";
 import { isMobile } from "react-device-detect";
 import getHeaderToolbar from "../utils/getHeaderToolbar";
+import { EventContentArg, EventInput, EventSourceFuncArg } from "fullcalendar";
 
 export function AssignOperationsPage() {
     const { operationsToAssign, getProductsWithOperations } =
@@ -47,7 +34,7 @@ export function AssignOperationsPage() {
     const [techs, setTechs] = useState<User[]>([]);
     let operations: OperationForSchedule[] = [];
 
-    const renderEventOperationContent = (eventInfo: any) => {
+    const renderEventOperationContent = (eventInfo: EventContentArg) => {
         const oper = eventInfo.event.extendedProps;
 
         return (
@@ -61,11 +48,14 @@ export function AssignOperationsPage() {
     const setOperationExecStart = (operation: OperationForSchedule) => {
         operationService
             .setOperationExecStart(operation.id, operation.start.toUTCString())
-            .then(_ => close())
+            .then(() => close())
             .catch(err => console.log(err));
     };
 
-    async function getCalendarData(fetchInfo: any, successCallback: any) {
+    async function getCalendarData(
+        fetchInfo: EventSourceFuncArg,
+        successCallback: (eventInputs: EventInput[]) => void,
+    ) {
         if (techEmail) {
             const date: Date = fetchInfo.start;
             await operationService
@@ -107,7 +97,7 @@ export function AssignOperationsPage() {
             currOperation.execStart = execStart;
             operationService
                 .assignOperation(currOperation)
-                .then(_ => getProductsWithOperations())
+                .then(() => getProductsWithOperations())
                 .catch(err => console.log(err));
         }
     };
@@ -122,6 +112,7 @@ export function AssignOperationsPage() {
             .sort((a, b) => a.ordinalNumber - b.ordinalNumber)
             .map(operation => (
                 <OperationItem
+                    key={operation.id}
                     operation={operation}
                     getOperationStyle={getOperationStyle}
                     selectOperation={selectOperation}
@@ -148,14 +139,14 @@ export function AssignOperationsPage() {
                                     <Text>
                                         Группа:{" "}
                                         {getDepartmentName(
-                                            currOperation?.operationType?.group
+                                            currOperation?.operationType?.group,
                                         )}
                                     </Text>
                                     <Text>
                                         Время выполнения:{" "}
                                         {formatTime(
                                             currOperation?.operationType
-                                                ?.execTime
+                                                ?.execTime,
                                         )}
                                     </Text>
                                     <DateTimePicker
@@ -226,14 +217,15 @@ export function AssignOperationsPage() {
                             getCalendarData(fetchInfo, successCallback)
                         }
                         eventContent={renderEventOperationContent}
-                        eventDrop={(event: any) =>
-                            setOperationExecStart(event.event)
+                        eventDrop={event =>
+                            setOperationExecStart(event.event as unknown as OperationForSchedule)
                         }
                         slotMinTime={"8:00"}
                         slotMaxTime={"19:00"}
                         snapDuration={"00:01"}
                         slotDuration={"00:15"}
-                        headerToolbar={getHeaderToolbar()}></FullCalendar>
+                        headerToolbar={getHeaderToolbar()}
+                    />
                 </RoundedBoxContainer>
             </Flex>
         </Center>
