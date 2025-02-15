@@ -1,4 +1,4 @@
-export function getDepartmentName(code: string) {
+export function getDepartmentName(code?: string) {
     switch (code) {
         case "MO":
             return "Отдел моделирования";
@@ -13,7 +13,7 @@ export function getDepartmentName(code: string) {
     }
 }
 
-export function getDepartmentIdByCode(code: string) {
+export function getDepartmentIdByCode(code?: string) {
     switch (code) {
         case "MO":
             return 2;

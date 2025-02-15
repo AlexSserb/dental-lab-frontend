@@ -1,12 +1,11 @@
 import { Button, Table } from "@mantine/core";
 import { IconInfoHexagon } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
-import { Order } from "types/OrderTypes/Order";
-import Product from "types/ProductTypes/Product";
+import { OrderWithPhysician, Product } from "../../../../client";
 
 type ProductRowProps = {
     product: Product;
-    order: Order | null;
+    order: OrderWithPhysician | null;
     index: number;
 };
 
@@ -19,7 +18,7 @@ export function ProductRow({ product, order, index }: ProductRowProps) {
             <Table.Td>{product.productType.name}</Table.Td>
             <Table.Td>{product.productStatus.name}</Table.Td>
             <Table.Td>{product.amount}</Table.Td>
-            <Table.Td>{product.productType.cost.toFixed(2)}</Table.Td>
+            <Table.Td>{(product.productType.cost ?? 0).toFixed(2)}</Table.Td>
             <Table.Td>{product.discount}%</Table.Td>
             <Table.Td>{order?.discount ?? 0}%</Table.Td>
             <Table.Td>

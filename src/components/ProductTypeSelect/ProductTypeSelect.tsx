@@ -1,6 +1,6 @@
 import useProductTypeSelect from "./useProductTypeSelect.tsx";
 import ObjectSelect, { ObjectSelectProps } from "../ObjectSelect/ObjectSelect.tsx";
-import ProductType from "../../types/ProductTypes/ProductType.ts";
+import { ProductType } from "../../client";
 
 type Props = Omit<
     ObjectSelectProps<ProductType | null>,

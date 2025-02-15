@@ -1,15 +1,13 @@
 import { Button, Center, Divider, Modal, Select, Stack, Text, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { Order } from "../../../types/OrderTypes/Order.ts";
-import { OrderStatusOption } from "../../../types/OrderTypes/OrderStatusOption.ts";
-import orderService from "../../../services/OrderService.ts";
-import OrderStatus from "../../../types/OrderTypes/OrderStatus.ts";
 import { calcDiscount, formatCost } from "../../../utils/discounts.ts";
 import { notifications } from "@mantine/notifications";
+import { OrdersService, OrderStatus, OrderWithPhysician } from "../../../client";
+import { Option } from "../../../types/Option.ts";
 
 type ModalProps = {
-    order: Order;
-    setOrder: (order: Order) => void;
+    order: OrderWithPhysician;
+    setOrder: (order: OrderWithPhysician) => void;
 };
 
 export function ModalSetOrderStatus({ order, setOrder }: ModalProps) {
@@ -17,13 +15,13 @@ export function ModalSetOrderStatus({ order, setOrder }: ModalProps) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [orderStatuses, setOrderStatuses] = useState<OrderStatusOption[]>([]);
+    const [orderStatuses, setOrderStatuses] = useState<Option[]>([]);
     const [selectedStatus, setSelectedStatus] = useState<string | null>(order.status.id);
 
     const loadOrderStatuses = () => {
-        orderService.getOrderStatuses()
-            .then(res => {
-                setOrderStatuses(res.data.map((st: OrderStatus) => {
+        OrdersService.getOrderStatuses()
+            .then(statuses => {
+                setOrderStatuses(statuses.map((st: OrderStatus) => {
                     return { label: st.name, value: st.id };
                 }));
             })
@@ -44,10 +42,14 @@ export function ModalSetOrderStatus({ order, setOrder }: ModalProps) {
             })
             return;
         }
-
-        orderService.setOrderStatus(order.id, selectedStatus)
-            .then(res => {
-                setOrder(res.data);
+        OrdersService.setOrderStatus({
+            requestBody: {
+                status: selectedStatus,
+            },
+            orderId: order.id,
+        })
+            .then(order => {
+                setOrder(order);
                 handleClose();
             })
             .catch(err => console.log(err));

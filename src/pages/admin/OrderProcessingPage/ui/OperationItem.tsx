@@ -1,9 +1,9 @@
 import { Table } from "@mantine/core";
-import Operation from "types/OperationTypes/Operation";
 import { formatTime } from "utils/formatDateTime";
+import { OperationForProduct } from "../../../../client";
 
 type OperationItemProps = {
-    operation: Operation;
+    operation: OperationForProduct;
 };
 
 function OperationItem({ operation }: OperationItemProps) {

@@ -1,13 +1,12 @@
 import { notifications } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import orderService from "services/OrderService";
-import ProductType from "types/ProductTypes/ProductType";
 
 import styles from "components/ToothMarks/styles/ToothMarksStyles.module.css";
-import { ProductBrief } from "types/ProductTypes/Product";
+import { ProductBrief } from "types/ProductTypes/ProductBrief.ts";
 import { isMobile } from "react-device-detect";
 import { useUserContext } from "contexts/UserContext/useUserContext";
+import { OrdersService, ProductType } from "../../../../client";
 
 function useCreateOrderPage() {
     const { user } = useUserContext();
@@ -39,13 +38,13 @@ function useCreateOrderPage() {
             });
             return;
         }
-        const sumCost = selectedProductType.cost * numberOfProducts;
+        const sumCost = (selectedProductType.cost ?? 0) * numberOfProducts;
         setOrderCost(orderCost + sumCost);
 
         const product: ProductBrief = {
             productTypeId: selectedProductType.id,
             productTypeName: selectedProductType.name,
-            productTypeCost: selectedProductType.cost,
+            productTypeCost: selectedProductType.cost ?? 0,
             sumCost: sumCost,
             amount: numberOfProducts,
             teeth: [...markedTeeth],
@@ -107,9 +106,14 @@ function useCreateOrderPage() {
             });
             return;
         }
-
-        orderService
-            .post(listOfProducts, selectedCustomer, comment)
+        console.log(listOfProducts);
+        OrdersService.createOrder({
+            requestBody: {
+                comment,
+                productTypes: listOfProducts,
+                customerId: selectedCustomer,
+            },
+        })
             .then(() => {
                 navigate("/");
                 notifications.show({

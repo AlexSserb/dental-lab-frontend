@@ -1,13 +1,13 @@
 import { Box, Button, Text } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
-import Operation from "types/OperationTypes/Operation";
-import { formatDateTime, formatTime } from "utils/formatDateTime";
+import { formatTime } from "utils/formatDateTime";
 import { getDepartmentName } from "utils/getDepartmentInfo";
+import { OperationForProduct } from "../../../../client";
 
 type OperationItemProps = {
-    operation: Operation;
+    operation: OperationForProduct;
     getOperationStyle: (operationId: string) => string;
-    selectOperation: (operation: Operation) => void;
+    selectOperation: (operation: OperationForProduct) => void;
 };
 
 function OperationItem({
@@ -36,7 +36,7 @@ function OperationItem({
                 )}
                 {operation.execStart ? (
                     <Text>
-                        На дату и время: {formatDateTime(operation.execStart)}
+                        На дату и время: {operation.execStart}
                     </Text>
                 ) : (
                     <Text>Время выполнения не назначено</Text>

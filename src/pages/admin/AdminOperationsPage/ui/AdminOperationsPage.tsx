@@ -17,7 +17,7 @@ export function AdminOperationsPage() {
     const { operations, product } = useAdminOperations();
 
     const renderOperations = operations.map(oper => (
-        <OperationItem oper={oper} />
+        <OperationItem operation={oper} />
     ));
 
     return (

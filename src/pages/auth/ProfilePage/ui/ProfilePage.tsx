@@ -1,17 +1,6 @@
-import {
-    Button,
-    Center,
-    Stack,
-    TextInput,
-    Text,
-    Title,
-    Group,
-    MultiSelect,
-    List,
-    Divider,
-} from "@mantine/core";
+import { Button, Center, Divider, Group, List, MultiSelect, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { IconEdit, IconCircleCheck } from "@tabler/icons-react";
+import { IconCircleCheck, IconEdit } from "@tabler/icons-react";
 import useProfile from "../hooks/useProfile";
 import { useUserContext } from "contexts/UserContext/useUserContext";
 import { ModalChangePassword } from "modals/ModalChangePassword";
@@ -152,24 +141,31 @@ export function ProfilePage() {
                         <Divider />
                         {renderCustomers()}
                         <Divider />
-                    </>)}
+                    </>
+                )}
 
-                {user?.email === userData.email ? <>
-                    <ModalChangePassword />
-                    <Button
-                        variant="contained"
-                        onClick={() => handleClickLogoutUser()}>
-                        Выйти
-                    </Button>
-                </> : userData.group !== "Врач" && <Button
-                    variant="contained"
-                    onClick={() =>
-                        navigate("/schedule", {
-                            state: { techEmail: userData.email },
-                        })
-                    }>
-                    Расписание
-                </Button>}
+                {user?.email === userData.email ? (
+                    <>
+                        <ModalChangePassword />
+                        <Button
+                            variant="contained"
+                            onClick={() => handleClickLogoutUser()}>
+                            Выйти
+                        </Button>
+                    </>
+                ) : (
+                    userData.group !== "Врач" && (
+                        <Button
+                            variant="contained"
+                            onClick={() =>
+                                navigate("/schedule", {
+                                    state: { techEmail: userData.email },
+                                })
+                            }>
+                            Расписание
+                        </Button>
+                    )
+                )}
             </Stack>
         </RoundedBoxContainer>
     </Center>;

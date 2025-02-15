@@ -4,14 +4,13 @@ import { useUserContext } from "contexts/UserContext/useUserContext";
 import { jwtDecode } from "jwt-decode";
 import { RegistrationData } from "../types/RegistrationData";
 import { RegistrationError } from "../types/RegistrationError";
-import { postRegistrationData } from "../api/registrationApi";
-import { CustomerOption } from "types/CustomerTypes/CustomerOption";
-import customerService from "services/CustomerService";
+import { AccountsService } from "../../../../client";
+import { Option } from "../../../../types/Option.ts";
 
 function useRegistration() {
     const { setAuthTokens, setUser, user } = useUserContext();
     const [message, setMessage] = useState<string>("");
-    const [customers, setCustomers] = useState<CustomerOption[]>([]);
+    const [customers, setCustomers] = useState<Option[]>([]);
 
     const [stepperActive, setStepperActive] = useState(1);
 
@@ -26,21 +25,24 @@ function useRegistration() {
     }, [user]);
 
     useEffect(() => {
-        customerService.getAll().then(res => {
-            const customers: CustomerOption[] = res.data.map(customer => {
-                return { value: customer.id, label: customer.name };
+        AccountsService.getCustomers()
+            .then(customers => {
+                const customerOptions: Option[] = customers.map(customer => {
+                    return { value: customer.id, label: customer.name };
+                });
+                setCustomers(customerOptions);
             });
-            setCustomers(customers);
-        });
     }, []);
 
     const registerUser = (data: RegistrationData) => {
         setMessage("");
-        postRegistrationData(data)
-            .then(res => {
-                setAuthTokens(res.data);
-                setUser(jwtDecode(res.data.access));
-                localStorage.setItem("authTokens", JSON.stringify(res.data));
+        AccountsService.register({
+            requestBody: data,
+        })
+            .then(tokens => {
+                setAuthTokens(tokens);
+                setUser(jwtDecode(tokens.access));
+                localStorage.setItem("authTokens", JSON.stringify(tokens));
             })
             .catch((err: AxiosError<RegistrationError>) => {
                 console.log(err);

@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import productService from "services/ProductService";
-import { Order } from "types/OrderTypes/Order";
-import Product from "types/ProductTypes/Product";
-import documentService from "../../../../services/DocumentService.ts";
+import documentService from "../services/DocumentService.ts";
 import { saveAs } from "file-saver";
+import { OrderWithPhysician, Product, ProductsService } from "../../../../client";
 
 function useAdminOrder() {
-    const [order, setOrder] = useState<Order | null>(null);
+    const [order, setOrder] = useState<OrderWithPhysician | null>(null);
     const [products, setProducts] = useState<Product[]>([]);
 
     const { state } = useLocation();
 
     const loadOrderInfo = (orderId: string) => {
-        productService
-            .getForOrder(orderId)
-            .then(res => {
-                setProducts(res.data);
+        ProductsService.getForOrder({
+            orderId,
+        })
+            .then(products => {
+                setProducts(products);
                 setOrder(state.order);
             })
             .catch(err => {
@@ -34,6 +33,7 @@ function useAdminOrder() {
         if (!order) return;
         documentService.getOrderReport(order.id)
             .then(res => {
+                console.log(res.data);
                 const pdfBlob = new Blob([res.data], { type: "application/pdf" });
                 saveAs(pdfBlob, "Наряд.pdf");
             })

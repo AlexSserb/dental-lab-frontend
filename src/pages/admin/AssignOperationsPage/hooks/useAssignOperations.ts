@@ -1,34 +1,34 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import productService from "services/ProductService";
-import Operation from "types/OperationTypes/Operation";
+import { OperationForProduct, ProductsService } from "../../../../client";
 
 export function useAssignOperations() {
     const { state } = useLocation();
-    let [operationsToAssign, setOperationsToAssign] = useState<Operation[]>([]);
+    let [operationsToAssign, setOperationsToAssign] = useState<OperationForProduct[]>([]);
 
-    const processOperation = (operation: any): Operation => {
+    const processOperation = (operation: OperationForProduct): OperationForProduct => {
         if (!operation.execStart) {
             return operation;
         }
         return {
             ...operation,
-            execStart: new Date(operation.execStart),
+            execStart: operation.execStart,
         };
     };
 
     const getProductsWithOperations = () => {
         operationsToAssign = [];
-        productService
-            .getWithOperationsForOrder(state.order.id)
-            .then(res => {
-                const operations: Operation[] = [];
-                res.data.forEach(product =>
+        ProductsService.getWithOperations({
+            orderId: state.order.id,
+        })
+            .then(products => {
+                const operations: OperationForProduct[] = [];
+                products.forEach(product =>
                     operations.push(
                         ...product.operations.map(operation =>
-                            processOperation(operation)
-                        )
-                    )
+                            processOperation(operation),
+                        ),
+                    ),
                 );
                 setOperationsToAssign(operations);
             })

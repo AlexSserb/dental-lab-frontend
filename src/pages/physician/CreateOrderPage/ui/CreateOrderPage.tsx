@@ -43,7 +43,7 @@ export const CreateOrderPage = () => {
 
     const renderProducts = () => {
         return listOfProducts.map((product, i) => (
-            <Table.Tr>
+            <Table.Tr key={i}>
                 <Table.Td>{i + 1}</Table.Td>
                 <Table.Td>{product.productTypeName}</Table.Td>
                 <Table.Td>{product.amount}</Table.Td>

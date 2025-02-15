@@ -1,23 +1,21 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import orderService from "services/OrderService";
-import productService from "services/ProductService";
-import { Order } from "types/OrderTypes/Order";
-import { FullProduct } from "types/ProductTypes/Product";
+import { OrdersService, OrderWithPhysician, ProductAndOperations, ProductsService } from "../../../../client";
 
 function useOrderProcessing() {
-    const [order, setOrder] = useState<Order | null>(null);
-    const [products, setProducts] = useState<FullProduct[]>([]);
+    const [order, setOrder] = useState<OrderWithPhysician | null>(null);
+    const [products, setProducts] = useState<ProductAndOperations[]>([]);
     const [curProdIdx, setCurProdIdx] = useState(0);
 
     const { state } = useLocation();
     const navigate = useNavigate();
 
     const getProductsWithOperations = () => {
-        productService
-            .getWithOperationsForOrder(state.order.id)
-            .then(res => {
-                setProducts(res.data);
+        ProductsService.getWithOperations({
+            orderId: state.order.id,
+        })
+            .then(productsAndOperations => {
+                setProducts(productsAndOperations);
             })
             .catch(err => {
                 setProducts([]);
@@ -31,15 +29,15 @@ function useOrderProcessing() {
         getProductsWithOperations();
     }, []);
 
-    const handleOrderDiscountChanged = (e: any) => {
-        const discount = e.target.value;
+    const handleOrderDiscountChanged = (value: string | number) => {
+        const discount = Number(value);
         if (order && discount >= 0 && discount < 100) {
-            setOrder({ ...order, discount: e.target.value });
+            setOrder({ ...order, discount });
         }
     };
 
-    const handleProductDiscountChanged = (e: any) => {
-        const discount = e.target.value;
+    const handleProductDiscountChanged = (value: string | number) => {
+        const discount = Number(value);
         if (discount >= 0 && discount < 100) {
             products[curProdIdx].discount = discount;
             setProducts([...products]);
@@ -49,10 +47,23 @@ function useOrderProcessing() {
     const submitOrder = () => {
         if (!order) return;
 
-        orderService
-            .confirmOrder(order, products)
-            .then(res => {
-                navigate("/order", { state: { order: res.data } });
+        const productsDiscountsData = products.map(product => ({
+            ...product,
+            discount: product.discount ?? 0,
+        }));
+        const orderDiscountData = {
+            ...order,
+            discount: order.discount ?? 0,
+        };
+
+        OrdersService.confirmOrder({
+            requestBody: {
+                orderDiscountData,
+                productsDiscountsData,
+            },
+        })
+            .then(order => {
+                navigate("/order", { state: { order } });
             })
             .catch(err => {
                 console.log(err);

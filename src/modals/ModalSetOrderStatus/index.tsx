@@ -1,1 +1,1 @@
-export { ModalSetOperStatus } from "../ModalSetOperStatus";
+export { ModalSetOperationStatus } from "../ModalSetOperStatus";

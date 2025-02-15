@@ -1,4 +1,4 @@
-import { Order } from "types/OrderTypes/Order";
+import { OrderWithPhysician } from "../../../../client";
 
 type TableRow = {
     customer: string;
@@ -6,7 +6,7 @@ type TableRow = {
     date: string;
     status: string;
     cost: number;
-    order: Order;
+    order: OrderWithPhysician;
 };
 
 export default TableRow;

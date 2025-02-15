@@ -1,21 +1,17 @@
 import { Accordion, Box, Divider, Flex, Stack, Table, Text } from "@mantine/core";
 import moment from "moment";
 import { Link } from "react-router-dom";
-
-import {
-    FullOperation,
-    OperationHistory,
-} from "types/OperationTypes/Operation";
 import { getDepartmentName } from "utils/getDepartmentInfo";
 import { formatTime } from "../../../../utils/formatDateTime.ts";
+import { FullOperation, type OperationEvent } from "../../../../client";
 
 type OperationItemProps = {
-    oper: FullOperation;
+    operation: FullOperation;
 };
 
-export function OperationItem({ oper }: OperationItemProps) {
-    const operationHistory = (history: OperationHistory[]) => {
-        return history.map((entity: OperationHistory) => (
+export function OperationItem({ operation }: OperationItemProps) {
+    const operationHistory = (history: OperationEvent[]) => {
+        return history.map((entity: OperationEvent) => (
             <Table.Tr>
                 <Table.Td>
                     {moment(entity.pghCreatedAt).format("DD.MM.YYYY HH:mm")}
@@ -26,29 +22,29 @@ export function OperationItem({ oper }: OperationItemProps) {
     };
 
     return (
-        <Accordion.Item key={oper.id} value={oper.id}>
+        <Accordion.Item key={operation.id} value={operation.id}>
             <Accordion.Control>
                 <Flex direction={{ base: "column", sm: "row" }} gap="md">
                     <Stack>
-                        <Text>Вид операции: {oper.operationType.name}</Text>
+                        <Text>Вид операции: {operation.operationType.name}</Text>
                         <Text>
-                            {getDepartmentName(oper.operationType.group)}
+                            {getDepartmentName(operation.operationType.group ?? "")}
                         </Text>
                         <Text>
-                            Статус операции: {oper.operationStatus?.name}
+                            Статус операции: {operation.operationStatus?.name}
                         </Text>
                     </Stack>
                     <Stack>
                         <Text>
-                            Время выполнения: {formatTime(oper.operationType.execTime)}
+                            Время выполнения: {formatTime(operation.operationType.execTime)}
                         </Text>
-                        {oper.tech ? (
+                        {operation.tech ? (
                             <Text>
-                                <>Назначена технику: </>
+                                <>Назначена технику:</>
                                 <Link
                                     to="/profile"
-                                    state={{ email: oper.tech?.email }}>
-                                    {oper.tech?.lastName} {oper.tech?.firstName}
+                                    state={{ email: operation.tech?.email }}>
+                                    {operation.tech?.lastName} {operation.tech?.firstName}
                                 </Link>
                             </Text>
                         ) : (
@@ -69,7 +65,7 @@ export function OperationItem({ oper }: OperationItemProps) {
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
-                            {operationHistory(oper.history)}
+                            {operationHistory(operation.history)}
                         </Table.Tbody>
                     </Table>
                 </Box>

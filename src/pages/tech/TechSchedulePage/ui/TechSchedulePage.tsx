@@ -13,11 +13,10 @@ import { IconSearch } from "@tabler/icons-react";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import { useUserContext } from "contexts/UserContext/useUserContext";
 import { isMobile } from "react-device-detect";
-import operationService from "services/OperationService";
 import { isLabAdmin } from "utils/permissions";
-import { OperationForSchedule } from "../../../../types/OperationTypes/OperationForSchedule";
 import { formatDate, formatTime } from "../../../../utils/formatDateTime";
 import getHeaderToolbar from "../utils/getHeaderToolbar";
+import { OperationForSchedule, OperationsService } from "../../../../client";
 
 export const TechSchedulePage = () => {
     const [opened, { open, close }] = useDisclosure(false);
@@ -64,19 +63,23 @@ export const TechSchedulePage = () => {
     };
 
     const setOperationExecStart = (operation: OperationForSchedule) => {
-        operationService
-            .setOperationExecStart(operation.id, operation.start.toUTCString())
-            .then(() => close())
+        const dateStart = new Date(operation.start);
+        OperationsService.setOperationExecStart({
+            operationId: operation.id,
+            execStart: dateStart.toUTCString(),
+        })
             .catch(err => console.log(err));
     };
 
     async function getCalendarData(fetchInfo: any, successCallback: any) {
         const date: Date = fetchInfo.start;
-        await operationService
-            .getForSchedule(techEmail, formatDate(date))
-            .then(res => {
-                if (res?.data?.length === 0) operations = [];
-                else operations = res.data;
+        await OperationsService.getForSchedule({
+            dateStart: formatDate(date),
+            techEmail,
+        })
+            .then(operationsForSchedule => {
+                if (operationsForSchedule.length === 0) operations = [];
+                else operations = operationsForSchedule;
                 successCallback(operations);
             })
             .catch(err => console.log(err));
@@ -95,9 +98,9 @@ export const TechSchedulePage = () => {
                 <Text>Статус операции: {operation.operationStatus.name}</Text>
                 <Text>Начало выполнения:</Text>
                 <DateTimePicker
-                    value={operation.start}
+                    value={new Date(operation.start)}
                     onChange={value =>
-                        value && setOperation({ ...operation, start: value })
+                        value && setOperation({ ...operation, start: formatDate(value) })
                     }
                     size="md"
                     readOnly={!isEditable}

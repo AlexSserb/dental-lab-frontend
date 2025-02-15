@@ -1,10 +1,9 @@
-import { TextInput } from "@mantine/core";
+import { NumberInput, NumberInputProps } from "@mantine/core";
 
-export function DiscountInput(props: any) {
+export function DiscountInput(props: NumberInputProps) {
     return (
-        <TextInput
+        <NumberInput
             mx="xl"
-            type="number"
             step={1}
             min={0}
             max={100}

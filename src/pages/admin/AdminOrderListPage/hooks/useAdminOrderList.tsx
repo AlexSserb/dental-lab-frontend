@@ -1,13 +1,12 @@
 import { ActionIcon, Center } from "@mantine/core";
 import { IconInfoHexagon } from "@tabler/icons-react";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { useMantineReactTable } from "mantine-react-table";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import orderService from "services/OrderService";
-import { Order } from "types/OrderTypes/Order";
 import TableRow from "../types/TableRow";
 import columns from "../utils/columns";
+import { OrdersService, OrderWithPhysician } from "../../../../client";
 
 function useAdminOrderList() {
     const [orders, setOrders] = useState<TableRow[]>([]);
@@ -83,11 +82,13 @@ function useAdminOrderList() {
 
         const date = new Date(dateFromStorage);
 
-        orderService
-            .getOrders(date.getMonth() + 1, date.getFullYear())
-            .then((res: AxiosResponse<Order[]>) => {
-                const result: TableRow[] = res.data.map(
-                    (order: Order): TableRow => {
+        OrdersService.getOrder({
+            month: date.getMonth() + 1,
+            year: date.getFullYear(),
+        })
+            .then(orders => {
+                const result: TableRow[] = orders.map(
+                    (order: OrderWithPhysician): TableRow => {
                         return {
                             customer: order.customer.name,
                             user:

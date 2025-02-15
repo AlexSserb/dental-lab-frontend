@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import operationService from "services/OperationService";
-import { FullOperation } from "types/OperationTypes/Operation";
+import { FullOperation, OperationsService } from "../../../../client";
 
 export function useAdminOperations() {
     const [operations, setOperations] = useState<FullOperation[]>([]);
@@ -9,10 +8,11 @@ export function useAdminOperations() {
     const { product } = state;
 
     const getOperations = () => {
-        operationService
-            .getForProduct(product.id)
-            .then(res => {
-                setOperations(res.data);
+        OperationsService.getForProduct({
+            productId: product.id,
+        })
+            .then(operations => {
+                setOperations(operations);
             })
             .catch(err => console.log(err));
     };

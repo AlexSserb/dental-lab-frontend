@@ -1,8 +1,13 @@
 import { Button, Group } from "@mantine/core";
-import { Order } from "../../../types/OrderTypes/Order.ts";
 import { IconFileTypePdf } from "@tabler/icons-react";
+import { OrderWithPhysician } from "../../../client";
 
-const createReport = (order: Order | null, statusNumber: number, text: string, loader: () => void) => {
+const createReport = (
+    order: OrderWithPhysician | null,
+    statusNumber: number,
+    text: string,
+    loader: () => void,
+) => {
     if (order && order?.status?.number >= statusNumber) {
         return (
             <Button

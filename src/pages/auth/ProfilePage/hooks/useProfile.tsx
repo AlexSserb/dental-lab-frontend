@@ -3,14 +3,12 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { useUserContext } from "contexts/UserContext/useUserContext";
-import customerService from "services/CustomerService";
-import profileService from "services/ProfileService";
-import { CustomerOption } from "types/CustomerTypes/CustomerOption";
-import { ProfileData } from "../types/ProfileData";
+import { AccountsService, UserProfile } from "../../../../client";
+import { Option } from "../../../../types/Option.ts";
 
 function useProfile() {
     const { user } = useUserContext();
-    const [userData, setUserData] = useState<ProfileData>({
+    const [userData, setUserData] = useState<UserProfile>({
         email: "",
         firstName: "",
         lastName: "",
@@ -21,12 +19,12 @@ function useProfile() {
     const [isFirstNameEdit, setIsFirstNameEdit] = useState(false);
     const [isLastNameEdit, setIsLastNameEdit] = useState(false);
     const [isCustomersEdit, setIsCustomersEdit] = useState(false);
-    const [customers, setCustomers] = useState<CustomerOption[]>([]);
+    const [customers, setCustomers] = useState<Option[]>([]);
     const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
 
     const { state } = useLocation();
 
-    const formatAndSetUserData = (data: ProfileData) => {
+    const formatAndSetUserData = (data: UserProfile) => {
         setUserData({
             email: data.email,
             firstName: data.firstName,
@@ -40,19 +38,19 @@ function useProfile() {
     };
 
     useEffect(() => {
-        profileService
-            .getProfileData(state?.email)
-            .then(res => formatAndSetUserData(res.data))
-            .catch(err => {
-                console.log(err);
-            });
+        AccountsService.getProfileData({
+            email: state.email,
+        })
+            .then(profileData => formatAndSetUserData(profileData))
+            .catch(err => console.log(err));
 
-        customerService.getAll().then(res => {
-            const customers: CustomerOption[] = res.data.map(customer => {
-                return { value: customer.id, label: customer.name };
+        AccountsService.getCustomers()
+            .then(customers => {
+                const customerOptions: Option[] = customers.map(customer => {
+                    return { value: customer.id, label: customer.name };
+                });
+                setCustomers(customerOptions);
             });
-            setCustomers(customers);
-        });
     }, [state?.email]);
 
     const showErrorNotification = () => {
@@ -64,10 +62,12 @@ function useProfile() {
 
     const saveFirstName = () => {
         if (isFirstNameEdit && user) {
-            profileService
-                .patchUserFirstName(user.email, userData.firstName)
-                .then(res => {
-                    formatAndSetUserData(res.data);
+            AccountsService.editFirstName({
+                email: user.email,
+                name: userData.firstName,
+            })
+                .then(profileData => {
+                    formatAndSetUserData(profileData);
                     notifications.show({
                         title: "Success",
                         message: "Имя успешно изменено.",
@@ -85,10 +85,12 @@ function useProfile() {
 
     const saveLastName = () => {
         if (isLastNameEdit && user) {
-            profileService
-                .patchUserLastName(user.email, userData.lastName)
-                .then(res => {
-                    formatAndSetUserData(res.data);
+            AccountsService.editLastName({
+                email: user.email,
+                name: userData.lastName,
+            })
+                .then(profileData => {
+                    formatAndSetUserData(profileData);
                     notifications.show({
                         title: "Success",
                         message: "Фамилия успешно изменена.",
@@ -106,10 +108,13 @@ function useProfile() {
 
     const saveCustomers = () => {
         if (isCustomersEdit && user) {
-            profileService
-                .attachCustomers(selectedCustomers)
-                .then(res => {
-                    formatAndSetUserData(res.data);
+            AccountsService.attachCustomersToUser({
+                requestBody: {
+                    customers: selectedCustomers,
+                },
+            })
+                .then(profile => {
+                    formatAndSetUserData(profile);
                     notifications.show({
                         title: "Success",
                         message: "Заказчики успешно прикреплены.",

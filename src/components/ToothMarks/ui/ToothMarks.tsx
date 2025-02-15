@@ -4,7 +4,7 @@ import useFillJawArrays from "../hooks/useFillJawArrays.tsx";
 import { ScrollArea } from "@mantine/core";
 
 type ToothMarksProps = {
-    teethList: number[];
+    teethList?: number[];
 };
 
 export const ToothMarks = ({ teethList }: ToothMarksProps) => {

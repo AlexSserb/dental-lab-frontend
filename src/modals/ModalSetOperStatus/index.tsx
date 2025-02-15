@@ -1,1 +1,1 @@
-export { ModalSetOperStatus } from "./ui/ModalSetOperStatus";
+export { ModalSetOperationStatus } from "./ui/ModalSetOperationStatus.tsx";

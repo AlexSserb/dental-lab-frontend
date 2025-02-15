@@ -1,13 +1,12 @@
 import { Button, Paper, Popover, Table } from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
 import { ToothMarks } from "components/ToothMarks";
-import { OrderBrief } from "types/OrderTypes/Order";
-import Product from "types/ProductTypes/Product";
+import { Order, Product } from "../../../../client";
 
 type ProductRowProps = {
     product: Product;
     rowIndex: number;
-    currOrder: OrderBrief | null;
+    currOrder: Order | null;
 };
 
 export const ProductRow = ({
@@ -21,7 +20,7 @@ export const ProductRow = ({
             <Table.Td>{product.productType.name}</Table.Td>
             <Table.Td>{product.productStatus.name}</Table.Td>
             <Table.Td>{product.amount}</Table.Td>
-            <Table.Td>{product.productType.cost.toFixed(2)}</Table.Td>
+            <Table.Td>{(product.productType.cost ?? 0).toFixed(2)}</Table.Td>
             <Table.Td>{product.discount}%</Table.Td>
             <Table.Td>
                 {Math.max(product.discount, currOrder?.discount ?? 0)}%

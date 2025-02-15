@@ -1,8 +1,9 @@
 import { Accordion, Divider, Flex, Group, Stack, Text } from "@mantine/core";
 import { ToothMarks } from "components/ToothMarks";
-import { ModalSetOperStatus } from "modals/ModalSetOperStatus";
-import { OperationAndProduct, OperationOption } from "types/OperationTypes/Operation";
+import { ModalSetOperationStatus } from "modals/ModalSetOperStatus";
 import { formatDateTime } from "../../../../utils/formatDateTime.ts";
+import { Operation } from "../../../../client";
+import { Option } from "../../../../types/Option.ts";
 
 const formatExecTime = (execTime: string) => {
     const hours = Number(execTime.substring(0, 2));
@@ -17,7 +18,7 @@ const formatExecTime = (execTime: string) => {
     );
 };
 
-const getOperExecStart = (oper: OperationAndProduct) => {
+const getOperExecStart = (oper: Operation) => {
     return oper.execStart ? (
         <Text>Назначено на: {formatDateTime(new Date(oper.execStart))}</Text>
     ) : (
@@ -26,8 +27,8 @@ const getOperExecStart = (oper: OperationAndProduct) => {
 };
 
 type OperationItemProps = {
-    operation: OperationAndProduct;
-    operationStatuses: OperationOption[];
+    operation: Operation;
+    operationStatuses: Option[];
     page: number;
     loadOperations: (page: number) => void;
 };
@@ -75,7 +76,7 @@ export function OperationItem({
                                 Статус: {operation.product.productStatus.name}
                             </Text>
                             <Text>Количество: {operation.product.amount}</Text>
-                            <ModalSetOperStatus
+                            <ModalSetOperationStatus
                                 operation={operation}
                                 operationStatuses={operationStatuses}
                                 page={page}

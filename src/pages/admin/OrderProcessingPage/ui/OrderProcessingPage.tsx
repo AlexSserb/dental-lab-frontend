@@ -137,7 +137,7 @@ export const OrderProcessingPage = () => {
                             </Text>
                             <Text>
                                 Стоимость 1-го изделия:{" "}
-                                {products[curProdIdx].productType.cost.toFixed(
+                                {products[curProdIdx].productType.cost?.toFixed(
                                     2
                                 )}{" "}
                                 руб.
@@ -148,7 +148,7 @@ export const OrderProcessingPage = () => {
                             <Text>
                                 Сумма:{" "}
                                 {(
-                                    products[curProdIdx].productType.cost *
+                                    (products[curProdIdx].productType.cost ?? 0) *
                                     products[curProdIdx].amount
                                 ).toFixed(2)}{" "}
                                 руб.

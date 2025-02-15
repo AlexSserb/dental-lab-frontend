@@ -1,17 +1,13 @@
-import productTypesService from "../../services/ProductTypeService.ts";
 import { useEffect, useState } from "react";
-import ProductType from "../../types/ProductTypes/ProductType.ts";
+import { ProductsService, ProductType } from "../../client";
 
 const useProductTypeSelect = () => {
     const [productTypes, setProductTypes] = useState<ProductType[]>([]);
 
     const loadProductTypes = () => {
-        productTypesService
-            .getAll()
-            .then(res => {
-                const products = res.data;
-
-                setProductTypes(products);
+        ProductsService.getProductTypes()
+            .then(typesOfProduct => {
+                setProductTypes(typesOfProduct);
             })
             .catch(err => console.log(err));
     };

@@ -9,9 +9,14 @@ export const ModalChangePassword = () => {
     const [newPassword, setNewPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-    const { submitChanges } = useChangePassword({
-        handleCloseModal: close,
-    });
+    const handleCloseModal = () => {
+        setConfirmPassword("");
+        setOldPassword("");
+        setNewPassword("");
+        close();
+    };
+
+    const { submitChanges } = useChangePassword({ handleCloseModal });
 
     return (
         <Stack>

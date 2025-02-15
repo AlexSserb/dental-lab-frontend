@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-    getOrdersForUser,
-    getProductsForOrder,
-} from "../api/physicianOrderListApi";
-import { AxiosResponse } from "axios";
-import { OrderPage } from "../types/OrderPage";
-import Product from "types/ProductTypes/Product";
-import { OrderBrief } from "types/OrderTypes/Order";
+import { type Order, OrdersService, Product, ProductsService } from "../../../../client";
 
 function usePhysicianOrderList() {
-    const [orders, setOrders] = useState<OrderBrief[]>([]);
+    const [orders, setOrders] = useState<Order[]>([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [products, setProducts] = useState<Product[]>([]);
-    const [currOrder, setCurrOrder] = useState<OrderBrief | null>(null);
+    const [currOrder, setCurrOrder] = useState<Order | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,13 +20,15 @@ function usePhysicianOrderList() {
     };
 
     const getOrders = (orderPage: number) => {
-        getOrdersForUser(orderPage)
-            .then((res: AxiosResponse<OrderPage>) => {
-                setOrders(res.data.results);
-                setTotalPages(res.data.totalPages);
-                if (res.data.results.length > 0) {
-                    setCurrOrder(res.data.results[0]);
-                    getOrderInfo(res.data.results[0]);
+        OrdersService.getOrdersForPhysician({
+            page: orderPage,
+        })
+            .then((res) => {
+                setOrders(res.results);
+                setTotalPages(res.totalPages);
+                if (res.results.length > 0) {
+                    setCurrOrder(res.results[0]);
+                    getOrderInfo(res.results[0]);
                 } else {
                     navigate("/create-order");
                 }
@@ -43,10 +38,12 @@ function usePhysicianOrderList() {
             });
     };
 
-    const getOrderInfo = (order: OrderBrief) => {
-        getProductsForOrder(order.id)
-            .then(res => {
-                setProducts(res.data);
+    const getOrderInfo = (order: Order) => {
+        ProductsService.getForOrder({
+            orderId: order.id,
+        })
+            .then(products => {
+                setProducts(products);
                 setCurrOrder(order);
             })
             .catch(err => {

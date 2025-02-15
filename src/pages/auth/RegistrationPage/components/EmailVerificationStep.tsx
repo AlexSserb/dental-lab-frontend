@@ -1,10 +1,10 @@
 import { useUserContext } from "../../../../contexts/UserContext/useUserContext.ts";
 import { Button, Group, Text, Title } from "@mantine/core";
 import { IconMailFast } from "@tabler/icons-react";
-import { postEmailVerification } from "../api/registrationApi.ts";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 import RegistrationStepWrapper from "../wrappers/RegistrationStepWrapper.tsx";
+import { AccountsService } from "../../../../client";
 
 const EmailVerificationStep = () => {
     const { user } = useUserContext();
@@ -18,9 +18,9 @@ const EmailVerificationStep = () => {
     };
 
     const sendEmailVerification = () => {
-        postEmailVerification()
-            .then((res) => {
-                console.log(res);
+        AccountsService.sendEmailVerification()
+            .then(res => {
+                console.log(res.message);
                 notifications.show({
                     message: "Сообщение для подтверждения почты отправлено",
                 });

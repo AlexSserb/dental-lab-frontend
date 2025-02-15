@@ -1,31 +1,26 @@
 import { useEffect, useState } from "react";
-import operationService from "services/OperationService";
-import { OperationAndProduct, OperationOption } from "types/OperationTypes/Operation";
+import { Operation, OperationsService } from "../../../../client";
+import { Option } from "../../../../types/Option.ts";
 
 function useTechOperation() {
-    const [operations, setOperations] = useState<OperationAndProduct[]>([]);
-    const [operationStatuses, setOperationStatuses] = useState<
-        OperationOption[]
-    >([]);
+    const [operations, setOperations] = useState<Operation[]>([]);
+    const [operationStatuses, setOperationStatuses] = useState<Option[]>([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
     const loadOperations = (page: number) => {
-        operationService
-            .getForTech(page)
+        OperationsService.getForTech({ page })
             .then(res => {
-                console.log(res.data)
-                setOperations(res.data.results);
-                setTotalPages(res.data.totalPages);
+                setOperations(res.results);
+                setTotalPages(res.totalPages);
             })
             .catch(err => console.log(err));
     };
 
     useEffect(() => {
-        operationService
-            .getOperationStatuses()
-            .then(res => {
-                const operations = res.data.map(oper => {
+        OperationsService.getOperationStatuses()
+            .then(operationStatuses => {
+                const operations = operationStatuses.map(oper => {
                     return { value: oper.id, label: oper.name };
                 });
                 setOperationStatuses(operations);
