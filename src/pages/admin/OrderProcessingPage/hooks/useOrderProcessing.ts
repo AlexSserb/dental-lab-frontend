@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { OrdersService, OrderWithPhysician, ProductAndOperations, ProductsService } from "../../../../client";
+import { useNavigate } from "react-router-dom";
+import { OrdersService, ProductAndOperations, ProductsService } from "../../../../client";
+import { useOrdersContext } from "../../../../contexts/OrdersContext/OrdersContext.tsx";
 
 function useOrderProcessing() {
-    const [order, setOrder] = useState<OrderWithPhysician | null>(null);
+    const { selectedOrder: order, setSelectedOrder: setOrder } = useOrdersContext();
     const [products, setProducts] = useState<ProductAndOperations[]>([]);
     const [curProdIdx, setCurProdIdx] = useState(0);
 
-    const { state } = useLocation();
     const navigate = useNavigate();
 
     const getProductsWithOperations = () => {
+        if (!order) return;
         ProductsService.getWithOperations({
-            orderId: state.order.id,
+            orderId: order.id,
         })
             .then(productsAndOperations => {
                 setProducts(productsAndOperations);
@@ -24,8 +25,6 @@ function useOrderProcessing() {
     };
 
     useEffect(() => {
-        setOrder(state.order);
-
         getProductsWithOperations();
     }, []);
 
@@ -63,7 +62,8 @@ function useOrderProcessing() {
             },
         })
             .then(order => {
-                navigate("/order", { state: { order } });
+                setOrder(order);
+                navigate("/order");
             })
             .catch(err => {
                 console.log(err);
@@ -71,7 +71,6 @@ function useOrderProcessing() {
     };
 
     return {
-        order,
         products,
         curProdIdx,
         setCurProdIdx,

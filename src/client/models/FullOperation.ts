@@ -14,5 +14,6 @@ export type FullOperation = {
     execStart?: string | null;
     ordinalNumber: number;
     history: Array<OperationEvent>;
+    isExecStartEditable?: boolean;
 };
 

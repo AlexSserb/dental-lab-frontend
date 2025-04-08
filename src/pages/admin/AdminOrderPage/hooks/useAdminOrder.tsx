@@ -1,37 +1,36 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import documentService from "../services/DocumentService.ts";
 import { saveAs } from "file-saver";
-import { OrderWithPhysician, Product, ProductsService } from "../../../../client";
+import { Product, ProductsService } from "../../../../client";
+import { useOrdersContext } from "../../../../contexts/OrdersContext/OrdersContext.tsx";
 
 function useAdminOrder() {
-    const [order, setOrder] = useState<OrderWithPhysician | null>(null);
     const [products, setProducts] = useState<Product[]>([]);
 
-    const { state } = useLocation();
+    const { selectedOrder } = useOrdersContext();
 
-    const loadOrderInfo = (orderId: string) => {
+    const loadOrderInfo = () => {
+        if (!selectedOrder) return;
+
         ProductsService.getForOrder({
-            orderId,
+            orderId: selectedOrder.id,
         })
             .then(products => {
                 setProducts(products);
-                setOrder(state.order);
             })
             .catch(err => {
                 setProducts([]);
-                setOrder(null);
                 console.log(err);
             });
     };
 
     useEffect(() => {
-        loadOrderInfo(state.order.id);
-    }, []);
+        loadOrderInfo();
+    }, [selectedOrder]);
 
     const loadOrderReport = () => {
-        if (!order) return;
-        documentService.getOrderReport(order.id)
+        if (!selectedOrder) return;
+        documentService.getOrderReport(selectedOrder.id)
             .then(res => {
                 console.log(res.data);
                 const pdfBlob = new Blob([res.data], { type: "application/pdf" });
@@ -43,8 +42,8 @@ function useAdminOrder() {
     };
 
     const loadAcceptanceReport = () => {
-        if (!order) return;
-        documentService.getAcceptanceReport(order.id)
+        if (!selectedOrder) return;
+        documentService.getAcceptanceReport(selectedOrder.id)
             .then(res => {
                 const pdfBlob = new Blob([res.data], { type: "application/pdf" });
                 saveAs(pdfBlob, "Акт сдачи-приема.pdf");
@@ -55,8 +54,8 @@ function useAdminOrder() {
     };
 
     const loadInvoiceForPayment = () => {
-        if (!order) return;
-        documentService.getInvoiceForPayment(order.id)
+        if (!selectedOrder) return;
+        documentService.getInvoiceForPayment(selectedOrder.id)
             .then(res => {
                 const pdfBlob = new Blob([res.data], { type: "application/pdf" });
                 saveAs(pdfBlob, "Счет на оплату.pdf");
@@ -68,8 +67,6 @@ function useAdminOrder() {
 
     return {
         products,
-        order,
-        setOrder,
         loadOrderReport,
         loadAcceptanceReport,
         loadInvoiceForPayment,

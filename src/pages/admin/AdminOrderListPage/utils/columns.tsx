@@ -19,6 +19,11 @@ const columns: MRT_ColumnDef<TableRow>[] = [
     {
         accessorKey: "date",
         header: "Дата оформления",
+        size: 0,
+    },
+    {
+        accessorKey: "deadline",
+        header: "Крайний срок",
     },
     {
         accessorKey: "status",

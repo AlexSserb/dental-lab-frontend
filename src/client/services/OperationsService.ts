@@ -5,9 +5,11 @@
 import type { FullOperation } from '../models/FullOperation';
 import type { Operation } from '../models/Operation';
 import type { OperationForSchedule } from '../models/OperationForSchedule';
+import type { OperationForTechSchedule } from '../models/OperationForTechSchedule';
 import type { OperationsPaginatedList } from '../models/OperationsPaginatedList';
 import type { OperationStatus } from '../models/OperationStatus';
 import type { PatchedAssignOperation } from '../models/PatchedAssignOperation';
+import type { PatchedSetOperationData } from '../models/PatchedSetOperationData';
 import type { PatchedUpdateOperationStatus } from '../models/PatchedUpdateOperationStatus';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -27,26 +29,6 @@ export class OperationsService {
             url: '/operations/assign-operation',
             body: requestBody,
             mediaType: 'application/json',
-        });
-    }
-    /**
-     * @returns any No response body
-     * @throws ApiError
-     */
-    public static setOperationExecStart({
-        execStart,
-        operationId,
-    }: {
-        execStart: string,
-        operationId: string,
-    }): CancelablePromise<any> {
-        return __request(OpenAPI, {
-            method: 'PATCH',
-            url: '/operations/operation-exec-start/{operationId}/{execStart}',
-            path: {
-                'execStart': execStart,
-                'operationId': operationId,
-            },
         });
     }
     /**
@@ -103,11 +85,28 @@ export class OperationsService {
      */
     public static getForSchedule({
         dateStart,
+    }: {
+        dateStart: string,
+    }): CancelablePromise<Array<OperationForSchedule>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/operations/operations-for-schedule/{dateStart}',
+            path: {
+                'dateStart': dateStart,
+            },
+        });
+    }
+    /**
+     * @returns OperationForTechSchedule
+     * @throws ApiError
+     */
+    public static getForTechSchedule({
+        dateStart,
         techEmail,
     }: {
         dateStart: string,
         techEmail: string,
-    }): CancelablePromise<Array<OperationForSchedule>> {
+    }): CancelablePromise<Array<OperationForTechSchedule>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/operations/operations-for-schedule/{dateStart}/{techEmail}',
@@ -132,6 +131,22 @@ export class OperationsService {
             query: {
                 'page': page,
             },
+        });
+    }
+    /**
+     * @returns any No response body
+     * @throws ApiError
+     */
+    public static updateOperation({
+        requestBody,
+    }: {
+        requestBody?: PatchedSetOperationData,
+    }): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/operations/update-operation',
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
 }

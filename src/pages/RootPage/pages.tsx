@@ -1,6 +1,6 @@
 import { User } from "contexts/UserContext/types";
 import PageInfo from "types/PageInfo";
-import { isRegularTech } from "utils/permissions";
+import { isLabAdmin, isRegularTech } from "utils/permissions";
 
 export function getPages(user: User | undefined): PageInfo[] {
     if (!user) return [];
@@ -11,6 +11,10 @@ export function getPages(user: User | undefined): PageInfo[] {
     ];
 
     if (isRegularTech(user)) {
+        pages.push({ title: "Расписание", path: "/schedule", state: {} });
+    }
+
+    if (isLabAdmin(user)) {
         pages.push({ title: "Расписание", path: "/schedule", state: {} });
     }
 

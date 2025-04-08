@@ -21,5 +21,8 @@ export function useAdminOperations() {
         getOperations();
     }, []);
 
-    return { operations, product };
+    return {
+        operations,
+        product,
+    };
 }

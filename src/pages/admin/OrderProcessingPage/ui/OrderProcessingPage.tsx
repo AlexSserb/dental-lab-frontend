@@ -1,13 +1,4 @@
-import {
-    Button,
-    Center,
-    Divider,
-    Group,
-    Stack,
-    Table,
-    Text,
-    Title,
-} from "@mantine/core";
+import { Button, Center, Divider, Group, Stack, Table, Text, Title } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { DiscountInput } from "components/DiscountInput";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
@@ -15,6 +6,8 @@ import useOrderProcessing from "../hooks/useOrderProcessing";
 import { getOrderCost, getProductCost } from "../utils/getCost";
 import OperationItem from "./OperationItem";
 import { TransparentContainer } from "components/TransparentContainer";
+import TitleWithBackButton from "../../../../components/TitleWithBackButton/TitleWithBackButton.tsx";
+import { useOrdersContext } from "../../../../contexts/OrdersContext/OrdersContext.tsx";
 
 const blockStyle = {
     padding: 2,
@@ -23,7 +16,6 @@ const blockStyle = {
 
 export const OrderProcessingPage = () => {
     const {
-        order,
         products,
         curProdIdx,
         setCurProdIdx,
@@ -31,6 +23,8 @@ export const OrderProcessingPage = () => {
         handleOrderDiscountChanged,
         handleProductDiscountChanged,
     } = useOrderProcessing();
+
+    const { selectedOrder: order } = useOrdersContext();
 
     const renderProducts = () => {
         return products.map((product, index) => (
@@ -60,12 +54,11 @@ export const OrderProcessingPage = () => {
         return (
             <RoundedBoxContainer>
                 <Stack style={blockStyle}>
-                    <Center>
-                        <Title order={4}>
-                            <b>Информация о заказе</b>
-                        </Title>
-                    </Center>
-                    <Divider />
+                    <TitleWithBackButton
+                        title={"Информация о заказе"}
+                        backRef={"/order"}
+                        titleOrder={4}
+                    />
                     <Text>
                         Заказчик:{" "}
                         {order?.user?.lastName + " " + order?.user?.firstName}
@@ -138,7 +131,7 @@ export const OrderProcessingPage = () => {
                             <Text>
                                 Стоимость 1-го изделия:{" "}
                                 {products[curProdIdx].productType.cost?.toFixed(
-                                    2
+                                    2,
                                 )}{" "}
                                 руб.
                             </Text>
@@ -164,14 +157,14 @@ export const OrderProcessingPage = () => {
                                 Результирующая скидка (%):{" "}
                                 {Math.max(
                                     products[curProdIdx].discount,
-                                    order?.discount ?? 0
+                                    order?.discount ?? 0,
                                 )}
                             </Text>
                             <Text>
                                 Итоговая сумма:{" "}
                                 {getProductCost(
                                     products[curProdIdx],
-                                    order
+                                    order,
                                 ).toFixed(2)}{" "}
                                 руб.
                             </Text>

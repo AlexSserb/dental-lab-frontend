@@ -11,6 +11,8 @@ import { PhysicianOrderListPage } from "pages/physician/PhysicianOrderListPage";
 import { TechOperationsPage } from "pages/tech/TechOperationsPage";
 import { TechSchedulePage } from "pages/tech/TechSchedulePage";
 import { Route, Routes } from "react-router-dom";
+import { SchedulePage } from "../admin/SchedulePage";
+import { OrdersContextProvider } from "../../contexts/OrdersContext/OrdersContext.tsx";
 
 export const routesUnauthorized = (
     <Routes>
@@ -39,17 +41,20 @@ export const routesTech = (
 );
 
 export const routesAdmin = (
-    <Routes>
-        <Route path="/" element={<AdminOrderListPage />} />
-        <Route path="/registration" element={<RegistrationPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/order" element={<AdminOrderPage />} />
-        <Route
-            path="/operations-for-product"
-            element={<AdminOperationsPage />}
-        />
-        <Route path="/schedule" element={<TechSchedulePage />} />
-        <Route path="/process-order" element={<OrderProcessingPage />} />
-        <Route path="/assign-operations" element={<AssignOperationsPage />} />
-    </Routes>
+    <OrdersContextProvider>
+        <Routes>
+            <Route path="/" element={<AdminOrderListPage />} />
+            <Route path="/registration" element={<RegistrationPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/order" element={<AdminOrderPage />} />
+            <Route
+                path="/operations-for-product"
+                element={<AdminOperationsPage />}
+            />
+            <Route path="/tech-schedule" element={<TechSchedulePage />} />
+            <Route path="/process-order" element={<OrderProcessingPage />} />
+            <Route path="/assign-operations" element={<AssignOperationsPage />} />
+            <Route path="/schedule" element={<SchedulePage />} />
+        </Routes>
+    </OrdersContextProvider>
 );

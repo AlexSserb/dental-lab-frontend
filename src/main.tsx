@@ -41,5 +41,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 </UserProvider>
             </DatesProvider>
         </MantineProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
 );

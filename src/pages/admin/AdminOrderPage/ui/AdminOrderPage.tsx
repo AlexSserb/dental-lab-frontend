@@ -1,8 +1,6 @@
 import {
     Box,
-    Button,
-    Center,
-    Divider,
+    Button, Divider,
     Flex,
     ScrollArea,
     Stack,
@@ -22,6 +20,8 @@ import { ProductRow } from "pages/admin/AdminOrderListPage/ui/ProductRow";
 import { calcDiscount, formatCost } from "utils/discounts";
 import { ModalSetOrderStatus } from "../../../../modals/ModalSetOrderStatus/ui/ModalSetOrderStatus.tsx";
 import createReport from "../../../../modals/ModalSetOrderStatus/utils/createReport.tsx";
+import TitleWithBackButton from "../../../../components/TitleWithBackButton/TitleWithBackButton.tsx";
+import { useOrdersContext } from "../../../../contexts/OrdersContext/OrdersContext.tsx";
 
 function ReadOnlyTextInput(props: TextInputProps) {
     return <TextInput {...props} readOnly w="100%" />;
@@ -31,13 +31,12 @@ export function AdminOrderPage() {
     const { user } = useUserContext();
     const {
         products,
-        order,
-        setOrder,
         loadOrderReport,
         loadAcceptanceReport,
         loadInvoiceForPayment,
     } = useAdminOrder();
     const navigate = useNavigate();
+    const { selectedOrder: order } = useOrdersContext();
 
     const renderProducts = () => {
         return products.map((product, index) => (
@@ -58,14 +57,9 @@ export function AdminOrderPage() {
             return (
                 <Button
                     variant="contained"
-                    onClick={() =>
-                        navigate("/assign-operations", {
-                            state: {
-                                order: order,
-                                products: products,
-                            },
-                        })
-                    }>
+                    onClick={() => navigate("/assign-operations")}
+                    w={"100%"}
+                >
                     Назначить операции
                 </Button>
             );
@@ -84,7 +78,9 @@ export function AdminOrderPage() {
                                 products: products,
                             },
                         })
-                    }>
+                    }
+                    w={"100%"}
+                >
                     Начать формирование наряда
                 </Button>
             );
@@ -105,12 +101,10 @@ export function AdminOrderPage() {
 
     return (
         <RoundedBoxContainer width="60%" minWidth="380px">
-            <Center>
-                <Title order={2} mb={20}>
-                    Информация о заказе
-                </Title>
-            </Center>
-            <Divider />
+            <TitleWithBackButton
+                backRef={"/"}
+                title={"Информация о заказе"}
+            />
             <Box>
                 <Stack gap={10}>
                     <Title order={4} mt={20}>
@@ -139,6 +133,7 @@ export function AdminOrderPage() {
                     ) : (
                         <Text>Информации об изделиях нет</Text>
                     )}
+                    <Divider />
                     <Flex direction="row" gap="sm">
                         <ReadOnlyTextInput
                             label="Заказчик"
@@ -152,9 +147,15 @@ export function AdminOrderPage() {
                             label="Статус"
                             value={order?.status?.name}
                         />
+                    </Flex>
+                    <Flex direction="row" gap="sm">
                         <ReadOnlyTextInput
                             label="Дата"
                             value={order?.orderDate}
+                        />
+                        <ReadOnlyTextInput
+                            label="Крайний срок выполнения"
+                            value={order?.deadline}
                         />
                     </Flex>
                     <Flex direction="row" gap="sm">
@@ -179,12 +180,17 @@ export function AdminOrderPage() {
                             value={order?.comment}
                         />
                     )}
-                    {order && <ModalSetOrderStatus order={order} setOrder={setOrder} />}
-                    {startOrderForm()}
-                    {getButtonAssignOperations()}
-                    {createOrderReport()}
-                    {createAcceptanceReport()}
-                    {createInvoiceForPayment()}
+                    <Divider />
+                    <Flex direction="row" gap="sm">
+                        {order && <ModalSetOrderStatus />}
+                        {startOrderForm()}
+                        {getButtonAssignOperations()}
+                    </Flex>
+                    <Flex direction="row" gap="sm">
+                        {createOrderReport()}
+                        {createAcceptanceReport()}
+                        {createInvoiceForPayment()}
+                    </Flex>
                 </Stack>
             </Box>
         </RoundedBoxContainer>

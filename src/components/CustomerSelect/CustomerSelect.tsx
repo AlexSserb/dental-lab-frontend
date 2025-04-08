@@ -9,7 +9,7 @@ const CustomerSelect = (props: Props) => {
     return (
         <Select
             w="100%"
-            label="Заказчик"
+            label="Организация-заказчик"
             data={customers}
             {...props}
         />

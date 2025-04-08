@@ -1,7 +1,6 @@
 import { IconInfoSquare } from "@tabler/icons-react";
 
 import { useNavigate } from "react-router-dom";
-
 import {
     Button,
     Center,
@@ -10,7 +9,8 @@ import {
     Paper,
     ScrollArea,
     Stack,
-    Table, Textarea,
+    Table,
+    Textarea,
     TextInput,
     Title,
 } from "@mantine/core";
@@ -66,7 +66,7 @@ export const PhysicianOrderListPage = () => {
 
     return (
         <Flex gap={10} direction={{ base: "column", sm: "row" }}>
-            <RoundedBoxContainer>
+            <RoundedBoxContainer width={"100%"}>
                 <Flex direction="column">
                     <Title mx={15} order={2}>
                         Заказы
@@ -79,20 +79,18 @@ export const PhysicianOrderListPage = () => {
                         Оформить заказ
                     </Button>
                     {orders.length > 0 ? (
-                        <Stack align="center" m={20}>
-                            <Paper>
-                                <Table withTableBorder withColumnBorders>
-                                    <Table.Thead>
-                                        <Table.Tr>
-                                            <Table.Th>№</Table.Th>
-                                            <Table.Th>Дата</Table.Th>
-                                            <Table.Th>Статус</Table.Th>
-                                            <Table.Th></Table.Th>
-                                        </Table.Tr>
-                                    </Table.Thead>
-                                    <Table.Tbody>{renderOrders()}</Table.Tbody>
-                                </Table>
-                            </Paper>
+                        <Stack align="flex-start" m={20}>
+                            <Table withTableBorder withColumnBorders>
+                                <Table.Thead>
+                                    <Table.Tr>
+                                        <Table.Th>№</Table.Th>
+                                        <Table.Th>Дата</Table.Th>
+                                        <Table.Th>Статус</Table.Th>
+                                        <Table.Th></Table.Th>
+                                    </Table.Tr>
+                                </Table.Thead>
+                                <Table.Tbody>{renderOrders()}</Table.Tbody>
+                            </Table>
                             <Pagination
                                 total={totalPages}
                                 value={page}
@@ -109,15 +107,15 @@ export const PhysicianOrderListPage = () => {
                     )}
                 </Flex>
             </RoundedBoxContainer>
-            <RoundedBoxContainer>
-                <Flex direction="column">
+            <RoundedBoxContainer width={"100%"}>
+                <Flex direction="column" w={"100%"}>
                     <Center>
                         <Title mb={20} order={2}>
                             Информация о заказе
                         </Title>
                     </Center>
                     <Stack gap={15}>
-                        {products.length > 0 ? (
+                        {products.length > 0 && (
                             <Paper>
                                 <ScrollArea scrollbars="x">
                                     <Table withTableBorder withColumnBorders>
@@ -144,8 +142,6 @@ export const PhysicianOrderListPage = () => {
                                     </Table>
                                 </ScrollArea>
                             </Paper>
-                        ) : (
-                            <p>Изделия для заказа</p>
                         )}
                         <Flex
                             direction={{ base: "column", sm: "row" }}
@@ -160,10 +156,19 @@ export const PhysicianOrderListPage = () => {
                                 label="Заказчик"
                                 value={currOrder?.customer?.name ?? ""}
                             />
+                        </Flex>
+                        <Flex
+                            direction={{ base: "column", sm: "row" }}
+                            gap={10}>
                             <TextInput
                                 {...textInputStyle}
-                                label="Дата"
+                                label="Дата оформления"
                                 value={currOrder?.orderDate ?? ""}
+                            />
+                            <TextInput
+                                {...textInputStyle}
+                                label="Крайний срок выполнения"
+                                value={currOrder?.deadline ?? ""}
                             />
                         </Flex>
                         <Flex direction={{ base: "column", sm: "row" }}>

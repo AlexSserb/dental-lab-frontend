@@ -13,5 +13,6 @@ export type UserProfile = {
     readonly createdAt: string;
     customers: Array<Customer>;
     readonly group: string;
+    readonly groupId: number;
 };
 

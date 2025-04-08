@@ -3,7 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { DataForOrderCreation } from '../models/DataForOrderCreation';
-import type { Order } from '../models/Order';
 import type { OrderDiscountSetter } from '../models/OrderDiscountSetter';
 import type { OrdersPaginatedList } from '../models/OrdersPaginatedList';
 import type { OrderStatus } from '../models/OrderStatus';
@@ -31,14 +30,14 @@ export class OrdersService {
         });
     }
     /**
-     * @returns Order
+     * @returns OrderWithPhysician
      * @throws ApiError
      */
     public static confirmOrder({
         requestBody,
     }: {
         requestBody: OrderDiscountSetter,
-    }): CancelablePromise<Order> {
+    }): CancelablePromise<OrderWithPhysician> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/orders/confirm-order/',

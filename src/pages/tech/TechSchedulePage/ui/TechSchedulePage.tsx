@@ -14,9 +14,9 @@ import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import { useUserContext } from "contexts/UserContext/useUserContext";
 import { isMobile } from "react-device-detect";
 import { isLabAdmin } from "utils/permissions";
-import { formatDate, formatTime } from "../../../../utils/formatDateTime";
+import { formatDate, formatStrTime } from "../../../../utils/formatDateTime";
 import getHeaderToolbar from "../utils/getHeaderToolbar";
-import { OperationForSchedule, OperationsService } from "../../../../client";
+import { OperationForTechSchedule, OperationsService } from "../../../../client";
 
 export const TechSchedulePage = () => {
     const [opened, { open, close }] = useDisclosure(false);
@@ -29,11 +29,9 @@ export const TechSchedulePage = () => {
     const calendarApi = calendarRef.current?.getApi();
 
     const [currDate, setCurrDate] = useState<Date | null>(null);
-    let operations: OperationForSchedule[] = [];
+    let operations: OperationForTechSchedule[] = [];
 
-    const [operation, setOperation] = useState<OperationForSchedule | null>(
-        null
-    );
+    const [operation, setOperation] = useState<OperationForTechSchedule | null>(null);
 
     const renderEventOperationContent = (eventInfo: any) => {
         const oper = eventInfo.event.extendedProps;
@@ -45,13 +43,14 @@ export const TechSchedulePage = () => {
                 h="100%"
                 w="100%"
                 onClick={() => {
-                    const operInfo: OperationForSchedule = {
+                    const operInfo: OperationForTechSchedule = {
                         id: eventInfo.event.id,
                         start: eventInfo.event.start,
                         end: eventInfo.event.end,
                         operationType: oper.operationType,
                         operationStatus: oper.operationStatus,
                         product: oper.product,
+                        editable: oper.editable,
                     };
                     setOperation(operInfo);
                     open();
@@ -62,18 +61,20 @@ export const TechSchedulePage = () => {
         );
     };
 
-    const setOperationExecStart = (operation: OperationForSchedule) => {
+    const updateOperation = (operation: OperationForTechSchedule) => {
         const dateStart = new Date(operation.start);
-        OperationsService.setOperationExecStart({
-            operationId: operation.id,
-            execStart: dateStart.toUTCString(),
+        OperationsService.updateOperation({
+            requestBody: {
+                operationId: operation.id,
+                execStart: dateStart.toUTCString(),
+            },
         })
             .catch(err => console.log(err));
     };
 
     async function getCalendarData(fetchInfo: any, successCallback: any) {
         const date: Date = fetchInfo.start;
-        await OperationsService.getForSchedule({
+        await OperationsService.getForTechSchedule({
             dateStart: formatDate(date),
             techEmail,
         })
@@ -93,7 +94,7 @@ export const TechSchedulePage = () => {
                 <Text>Тип операции: {operation.operationType.name}</Text>
                 <Text>
                     Время выполнения:{" "}
-                    {formatTime(operation.operationType.execTime)}
+                    {formatStrTime(operation.operationType.execTime)}
                 </Text>
                 <Text>Статус операции: {operation.operationStatus.name}</Text>
                 <Text>Начало выполнения:</Text>
@@ -108,7 +109,7 @@ export const TechSchedulePage = () => {
                 {isEditable && (
                     <Button
                         onClick={() => {
-                            setOperationExecStart(operation);
+                            updateOperation(operation);
                         }}>
                         Сохранить изменения
                     </Button>
@@ -159,13 +160,20 @@ export const TechSchedulePage = () => {
                         }
                         eventContent={renderEventOperationContent}
                         eventDrop={(event: any) =>
-                            setOperationExecStart(event.event)
+                            updateOperation(event.event)
                         }
                         slotMinTime={"8:00"}
                         slotMaxTime={"19:00"}
                         snapDuration={"00:01"}
                         slotDuration={"00:15"}
-                        headerToolbar={getHeaderToolbar()}></FullCalendar>
+                        headerToolbar={getHeaderToolbar()}
+                        slotLabelFormat={{
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                            meridiem: false,
+                        }}
+                    />
                 </Box>
             </Stack>
             <Drawer opened={opened} onClose={close} title="Операция">

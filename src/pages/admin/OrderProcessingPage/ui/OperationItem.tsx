@@ -1,5 +1,5 @@
 import { Table } from "@mantine/core";
-import { formatTime } from "utils/formatDateTime";
+import { formatStrTime } from "utils/formatDateTime";
 import { OperationForProduct } from "../../../../client";
 
 type OperationItemProps = {
@@ -11,7 +11,7 @@ function OperationItem({ operation }: OperationItemProps) {
         <Table.Tr key={operation.id}>
             <Table.Td>{operation.ordinalNumber}</Table.Td>
             <Table.Td>{operation.operationType.name}</Table.Td>
-            <Table.Td>{formatTime(operation.operationType.execTime)}</Table.Td>
+            <Table.Td>{formatStrTime(operation.operationType.execTime)}</Table.Td>
         </Table.Tr>
     );
 }

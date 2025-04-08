@@ -1,6 +1,6 @@
 import { Box, Button, Text } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
-import { formatTime } from "utils/formatDateTime";
+import { formatDateTime, formatStrTime } from "utils/formatDateTime";
 import { getDepartmentName } from "utils/getDepartmentInfo";
 import { OperationForProduct } from "../../../../client";
 
@@ -24,7 +24,7 @@ function OperationItem({
                 </Text>
                 <Text>
                     Время выполнения:{" "}
-                    {formatTime(operation.operationType.execTime)}
+                    {formatStrTime(operation.operationType.execTime)}
                 </Text>
                 {operation.tech ? (
                     <Text>
@@ -36,7 +36,7 @@ function OperationItem({
                 )}
                 {operation.execStart ? (
                     <Text>
-                        На дату и время: {operation.execStart}
+                        На дату и время: {formatDateTime(new Date(operation.execStart))}
                     </Text>
                 ) : (
                     <Text>Время выполнения не назначено</Text>

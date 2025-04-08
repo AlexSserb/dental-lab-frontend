@@ -17,14 +17,13 @@ import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import useAdminOrderList from "../hooks/useAdminOrderList";
 
 export function AdminOrderListPage() {
-    const { selectedDate, saveSelectedDate, getOrders, orders, table } =
-        useAdminOrderList();
+    const { selectedDate, saveSelectedDate, getOrders, orders, table } = useAdminOrderList();
 
     return (
-        <RoundedBoxContainer minWidth="380px">
+        <RoundedBoxContainer minWidth="70%">
             <Stack>
                 <Center>
-                    <Title order={1}>Заказы</Title>
+                    <Title order={2}>Заказы</Title>
                 </Center>
                 <Divider />
                 <Stack gap={10}>
@@ -50,7 +49,7 @@ export function AdminOrderListPage() {
                             <MantineReactTable table={table} />
                         </ScrollArea>
                     ) : (
-                        <Paper>
+                        <Paper my={"xl"}>
                             <Center>
                                 <Text>Нет заказов</Text>
                             </Center>

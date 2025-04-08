@@ -102,7 +102,7 @@ function useCreateOrderPage() {
         if (!selectedCustomer) {
             notifications.show({
                 title: "Error",
-                message: "Заказчик не выбран",
+                message: "Организация-заказчик не выбран",
             });
             return;
         }

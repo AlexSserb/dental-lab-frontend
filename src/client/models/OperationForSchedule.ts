@@ -12,5 +12,9 @@ export type OperationForSchedule = {
     operationType: OperationType;
     operationStatus: OperationStatus;
     product: Product;
+    editable: boolean;
+    resourceId: string;
+    error: boolean;
+    errorDescription: string;
 };
 

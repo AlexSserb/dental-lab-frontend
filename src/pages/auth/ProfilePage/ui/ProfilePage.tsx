@@ -158,7 +158,7 @@ export function ProfilePage() {
                         <Button
                             variant="contained"
                             onClick={() =>
-                                navigate("/schedule", {
+                                navigate("/tech-schedule", {
                                     state: { techEmail: userData.email },
                                 })
                             }>

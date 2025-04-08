@@ -12,5 +12,6 @@ export type Operation = {
     product: Product;
     execStart?: string | null;
     ordinalNumber: number;
+    isExecStartEditable?: boolean;
 };
 

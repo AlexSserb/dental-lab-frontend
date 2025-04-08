@@ -1,6 +1,6 @@
-import { Button, Group } from "@mantine/core";
 import { IconFileTypePdf } from "@tabler/icons-react";
 import { OrderWithPhysician } from "../../../client";
+import InlineButton from "../../../components/InlineButton/InlineButton.tsx";
 
 const createReport = (
     order: OrderWithPhysician | null,
@@ -10,15 +10,14 @@ const createReport = (
 ) => {
     if (order && order?.status?.number >= statusNumber) {
         return (
-            <Button
-                variant="outline"
+            <InlineButton
+                variant={"default"}
                 onClick={() => loader()}
+                w={"100%"}
             >
-                <Group gap="sm">
-                    <IconFileTypePdf />
-                    {text}
-                </Group>
-            </Button>
+                <IconFileTypePdf />
+                {text}
+            </InlineButton>
         );
     }
 };

@@ -30,7 +30,7 @@ export function ProductRow({ product, order, index }: ProductRowProps) {
                     variant="contained"
                     onClick={() =>
                         navigate("/operations-for-product", {
-                            state: { product: product },
+                            state: { product, order },
                         })
                     }>
                     <IconInfoHexagon />

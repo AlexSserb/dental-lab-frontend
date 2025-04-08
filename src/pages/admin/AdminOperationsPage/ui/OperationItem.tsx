@@ -2,7 +2,7 @@ import { Accordion, Box, Divider, Flex, Stack, Table, Text } from "@mantine/core
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { getDepartmentName } from "utils/getDepartmentInfo";
-import { formatTime } from "../../../../utils/formatDateTime.ts";
+import { formatStrTime } from "../../../../utils/formatDateTime.ts";
 import { FullOperation, type OperationEvent } from "../../../../client";
 
 type OperationItemProps = {
@@ -36,7 +36,7 @@ export function OperationItem({ operation }: OperationItemProps) {
                     </Stack>
                     <Stack>
                         <Text>
-                            Время выполнения: {formatTime(operation.operationType.execTime)}
+                            Время выполнения: {formatStrTime(operation.operationType.execTime)}
                         </Text>
                         {operation.tech ? (
                             <Text>

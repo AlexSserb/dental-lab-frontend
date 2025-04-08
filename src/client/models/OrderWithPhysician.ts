@@ -14,5 +14,6 @@ export type OrderWithPhysician = {
     user: UserProfile;
     comment?: string;
     customer: Customer;
+    deadline: string;
 };
 

@@ -12,5 +12,6 @@ export type Order = {
     readonly cost: number;
     comment?: string;
     customer: Customer;
+    deadline: string;
 };
 

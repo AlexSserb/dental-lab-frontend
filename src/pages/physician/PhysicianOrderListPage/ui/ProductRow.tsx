@@ -1,7 +1,8 @@
-import { Button, Paper, Popover, Table } from "@mantine/core";
+import { Button, Popover, Table } from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
 import { ToothMarks } from "components/ToothMarks";
 import { Order, Product } from "../../../../client";
+import MotionEnterDiv from "../../../../components/motionTemplates/MotionEnterDiv.tsx";
 
 type ProductRowProps = {
     product: Product;
@@ -10,10 +11,10 @@ type ProductRowProps = {
 };
 
 export const ProductRow = ({
-    product,
-    rowIndex,
-    currOrder,
-}: ProductRowProps) => {
+                               product,
+                               rowIndex,
+                               currOrder,
+                           }: ProductRowProps) => {
     return (
         <Table.Tr key={product.id}>
             <Table.Td>{rowIndex}</Table.Td>
@@ -38,9 +39,9 @@ export const ProductRow = ({
                         </Button>
                     </Popover.Target>
                     <Popover.Dropdown>
-                        <Paper>
+                        <MotionEnterDiv>
                             <ToothMarks teethList={product.teeth} />
-                        </Paper>
+                        </MotionEnterDiv>
                     </Popover.Dropdown>
                 </Popover>
             </Table.Td>

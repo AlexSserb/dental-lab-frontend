@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { OperationForProduct, ProductsService } from "../../../../client";
+import { useOrdersContext } from "../../../../contexts/OrdersContext/OrdersContext.tsx";
 
 export function useAssignOperations() {
-    const { state } = useLocation();
+    const { selectedOrder } = useOrdersContext();
     let [operationsToAssign, setOperationsToAssign] = useState<OperationForProduct[]>([]);
 
     const processOperation = (operation: OperationForProduct): OperationForProduct => {
@@ -17,9 +17,10 @@ export function useAssignOperations() {
     };
 
     const getProductsWithOperations = () => {
+        if (!selectedOrder) return;
         operationsToAssign = [];
         ProductsService.getWithOperations({
-            orderId: state.order.id,
+            orderId: selectedOrder?.id,
         })
             .then(products => {
                 const operations: OperationForProduct[] = [];

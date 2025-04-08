@@ -11,7 +11,8 @@ import {
     ScrollArea,
     Stack,
     Table,
-    Text, Textarea,
+    Text,
+    Textarea,
     TextInput,
     Title,
     UnstyledButton,
@@ -40,6 +41,9 @@ export const CreateOrderPage = () => {
     } = useCreateOrderPage();
 
     const { upperJaw, lowerJaw } = useFillJawArrays();
+
+    const deadline = new Date();
+    deadline.setDate(deadline.getDate() + 5);
 
     const renderProducts = () => {
         return listOfProducts.map((product, i) => (
@@ -140,10 +144,20 @@ export const CreateOrderPage = () => {
                                 value={comment}
                                 onChange={e => setComment(e.target.value)}
                             />
-                            <CustomerSelect
-                                value={selectedCustomer}
-                                onChange={setSelectedCustomer}
-                            />
+                            <Flex
+                                direction={{ base: "column", sm: "row" }}
+                                gap={10}>
+                                <CustomerSelect
+                                    value={selectedCustomer}
+                                    onChange={setSelectedCustomer}
+                                />
+                                <TextInput
+                                    label={"Крайний срок выполнения"}
+                                    w={"100%"}
+                                    value={deadline.toLocaleDateString("ru")}
+                                    disabled
+                                />
+                            </Flex>
                             <Text>
                                 Сумма: {orderCost.toFixed(2)} руб.
                             </Text>

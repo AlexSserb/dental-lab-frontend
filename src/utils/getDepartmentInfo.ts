@@ -24,6 +24,6 @@ export function getDepartmentIdByCode(code?: string) {
         case "DE":
             return 5;
         default:
-            return -1;
+            return;
     }
 }

@@ -1,17 +1,9 @@
-import {
-    Accordion,
-    Center,
-    Divider,
-    Group,
-    Paper,
-    Stack,
-    Text,
-    Title,
-} from "@mantine/core";
+import { Accordion, Center, Divider, Group, Paper, Stack, Text, Title } from "@mantine/core";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import { ToothMarks } from "components/ToothMarks";
 import { useAdminOperations } from "../hooks/useAdminOperations";
 import { OperationItem } from "./OperationItem";
+import TitleWithBackButton from "../../../../components/TitleWithBackButton/TitleWithBackButton.tsx";
 
 export function AdminOperationsPage() {
     const { operations, product } = useAdminOperations();
@@ -23,12 +15,10 @@ export function AdminOperationsPage() {
     return (
         <RoundedBoxContainer width="60%" minWidth="380px">
             <Stack gap="sm">
-                <Center>
-                    <Title order={3} m="md">
-                        Информация об изделии
-                    </Title>
-                </Center>
-                <Divider />
+                <TitleWithBackButton
+                    title={"Информация об изделии"}
+                    backRef={"/order"}
+                />
                 <Text>Тип изделия: {product.productType.name}</Text>
                 <Text>Количество: {product.amount}</Text>
                 <Text>Статус: {product.productStatus.name}</Text>

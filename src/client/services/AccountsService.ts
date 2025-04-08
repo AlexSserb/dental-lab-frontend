@@ -144,15 +144,15 @@ export class AccountsService {
      * @returns UserProfile
      * @throws ApiError
      */
-    public static getTechniciansByGroup({
+    public static getTechnicians({
         groupId,
     }: {
-        groupId: number,
+        groupId?: number,
     }): CancelablePromise<Array<UserProfile>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/accounts/technicians/{groupId}',
-            path: {
+            url: '/accounts/technicians',
+            query: {
                 'groupId': groupId,
             },
         });

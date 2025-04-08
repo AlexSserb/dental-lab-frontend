@@ -2,21 +2,19 @@ import { Button, Center, Divider, Modal, Select, Stack, Text, Title } from "@man
 import { useEffect, useState } from "react";
 import { calcDiscount, formatCost } from "../../../utils/discounts.ts";
 import { notifications } from "@mantine/notifications";
-import { OrdersService, OrderStatus, OrderWithPhysician } from "../../../client";
+import { OrdersService, OrderStatus } from "../../../client";
 import { Option } from "../../../types/Option.ts";
+import { useOrdersContext } from "../../../contexts/OrdersContext/OrdersContext.tsx";
 
-type ModalProps = {
-    order: OrderWithPhysician;
-    setOrder: (order: OrderWithPhysician) => void;
-};
-
-export function ModalSetOrderStatus({ order, setOrder }: ModalProps) {
+export function ModalSetOrderStatus() {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const { selectedOrder: order, setSelectedOrder } = useOrdersContext();
+
     const [orderStatuses, setOrderStatuses] = useState<Option[]>([]);
-    const [selectedStatus, setSelectedStatus] = useState<string | null>(order.status.id);
+    const [selectedStatus, setSelectedStatus] = useState<string | null>(order?.status.id ?? null);
 
     const loadOrderStatuses = () => {
         OrdersService.getOrderStatuses()
@@ -35,11 +33,13 @@ export function ModalSetOrderStatus({ order, setOrder }: ModalProps) {
     }, []);
 
     const handleSubmit = () => {
+        if (!order) return;
+
         if (!selectedStatus) {
             notifications.show({
                 title: "Error",
-                message: "Статус заказа не выбран."
-            })
+                message: "Статус заказа не выбран.",
+            });
             return;
         }
         OrdersService.setOrderStatus({
@@ -49,15 +49,15 @@ export function ModalSetOrderStatus({ order, setOrder }: ModalProps) {
             orderId: order.id,
         })
             .then(order => {
-                setOrder(order);
+                setSelectedOrder(order);
                 handleClose();
             })
             .catch(err => console.log(err));
-    }
+    };
 
     return (
-        <Stack>
-            <Button variant="contained" onClick={handleOpen}>
+        <>
+            <Button variant="contained" onClick={handleOpen} w={"100%"}>
                 Изменить статус заказа
             </Button>
             <Modal
@@ -84,9 +84,9 @@ export function ModalSetOrderStatus({ order, setOrder }: ModalProps) {
                     </Center>
                     <Divider />
 
-                    <Text>Заказчик: {order.customer.name}</Text>
-                    <Text>Врач: {order.user.lastName} {order.user.firstName}</Text>
-                    <Text>Дата создания: {order.orderDate}</Text>
+                    <Text>Заказчик: {order?.customer.name}</Text>
+                    <Text>Врач: {order?.user.lastName} {order?.user.firstName}</Text>
+                    <Text>Дата создания: {order?.orderDate}</Text>
                     <Text>Сумма заказа: {order?.cost?.toFixed(2)} руб.</Text>
                     <Text>Скидка на заказ: {order?.discount ?? 0} %</Text>
                     <Text>Сумма заказа: {formatCost(
@@ -94,6 +94,6 @@ export function ModalSetOrderStatus({ order, setOrder }: ModalProps) {
                     )} руб.</Text>
                 </Stack>
             </Modal>
-        </Stack>
-    )
+        </>
+    );
 }
