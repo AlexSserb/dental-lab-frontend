@@ -8,17 +8,19 @@ type Props = {
     width?: string;
     minWidth?: string;
     height?: string;
+    minHeight?: string;
     zIndex?: number;
     padding?: number;
 };
 
 export function RoundedBoxContainer(props: Props) {
-    const { children, grow, width, minWidth, height, zIndex, padding } = props;
+    const { children, grow, width, minWidth, height, minHeight, zIndex, padding } = props;
 
     const style = {
         width: width || "auto",
         minWidth: minWidth || "",
         height: height || "auto",
+        minHeight: minHeight || "",
         zIndex: zIndex || 1,
         padding: padding || 20,
         justifyContent: "start",

@@ -5,7 +5,7 @@ import { Box, Button, em, Group, rem, Stack, Tooltip } from "@mantine/core";
 import { formatDate, formatTime } from "../../../../utils/formatDateTime.ts";
 import { DateInput } from "@mantine/dates";
 import { RoundedBoxContainer } from "../../../../components/RoundedBoxContainer";
-import { IconAlertOctagon, IconCalendarEvent, IconCheck, IconLock, IconSearch } from "@tabler/icons-react";
+import { IconAlertOctagon, IconCalendarEvent, IconCheck, IconLock, IconSearch, IconX } from "@tabler/icons-react";
 import useTechniciansList from "../../../../hooks/useTechniciansList.tsx";
 import ruLocale from "@fullcalendar/core/locales/ru";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -56,7 +56,11 @@ export const Schedule = () => {
                 mx="xs"
                 h="100%"
                 w="100%"
+                style={{
+                    cursor: isOptimizedPlanShowed ? "default" : "pointer",
+                }}
                 onClick={() => {
+                    if (isOptimizedPlanShowed) return;
                     setOperation(operInfo);
                     open();
                 }}
@@ -81,6 +85,17 @@ export const Schedule = () => {
     };
 
     async function getCalendarData(fetchInfo: any, successCallback: any) {
+        if (isOptimizedPlanShowed) {
+            await OperationsService.generateOptimizedPlan()
+                .then(operationsForSchedule => {
+                    if (operationsForSchedule.length === 0) operations = [];
+                    else operations = operationsForSchedule;
+                    successCallback(operations);
+                })
+                .catch(err => console.log(err));
+            return;
+        }
+
         const date: Date = fetchInfo.start;
         await OperationsService.getForSchedule({
             dateStart: formatDate(date),
@@ -102,6 +117,8 @@ export const Schedule = () => {
     };
 
     const eventAllow = (dropInfo: DateSpanApi, draggedEvent: EventImpl | null) => {
+        if (isOptimizedPlanShowed) return false;
+
         const tech = techs.find(tech => tech.email === dropInfo.resource?.id);
         const techGroupId = techIdToOperationGroup(tech?.groupId);
         const operationGroupId = draggedEvent?.extendedProps.operationType?.group;
@@ -110,23 +127,54 @@ export const Schedule = () => {
     };
 
     const onApplyOptimizedPlanClick = () => {
+        const operationsToApply = operations.map(operation => {
+            return {
+                operationId: operation.id,
+                techEmail: operation.resourceId,
+                execStart: operation.start,
+            };
+        });
+        OperationsService.applyOptimizedPlan({
+            requestBody: {
+                operations: operationsToApply,
+            },
+        })
+            .then(() => {
+                setIsOptimizedPlanShowed(false);
+                refetchOperations();
+            })
+            .catch(err => console.log(err));
+    };
+
+    const onCancelOptimizedPlanClick = () => {
         setIsOptimizedPlanShowed(false);
+        refetchOperations();
     };
 
     const onCreateOptimizedPlanClick = () => {
         setIsOptimizedPlanShowed(true);
+        refetchOperations();
     };
 
     const optimizedPlanButton = () => {
         if (isOptimizedPlanShowed) {
             return (
-                <InlineButton
-                    size="md"
-                    onClick={onApplyOptimizedPlanClick}
-                >
-                    <IconCheck />
-                    Применить план
-                </InlineButton>
+                <Group>
+                    <InlineButton
+                        size="md"
+                        onClick={onApplyOptimizedPlanClick}
+                    >
+                        <IconCheck />
+                        Применить план
+                    </InlineButton>
+                    <InlineButton
+                        size="md"
+                        onClick={onCancelOptimizedPlanClick}
+                    >
+                        <IconX />
+                        Отменить
+                    </InlineButton>
+                </Group>
             );
         }
         return (
@@ -158,8 +206,8 @@ export const Schedule = () => {
                     <IconSearch />
                 </Button>
             </Group>
-        )
-    }
+        );
+    };
 
     const getHeaderToolbar = () => {
         if (isOptimizedPlanShowed) {
@@ -177,7 +225,7 @@ export const Schedule = () => {
     };
 
     return (
-        <RoundedBoxContainer width="99%" minWidth="380px" height="96vh">
+        <RoundedBoxContainer width="99%" minWidth="380px" minHeight="130vh">
             <Box miw="380px" mih="1vh">
                 <Group mb="md" justify="space-between">
                     {getSearchByDateField()}
@@ -200,12 +248,13 @@ export const Schedule = () => {
                     locale={ruLocale}
                     editable
                     nowIndicator
+                    weekends={false}
                     eventDurationEditable={false}
                     resourceAreaWidth={"15%"}
                     resourceGroupField={"group"}
                     eventAllow={eventAllow}
                     selectable
-                    timeZone={"UTC"}
+                    timeZone={"local"}
                     allDaySlot={false}
                     ref={calendarRef}
                     events={(fetchInfo, successCallback) =>

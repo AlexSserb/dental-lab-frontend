@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ApplyOperationsPlan } from '../models/ApplyOperationsPlan';
 import type { FullOperation } from '../models/FullOperation';
 import type { Operation } from '../models/Operation';
 import type { OperationForSchedule } from '../models/OperationForSchedule';
@@ -131,6 +132,32 @@ export class OperationsService {
             query: {
                 'page': page,
             },
+        });
+    }
+    /**
+     * @returns OperationForSchedule
+     * @throws ApiError
+     */
+    public static generateOptimizedPlan(): CancelablePromise<Array<OperationForSchedule>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/operations/plan',
+        });
+    }
+    /**
+     * @returns any No response body
+     * @throws ApiError
+     */
+    public static applyOptimizedPlan({
+        requestBody,
+    }: {
+        requestBody: ApplyOperationsPlan,
+    }): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/operations/plan/apply',
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
     /**

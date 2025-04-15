@@ -18,5 +18,5 @@ export const formatStrTime = (time: string) => {
 };
 
 export const formatTime = (date: Date) => {
-    return date.toISOString().substring(11, 16);
+    return date.toTimeString().substring(0, 5);
 };

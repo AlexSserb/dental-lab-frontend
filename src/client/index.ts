@@ -7,6 +7,8 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { ApplyOperations } from './models/ApplyOperations';
+export type { ApplyOperationsPlan } from './models/ApplyOperationsPlan';
 export type { AttachCustomersToUser } from './models/AttachCustomersToUser';
 export type { Customer } from './models/Customer';
 export type { CustomTokenObtainPair } from './models/CustomTokenObtainPair';
