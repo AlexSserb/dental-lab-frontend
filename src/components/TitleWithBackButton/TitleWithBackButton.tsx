@@ -20,7 +20,13 @@ const TitleWithBackButton = ({ title, backRef, state, titleOrder, isMini = false
                 justify={"space-between"}
             >
                 {isMini ? (
-                    <ActionIcon variant={"outline"} color={"black"}>
+                    <ActionIcon
+                        variant={"outline"}
+                        color={"black"}
+                        onClick={() => {
+                            navigate(backRef, { state });
+                        }}
+                    >
                         <IconArrowLeft />
                     </ActionIcon>
                 ) : (

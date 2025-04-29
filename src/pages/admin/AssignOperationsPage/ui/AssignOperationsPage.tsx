@@ -25,17 +25,26 @@ import {
 import TechSelect from "../../../../components/TechSelect/TechSelect.tsx";
 import WorkStartDateTimePicker from "../../../../components/WorkStartDateTimePicker/WorkStartDateTimePicker.tsx";
 import TitleWithBackButton from "../../../../components/TitleWithBackButton/TitleWithBackButton.tsx";
+import { notifications } from "@mantine/notifications";
 
 export function AssignOperationsPage() {
-    const { operationsToAssign, getProductsWithOperations } = useAssignOperations();
+    const { operationsToAssign, getProductsWithOperations, selectedOrder } = useAssignOperations();
 
     const [currOperation, setCurrOperation] = useState<OperationForProduct | null>(null);
     const [execStart, setExecStart] = useState<Date | null>(new Date());
     const [tech, setTech] = useState<UserProfile | null>(null);
 
     const calendarRef = useRef<FullCalendar | null>(null);
+    const calendarApi = calendarRef.current?.getApi();
+
     const [techs, setTechs] = useState<UserProfile[]>([]);
     let operations: OperationForTechSchedule[] = [];
+
+    const refetchOperations = () => {
+        if (calendarApi) {
+            calendarApi.refetchEvents();
+        }
+    };
 
     const renderEventOperationContent = (eventInfo: EventContentArg) => {
         const oper = eventInfo.event.extendedProps;
@@ -133,6 +142,22 @@ export function AssignOperationsPage() {
                     selectOperation={selectOperation}
                 />
             ));
+    };
+
+    const assignAllOperationsAutomatically = () => {
+        if (!selectedOrder) return;
+        OperationsService.assignOrderOperations({
+            requestBody: {
+                order: selectedOrder.id,
+            },
+        })
+            .then(() => {
+                refetchOperations();
+                notifications.show({
+                    message: "Все операции из заказа распределены",
+                });
+            })
+            .catch(err => console.log(err));
     };
 
     return (
@@ -235,6 +260,13 @@ export function AssignOperationsPage() {
                         snapDuration={"00:01"}
                         slotDuration={"00:15"}
                         headerToolbar={getHeaderToolbar()}
+                        customButtons={{
+                            assignAutomatically: {
+                                text: "Распределить все операции",
+                                click: assignAllOperationsAutomatically,
+                                hint: "Распределить все операции из данного заказа на техников",
+                            },
+                        }}
                     />
                 </RoundedBoxContainer>
             </Flex>

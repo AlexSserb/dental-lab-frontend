@@ -3,12 +3,12 @@ import { isMobile } from "react-device-detect";
 const getHeaderToolbar = () => {
     if (isMobile)
         return {
-            left: "",
+            left: "assignAutomatically",
             center: "title",
             right: "",
         };
     return {
-        left: "prev,next",
+        left: "prev,next,assignAutomatically",
         center: "title",
         right: "timeGridWeek,timeGridDay",
     };

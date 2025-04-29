@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ApplyOperationsPlan } from '../models/ApplyOperationsPlan';
+import type { AssignOrderOperations } from '../models/AssignOrderOperations';
 import type { FullOperation } from '../models/FullOperation';
 import type { Operation } from '../models/Operation';
 import type { OperationForSchedule } from '../models/OperationForSchedule';
@@ -28,6 +29,22 @@ export class OperationsService {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/operations/assign-operation',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @returns any No response body
+     * @throws ApiError
+     */
+    public static assignOrderOperations({
+        requestBody,
+    }: {
+        requestBody: AssignOrderOperations,
+    }): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/operations/assign-operations/order',
             body: requestBody,
             mediaType: 'application/json',
         });

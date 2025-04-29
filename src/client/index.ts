@@ -9,6 +9,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { ApplyOperations } from './models/ApplyOperations';
 export type { ApplyOperationsPlan } from './models/ApplyOperationsPlan';
+export type { AssignOrderOperations } from './models/AssignOrderOperations';
 export type { AttachCustomersToUser } from './models/AttachCustomersToUser';
 export type { Customer } from './models/Customer';
 export type { CustomTokenObtainPair } from './models/CustomTokenObtainPair';

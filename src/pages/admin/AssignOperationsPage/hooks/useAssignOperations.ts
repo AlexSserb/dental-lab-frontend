@@ -42,5 +42,5 @@ export function useAssignOperations() {
         getProductsWithOperations();
     }, []);
 
-    return { operationsToAssign, getProductsWithOperations };
+    return { operationsToAssign, getProductsWithOperations, selectedOrder };
 }
