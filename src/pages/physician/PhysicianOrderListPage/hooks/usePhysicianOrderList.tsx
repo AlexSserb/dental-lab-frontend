@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { type Order, OrdersService, Product, ProductsService } from "../../../../client";
+import { notifications } from "@mantine/notifications";
+import { modals } from "@mantine/modals";
+import { Text } from "@mantine/core";
 
 function usePhysicianOrderList() {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -26,6 +29,7 @@ function usePhysicianOrderList() {
             .then((res) => {
                 setOrders(res.results);
                 setTotalPages(res.totalPages);
+                if (currOrder) return;
                 if (res.results.length > 0) {
                     setCurrOrder(res.results[0]);
                     getOrderInfo(res.results[0]);
@@ -53,6 +57,37 @@ function usePhysicianOrderList() {
             });
     };
 
+    const cancelOrder = () => {
+        if (!currOrder) return;
+        OrdersService.cancelOrder({
+            requestBody: {
+                order: currOrder?.id,
+            },
+        })
+            .then(() => {
+                setCurrOrder(null);
+                getOrders(page);
+                notifications.show({
+                    message: "Заказ успешно отменен",
+                });
+            })
+            .catch(err => console.log(err));
+    };
+
+    const onCancelOrderClick = () => {
+        modals.openConfirmModal({
+            title: "Удаление должности",
+            children: (
+                <Text size="sm">
+                    Вы уверены, что хотите отменить заказ?
+                </Text>
+            ),
+            labels: { confirm: "Да", cancel: "Нет" },
+            confirmProps: { color: "red" },
+            onConfirm: () => cancelOrder(),
+        });
+    };
+
     return {
         orders,
         page,
@@ -60,7 +95,9 @@ function usePhysicianOrderList() {
         products,
         currOrder,
         handleChangePage,
+        getOrders,
         getOrderInfo,
+        onCancelOrderClick,
     };
 }
 

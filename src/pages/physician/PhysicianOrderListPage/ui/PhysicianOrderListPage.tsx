@@ -18,6 +18,8 @@ import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import styles from "pages/physician/PhysicianOrderListPage/styles/PhysicianOrderListStyles.module.css";
 import usePhysicianOrderList from "../hooks/usePhysicianOrderList";
 import { ProductRow } from "./ProductRow";
+import { isOrderCompleted, isOrderFresh } from "../../../../utils/checkStatus.ts";
+import { ModalReportAboutDefect } from "../../../../modals/ModalReportAboutDefect/ui/ModalReportAboutDefect.tsx";
 
 export const PhysicianOrderListPage = () => {
     const {
@@ -28,19 +30,27 @@ export const PhysicianOrderListPage = () => {
         currOrder,
         handleChangePage,
         getOrderInfo,
+        getOrders,
+        onCancelOrderClick,
     } = usePhysicianOrderList();
     const navigate = useNavigate();
+
+    const refetch = () => {
+        if (!currOrder) return;
+        getOrders(page);
+        getOrderInfo(currOrder);
+    };
 
     const renderOrders = () => {
         let i = 1;
         return orders.map(order => (
             <Table.Tr key={order.id}>
-                <Table.Td>{i++}</Table.Td>
+                <Table.Td w={1}>{i++}</Table.Td>
                 <Table.Td className={styles.noWrapDash}>
                     {order?.orderDate}
                 </Table.Td>
                 <Table.Td>{order.status.name}</Table.Td>
-                <Table.Td>
+                <Table.Td w={1}>
                     <Button onClick={() => getOrderInfo(order)}>
                         <IconInfoSquare />
                     </Button>
@@ -197,6 +207,25 @@ export const PhysicianOrderListPage = () => {
                             label="Комментарий к заказу"
                             value={currOrder?.comment}
                         />
+                        {(currOrder?.commentAfterAccept?.length ?? 0) > 0 && (
+                            <Textarea
+                                {...textInputStyle}
+                                label="Комментарий к заявлению о браке"
+                                value={currOrder?.commentAfterAccept}
+                            />
+                        )}
+                        {currOrder && isOrderCompleted(currOrder?.status.number) && (
+                            <ModalReportAboutDefect
+                                order={currOrder}
+                                products={products}
+                                refetchOrder={refetch}
+                            />
+                        )}
+                        {currOrder && isOrderFresh(currOrder.status.number) && (
+                            <Button onClick={onCancelOrderClick} variant={"outline"} color={"gray"}>
+                                Отменить заказ
+                            </Button>
+                        )}
                     </Stack>
                 </Flex>
             </RoundedBoxContainer>

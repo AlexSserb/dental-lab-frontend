@@ -14,7 +14,7 @@ export function ProductRow({ product, order, index }: ProductRowProps) {
 
     return (
         <Table.Tr key={product.id}>
-            <Table.Td>{index++}</Table.Td>
+            <Table.Td>{++index}</Table.Td>
             <Table.Td>{product.productType.name}</Table.Td>
             <Table.Td>{product.productStatus.name}</Table.Td>
             <Table.Td>{product.amount}</Table.Td>

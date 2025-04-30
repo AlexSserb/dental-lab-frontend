@@ -12,6 +12,7 @@ import { UserProvider } from "contexts/UserContext/contextProvider";
 import { RootPage } from "pages/RootPage";
 import axios from "axios";
 import "dayjs/locale/ru";
+import { ModalsProvider } from "@mantine/modals";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -29,17 +30,19 @@ axios.interceptors.request.use(config => {
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <MantineProvider>
-            <DatesProvider
-                settings={{
-                    locale: "ru",
-                    firstDayOfWeek: 1,
-                    weekendDays: [0, 6],
-                }}>
-                <Notifications />
-                <UserProvider>
-                    <RootPage />
-                </UserProvider>
-            </DatesProvider>
+            <ModalsProvider>
+                <DatesProvider
+                    settings={{
+                        locale: "ru",
+                        firstDayOfWeek: 1,
+                        weekendDays: [0, 6],
+                    }}>
+                    <Notifications />
+                    <UserProvider>
+                        <RootPage />
+                    </UserProvider>
+                </DatesProvider>
+            </ModalsProvider>
         </MantineProvider>
     </React.StrictMode>,
 );

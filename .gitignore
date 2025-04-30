@@ -27,3 +27,5 @@ dist-ssr
 
 tsconfig.tsbuildinfo
 vite.config.ts/
+
+yarn.lock

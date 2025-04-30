@@ -15,5 +15,6 @@ export type OrderWithPhysician = {
     comment?: string;
     customer: Customer;
     deadline: string;
+    commentAfterAccept?: string;
 };
 

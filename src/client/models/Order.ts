@@ -13,5 +13,6 @@ export type Order = {
     comment?: string;
     customer: Customer;
     deadline: string;
+    commentAfterAccept?: string;
 };
 

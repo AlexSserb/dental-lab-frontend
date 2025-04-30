@@ -1,6 +1,7 @@
 import {
     Box,
-    Button, Divider,
+    Button,
+    Divider,
     Flex,
     ScrollArea,
     Stack,
@@ -22,6 +23,7 @@ import { ModalSetOrderStatus } from "../../../../modals/ModalSetOrderStatus/ui/M
 import createReport from "../../../../modals/ModalSetOrderStatus/utils/createReport.tsx";
 import TitleWithBackButton from "../../../../components/TitleWithBackButton/TitleWithBackButton.tsx";
 import { useOrdersContext } from "../../../../contexts/OrdersContext/OrdersContext.tsx";
+import { isOrderDefected } from "../../../../utils/checkStatus.ts";
 
 function ReadOnlyTextInput(props: TextInputProps) {
     return <TextInput {...props} readOnly w="100%" />;
@@ -98,6 +100,9 @@ export function AdminOrderPage() {
     const createInvoiceForPayment = () => {
         return createReport(order, 1, "Документ \"Счет на оплату\"", loadInvoiceForPayment);
     };
+
+    console.log("IN PAGE:");
+    console.log(order);
 
     return (
         <RoundedBoxContainer width="60%" minWidth="380px">
@@ -178,6 +183,14 @@ export function AdminOrderPage() {
                         <Textarea
                             label="Комментарий к заказу"
                             value={order?.comment}
+                            readOnly
+                        />
+                    )}
+                    {isOrderDefected(order?.status.number) && (
+                        <Textarea
+                            label="Комментарий к выполненному заказу"
+                            value={order?.commentAfterAccept}
+                            readOnly
                         />
                     )}
                     <Divider />

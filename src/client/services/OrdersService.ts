@@ -2,12 +2,14 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { CancelOrder } from '../models/CancelOrder';
 import type { DataForOrderCreation } from '../models/DataForOrderCreation';
 import type { OrderDiscountSetter } from '../models/OrderDiscountSetter';
 import type { OrdersPaginatedList } from '../models/OrdersPaginatedList';
 import type { OrderStatus } from '../models/OrderStatus';
 import type { OrderWithPhysician } from '../models/OrderWithPhysician';
 import type { PatchedUpdateOrderStatus } from '../models/PatchedUpdateOrderStatus';
+import type { ReportDefect } from '../models/ReportDefect';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -27,6 +29,22 @@ export class OrdersService {
             path: {
                 'orderId': orderId,
             },
+        });
+    }
+    /**
+     * @returns any No response body
+     * @throws ApiError
+     */
+    public static cancelOrder({
+        requestBody,
+    }: {
+        requestBody: CancelOrder,
+    }): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/orders/cancel-order',
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
     /**
@@ -140,6 +158,22 @@ export class OrdersService {
                 'month': month,
                 'year': year,
             },
+        });
+    }
+    /**
+     * @returns any No response body
+     * @throws ApiError
+     */
+    public static reportDefect({
+        requestBody,
+    }: {
+        requestBody: ReportDefect,
+    }): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/orders/report-defect',
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
     /**

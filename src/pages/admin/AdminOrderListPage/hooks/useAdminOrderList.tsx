@@ -26,13 +26,13 @@ function useAdminOrderList() {
                 cost: order.cost,
                 date: order.orderDate,
                 deadline: order.deadline,
-                order: order,
+                order,
             };
         },
     ), [orders]);
 
     const table = useMantineReactTable({
-        columns: columns,
+        columns,
         data: getProcessedOrders,
         enableFullScreenToggle: false,
         enableGrouping: true,
