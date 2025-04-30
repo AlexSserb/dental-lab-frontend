@@ -5,11 +5,11 @@ import { FullOperation, OperationsService } from "../../../../client";
 export function useAdminOperations() {
     const [operations, setOperations] = useState<FullOperation[]>([]);
     const { state } = useLocation();
-    const { product } = state;
+    const { work } = state;
 
     const getOperations = () => {
-        OperationsService.getForProduct({
-            productId: product.id,
+        OperationsService.getForWork({
+            workId: work.id,
         })
             .then(operations => {
                 setOperations(operations);
@@ -23,6 +23,6 @@ export function useAdminOperations() {
 
     return {
         operations,
-        product,
+        work,
     };
 }

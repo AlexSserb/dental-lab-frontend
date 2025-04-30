@@ -49,7 +49,7 @@ export const TechSchedulePage = () => {
                         end: eventInfo.event.end,
                         operationType: oper.operationType,
                         operationStatus: oper.operationStatus,
-                        product: oper.product,
+                        work: oper.work,
                         editable: oper.editable,
                     };
                     setOperation(operInfo);

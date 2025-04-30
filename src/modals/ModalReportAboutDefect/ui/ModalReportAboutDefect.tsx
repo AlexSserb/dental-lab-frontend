@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { Box, Button, Modal, Radio, Stack, Table, Textarea } from "@mantine/core";
 import { useDisclosure, useSet } from "@mantine/hooks";
-import { Order, OrdersService, Product } from "../../../client";
+import { Order, OrdersService, Work } from "../../../client";
 
 type Props = {
     order: Order;
-    products: Product[];
+    works: Work[];
     refetchOrder: (order: Order) => void;
 }
 
-export const ModalReportAboutDefect = ({ order, products, refetchOrder }: Props) => {
+export const ModalReportAboutDefect = ({ order, works, refetchOrder }: Props) => {
     const [opened, { open, close }] = useDisclosure(false);
     const [commentAfterAccept, setCommentAfterAccept] = useState<string>("");
-    const selectedProductIds = useSet<string>([]);
+    const selectedWorkIds = useSet<string>([]);
 
     const handleCloseModal = () => {
         setCommentAfterAccept("");
@@ -23,7 +23,7 @@ export const ModalReportAboutDefect = ({ order, products, refetchOrder }: Props)
         OrdersService.reportDefect({
             requestBody: {
                 order: order.id,
-                products: [...selectedProductIds],
+                works: [...selectedWorkIds],
                 commentAfterAccept,
             },
         })
@@ -34,37 +34,37 @@ export const ModalReportAboutDefect = ({ order, products, refetchOrder }: Props)
             .catch(err => console.log(err));
     };
 
-    const renderProducts = () => (
+    const renderWorks = () => (
         <Table withTableBorder withColumnBorders>
             <Table.Thead>
                 <Table.Tr>
                     <Table.Td w="10%"></Table.Td>
-                    <Table.Td>Тип изделия</Table.Td>
+                    <Table.Td>Тип работы</Table.Td>
                     <Table.Td w="20%">
                         Кол-во
                     </Table.Td>
                 </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-                {products.map((product) => (
-                    <Table.Tr key={product.id}>
+                {works.map((work) => (
+                    <Table.Tr key={work.id}>
                         <Table.Td>
                             <Radio
-                                checked={selectedProductIds.has(product.id)}
+                                checked={selectedWorkIds.has(work.id)}
                                 onClick={() => {
-                                    if (selectedProductIds.has(product.id)) {
-                                        selectedProductIds.delete(product.id);
+                                    if (selectedWorkIds.has(work.id)) {
+                                        selectedWorkIds.delete(work.id);
                                     } else {
-                                        selectedProductIds.add(product.id);
+                                        selectedWorkIds.add(work.id);
                                     }
                                 }}
                             />
                         </Table.Td>
                         <Table.Td>
-                            {product.productType.name}
+                            {work.workType.name}
                         </Table.Td>
                         <Table.Td>
-                            {product.amount}
+                            {work.amount}
                         </Table.Td>
                     </Table.Tr>
                 ))}
@@ -86,8 +86,8 @@ export const ModalReportAboutDefect = ({ order, products, refetchOrder }: Props)
                         onChange={event => setCommentAfterAccept(event.target.value)}
                         maxLength={500}
                     />
-                    <Box>Выберите бракованые изделия:</Box>
-                    {renderProducts()}
+                    <Box>Выберите бракованые работы:</Box>
+                    {renderWorks()}
                     <Button
                         onClick={onSubmit}
                         mb={10}

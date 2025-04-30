@@ -83,16 +83,16 @@ export const ModalSetOperationStatus = ({
                     <Divider />
                     <Center>
                         <Text variant="h6" component="h6">
-                            Информация об изделии
+                            Информация о работе
                         </Text>
                     </Center>
                     <Divider />
 
-                    <Text>Вид: {operation.product.productType.name}</Text>
-                    <Text>Статус: {operation.product.productStatus.name}</Text>
-                    <Text>Количество: {operation.product.amount}</Text>
-                    <Text>Формула для изделия</Text>
-                    <ToothMarks teethList={operation.product.teeth} />
+                    <Text>Вид: {operation.work.workType.name}</Text>
+                    <Text>Статус: {operation.work.workStatus.name}</Text>
+                    <Text>Количество: {operation.work.amount}</Text>
+                    <Text>Формула для работы</Text>
+                    <ToothMarks teethList={operation.work.teeth} />
                 </Stack>
             </Modal>
         </Stack>

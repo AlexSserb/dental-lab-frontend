@@ -15,6 +15,7 @@ function useProfile() {
         group: "",
         createdAt: "",
         customers: [],
+        groupId: 1,
     });
     const [isFirstNameEdit, setIsFirstNameEdit] = useState(false);
     const [isLastNameEdit, setIsLastNameEdit] = useState(false);
@@ -25,14 +26,7 @@ function useProfile() {
     const { state } = useLocation();
 
     const formatAndSetUserData = (data: UserProfile) => {
-        setUserData({
-            email: data.email,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            group: data.group,
-            createdAt: data.createdAt,
-            customers: data.customers,
-        });
+        setUserData(data);
 
         setSelectedCustomers(data.customers.map(customer => customer.id));
     };

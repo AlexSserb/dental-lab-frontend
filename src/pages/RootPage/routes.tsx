@@ -48,7 +48,7 @@ export const routesAdmin = (
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/order" element={<AdminOrderPage />} />
             <Route
-                path="/operations-for-product"
+                path="/operations-for-work"
                 element={<AdminOperationsPage />}
             />
             <Route path="/tech-schedule" element={<TechSchedulePage />} />

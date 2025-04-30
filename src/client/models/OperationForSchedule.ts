@@ -4,14 +4,14 @@
 /* eslint-disable */
 import type { OperationStatus } from './OperationStatus';
 import type { OperationType } from './OperationType';
-import type { Product } from './Product';
+import type { Work } from './Work';
 export type OperationForSchedule = {
     id: string;
     start: string;
     end: string;
     operationType: OperationType;
     operationStatus: OperationStatus;
-    product: Product;
+    work: Work;
     editable: boolean;
     resourceId: string;
     error: boolean;

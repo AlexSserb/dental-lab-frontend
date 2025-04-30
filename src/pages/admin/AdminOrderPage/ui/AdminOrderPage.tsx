@@ -17,7 +17,7 @@ import { useUserContext } from "contexts/UserContext/useUserContext";
 import { useNavigate } from "react-router-dom";
 import { isLabAdmin } from "utils/permissions";
 import useAdminOrder from "../hooks/useAdminOrder";
-import { ProductRow } from "pages/admin/AdminOrderListPage/ui/ProductRow";
+import { WorkRow } from "pages/admin/AdminOrderListPage/ui/WorkRow.tsx";
 import { calcDiscount, formatCost } from "utils/discounts";
 import { ModalSetOrderStatus } from "../../../../modals/ModalSetOrderStatus/ui/ModalSetOrderStatus.tsx";
 import createReport from "../../../../modals/ModalSetOrderStatus/utils/createReport.tsx";
@@ -32,7 +32,7 @@ function ReadOnlyTextInput(props: TextInputProps) {
 export function AdminOrderPage() {
     const { user } = useUserContext();
     const {
-        products,
+        works,
         loadOrderReport,
         loadAcceptanceReport,
         loadInvoiceForPayment,
@@ -40,11 +40,11 @@ export function AdminOrderPage() {
     const navigate = useNavigate();
     const { selectedOrder: order } = useOrdersContext();
 
-    const renderProducts = () => {
-        return products.map((product, index) => (
-            <ProductRow
-                key={product.id}
-                product={product}
+    const renderWorks = () => {
+        return works.map((work, index) => (
+            <WorkRow
+                key={work.id}
+                work={work}
                 order={order}
                 index={index}
             />
@@ -76,8 +76,8 @@ export function AdminOrderPage() {
                     onClick={() =>
                         navigate("/process-order", {
                             state: {
-                                order: order,
-                                products: products,
+                                order,
+                                works,
                             },
                         })
                     }
@@ -101,9 +101,6 @@ export function AdminOrderPage() {
         return createReport(order, 1, "Документ \"Счет на оплату\"", loadInvoiceForPayment);
     };
 
-    console.log("IN PAGE:");
-    console.log(order);
-
     return (
         <RoundedBoxContainer width="60%" minWidth="380px">
             <TitleWithBackButton
@@ -113,30 +110,30 @@ export function AdminOrderPage() {
             <Box>
                 <Stack gap={10}>
                     <Title order={4} mt={20}>
-                        Изделия
+                        Работы
                     </Title>
-                    {products.length > 0 ? (
+                    {works.length > 0 ? (
                         <ScrollArea>
                             <Table withTableBorder withColumnBorders>
                                 <Table.Thead>
                                     <Table.Tr>
                                         <Table.Td>№</Table.Td>
-                                        <Table.Td>Тип изделия</Table.Td>
+                                        <Table.Td>Тип работы</Table.Td>
                                         <Table.Td>Статус</Table.Td>
                                         <Table.Td w="10%">Кол-во</Table.Td>
                                         <Table.Td>Цена</Table.Td>
-                                        <Table.Td>Скидка на изделие</Table.Td>
+                                        <Table.Td>Скидка на работу</Table.Td>
                                         <Table.Td>Скидка на заказ</Table.Td>
                                         <Table.Td>Рез. скидка</Table.Td>
                                         <Table.Td>Сумма</Table.Td>
                                         <Table.Td>Подробнее</Table.Td>
                                     </Table.Tr>
                                 </Table.Thead>
-                                <Table.Tbody>{renderProducts()}</Table.Tbody>
+                                <Table.Tbody>{renderWorks()}</Table.Tbody>
                             </Table>
                         </ScrollArea>
                     ) : (
-                        <Text>Информации об изделиях нет</Text>
+                        <Text>Информации о работах нет</Text>
                     )}
                     <Divider />
                     <Flex direction="row" gap="sm">

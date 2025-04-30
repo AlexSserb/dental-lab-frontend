@@ -5,6 +5,6 @@
 export type ReportDefect = {
     order: string;
     commentAfterAccept?: string;
-    products: Array<string>;
+    works: Array<string>;
 };
 

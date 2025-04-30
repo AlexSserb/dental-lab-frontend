@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import documentService from "../services/DocumentService.ts";
 import { saveAs } from "file-saver";
-import { Product, ProductsService } from "../../../../client";
+import { Work, WorksService } from "../../../../client";
 import { useOrdersContext } from "../../../../contexts/OrdersContext/OrdersContext.tsx";
 
 function useAdminOrder() {
-    const [products, setProducts] = useState<Product[]>([]);
+    const [works, setWorks] = useState<Work[]>([]);
 
     const { selectedOrder } = useOrdersContext();
 
     const loadOrderInfo = () => {
         if (!selectedOrder) return;
 
-        ProductsService.getForOrder({
+        WorksService.getForOrder({
             orderId: selectedOrder.id,
         })
-            .then(products => {
-                setProducts(products);
+            .then(works => {
+                setWorks(works);
             })
             .catch(err => {
-                setProducts([]);
+                setWorks([]);
                 console.log(err);
             });
     };
@@ -66,7 +66,7 @@ function useAdminOrder() {
     };
 
     return {
-        products,
+        works,
         loadOrderReport,
         loadAcceptanceReport,
         loadInvoiceForPayment,

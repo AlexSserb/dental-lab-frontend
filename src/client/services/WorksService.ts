@@ -2,25 +2,25 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Product } from '../models/Product';
-import type { ProductAndOperations } from '../models/ProductAndOperations';
-import type { ProductType } from '../models/ProductType';
+import type { Work } from '../models/Work';
+import type { WorkAndOperations } from '../models/WorkAndOperations';
+import type { WorkType } from '../models/WorkType';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-export class ProductsService {
+export class WorksService {
     /**
-     * @returns Product
+     * @returns Work
      * @throws ApiError
      */
     public static getForOrder({
         orderId,
     }: {
         orderId: string,
-    }): CancelablePromise<Array<Product>> {
+    }): CancelablePromise<Array<Work>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/products/{orderId}/',
+            url: '/works/{orderId}/',
             path: {
                 'orderId': orderId,
             },
@@ -29,30 +29,30 @@ export class ProductsService {
     /**
      * View is called once during the formation of the order by the administrator.
      * An operation list is generated for each item if it has not been generated previously.
-     * @returns ProductAndOperations
+     * @returns WorkAndOperations
      * @throws ApiError
      */
     public static getWithOperations({
         orderId,
     }: {
         orderId: string,
-    }): CancelablePromise<Array<ProductAndOperations>> {
+    }): CancelablePromise<Array<WorkAndOperations>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/products/operations/{orderId}',
+            url: '/works/operations/{orderId}',
             path: {
                 'orderId': orderId,
             },
         });
     }
     /**
-     * @returns ProductType
+     * @returns WorkType
      * @throws ApiError
      */
-    public static getProductTypes(): CancelablePromise<Array<ProductType>> {
+    public static getWorkTypes(): CancelablePromise<Array<WorkType>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/products/product-types/',
+            url: '/works/work-types/',
         });
     }
 }

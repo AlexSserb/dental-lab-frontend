@@ -6,7 +6,7 @@ import { OperationItem } from "./OperationItem";
 import TitleWithBackButton from "../../../../components/TitleWithBackButton/TitleWithBackButton.tsx";
 
 export function AdminOperationsPage() {
-    const { operations, product } = useAdminOperations();
+    const { operations, work } = useAdminOperations();
 
     const renderOperations = operations.map(oper => (
         <OperationItem operation={oper} />
@@ -16,16 +16,16 @@ export function AdminOperationsPage() {
         <RoundedBoxContainer width="60%" minWidth="380px">
             <Stack gap="sm">
                 <TitleWithBackButton
-                    title={"Информация об изделии"}
+                    title={"Информация о работе"}
                     backRef={"/order"}
                 />
-                <Text>Тип изделия: {product.productType.name}</Text>
-                <Text>Количество: {product.amount}</Text>
-                <Text>Статус: {product.productStatus.name}</Text>
+                <Text>Тип работы: {work.workType.name}</Text>
+                <Text>Количество: {work.amount}</Text>
+                <Text>Статус: {work.workStatus.name}</Text>
                 <Text>Формула:</Text>
                 <Group>
                     <Paper shadow="md" p="sm">
-                        <ToothMarks teethList={product.teeth} />
+                        <ToothMarks teethList={work.teeth} />
                     </Paper>
                 </Group>
                 <Divider />
@@ -33,7 +33,7 @@ export function AdminOperationsPage() {
                     <>
                         <Center>
                             <Title order={4} p="sm">
-                                Операции для изделия
+                                Операции для работы
                             </Title>
                         </Center>
                         <Divider />
@@ -42,7 +42,7 @@ export function AdminOperationsPage() {
                 ) : (
                     <Center>
                         <Text>
-                            Для изделия нет операций, так как не оформлен наряд.
+                            Для работы нет операций, так как не оформлен наряд.
                         </Text>
                     </Center>
                 )}

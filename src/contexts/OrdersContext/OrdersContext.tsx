@@ -42,8 +42,7 @@ const useOrdersContextState = () => {
     }, []);
 
     const getOrders = () => {
-        const dateFromStorage: string | null =
-            localStorage.getItem("orderListDate");
+        const dateFromStorage: string | null = localStorage.getItem("orderListDate");
 
         console.log(dateFromStorage);
         if (!dateFromStorage) return;

@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ProductFromUser } from './ProductFromUser';
+import type { WorkFromUser } from './WorkFromUser';
 export type DataForOrderCreation = {
     customerId: string;
-    productTypes: Array<ProductFromUser>;
+    workTypes: Array<WorkFromUser>;
     comment?: string;
 };
 

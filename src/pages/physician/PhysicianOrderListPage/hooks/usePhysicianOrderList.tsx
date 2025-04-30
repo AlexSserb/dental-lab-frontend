@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { type Order, OrdersService, Product, ProductsService } from "../../../../client";
+import { type Order, OrdersService, Work, WorksService } from "../../../../client";
 import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
 import { Text } from "@mantine/core";
@@ -9,7 +9,7 @@ function usePhysicianOrderList() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [products, setProducts] = useState<Product[]>([]);
+    const [works, setWorks] = useState<Work[]>([]);
     const [currOrder, setCurrOrder] = useState<Order | null>(null);
     const navigate = useNavigate();
 
@@ -43,15 +43,15 @@ function usePhysicianOrderList() {
     };
 
     const getOrderInfo = (order: Order) => {
-        ProductsService.getForOrder({
+        WorksService.getForOrder({
             orderId: order.id,
         })
-            .then(products => {
-                setProducts(products);
+            .then(works => {
+                setWorks(works);
                 setCurrOrder(order);
             })
             .catch(err => {
-                setProducts([]);
+                setWorks([]);
                 setCurrOrder(null);
                 console.log(err);
             });
@@ -92,7 +92,7 @@ function usePhysicianOrderList() {
         orders,
         page,
         totalPages,
-        products,
+        works,
         currOrder,
         handleChangePage,
         getOrders,

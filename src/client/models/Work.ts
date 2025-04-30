@@ -2,12 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ProductStatus } from './ProductStatus';
-import type { ProductType } from './ProductType';
-export type Product = {
+import type { WorkStatus } from './WorkStatus';
+import type { WorkType } from './WorkType';
+export type Work = {
     readonly id: string;
-    readonly productType: ProductType;
-    readonly productStatus: ProductStatus;
+    readonly workType: WorkType;
+    readonly workStatus: WorkStatus;
     discount: number;
     amount: number;
     readonly cost: number;

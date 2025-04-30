@@ -1,18 +1,18 @@
-import { OrderWithPhysician, ProductAndOperations } from "../../../../client";
+import { OrderWithPhysician, WorkAndOperations } from "../../../../client";
 
-export const getProductCost = (product: ProductAndOperations, order: OrderWithPhysician | null) => {
+export const getWorkCost = (work: WorkAndOperations, order: OrderWithPhysician | null) => {
     if (!order) return 0;
 
-    const cost = product.productType.cost ?? 0;
-    const discount = Math.max(product.discount ?? 0, order?.discount ?? 0);
-    return cost * product.amount * (1 - discount / 100);
+    const cost = work.workType.cost ?? 0;
+    const discount = Math.max(work.discount ?? 0, order?.discount ?? 0);
+    return cost * work.amount * (1 - discount / 100);
 };
 
-export const getOrderCost = (products: ProductAndOperations[], order: OrderWithPhysician | null) => {
+export const getOrderCost = (works: WorkAndOperations[], order: OrderWithPhysician | null) => {
     if (!order) return 0;
 
-    return products.reduce(
-        (partialSum, product) => partialSum + getProductCost(product, order),
+    return works.reduce(
+        (partialSum, work) => partialSum + getWorkCost(work, order),
         0
     );
 };

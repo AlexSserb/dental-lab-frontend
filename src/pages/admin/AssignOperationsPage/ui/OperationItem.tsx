@@ -2,12 +2,12 @@ import { Box, Button, Text } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import { formatDateTime, formatStrTime } from "utils/formatDateTime";
 import { getDepartmentName } from "utils/getDepartmentInfo";
-import { OperationForProduct } from "../../../../client";
+import { OperationForWork } from "../../../../client";
 
 type OperationItemProps = {
-    operation: OperationForProduct;
+    operation: OperationForWork;
     getOperationStyle: (operationId: string) => string;
-    selectOperation: (operation: OperationForProduct) => void;
+    selectOperation: (operation: OperationForWork) => void;
 };
 
 function OperationItem({

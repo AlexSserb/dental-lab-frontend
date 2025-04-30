@@ -68,14 +68,14 @@ export function OperationItem({
                     justify="space-between">
                     <Flex w="100%" justify={"space-between"}>
                         <Stack gap={5}>
-                            <Text>Информация об изделии</Text>
+                            <Text>Информация о работе</Text>
                             <Text>
-                                Вид: {operation.product.productType.name}
+                                Вид: {operation.work.workType.name}
                             </Text>
                             <Text>
-                                Статус: {operation.product.productStatus.name}
+                                Статус: {operation.work.workStatus.name}
                             </Text>
-                            <Text>Количество: {operation.product.amount}</Text>
+                            <Text>Количество: {operation.work.amount}</Text>
                             <ModalSetOperationStatus
                                 operation={operation}
                                 operationStatuses={operationStatuses}
@@ -85,8 +85,8 @@ export function OperationItem({
                         </Stack>
                     </Flex>
                     <Stack w="100%">
-                        <Text>Формула для изделия</Text>
-                        <ToothMarks teethList={operation.product.teeth} />
+                        <Text>Зубная формула</Text>
+                        <ToothMarks teethList={operation.work.teeth} />
                     </Stack>
                 </Flex>
             </Accordion.Panel>

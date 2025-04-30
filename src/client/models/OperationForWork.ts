@@ -5,7 +5,7 @@
 import type { OperationStatus } from './OperationStatus';
 import type { OperationType } from './OperationType';
 import type { UserProfile } from './UserProfile';
-export type OperationForProduct = {
+export type OperationForWork = {
     readonly id: string;
     operationType: OperationType;
     operationStatus: OperationStatus;

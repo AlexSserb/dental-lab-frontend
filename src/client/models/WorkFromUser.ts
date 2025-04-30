@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type ProductType = {
-    readonly id: string;
-    name: string;
-    cost?: number;
+export type WorkFromUser = {
+    workTypeId: string;
+    amount: number;
+    teeth: Array<number>;
 };
 

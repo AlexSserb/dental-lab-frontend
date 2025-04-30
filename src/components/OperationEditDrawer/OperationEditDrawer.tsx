@@ -1,5 +1,5 @@
 import { Button, Checkbox, Divider, Drawer, Stack, Text } from "@mantine/core";
-import { formatDateTime, formatStrTime } from "../../utils/formatDateTime.ts";
+import { formatStrTime } from "../../utils/formatDateTime.ts";
 import { useOperationEditContext } from "./contexts/OperationEditContext.tsx";
 import WorkStartDateTimePicker from "../WorkStartDateTimePicker/WorkStartDateTimePicker.tsx";
 
@@ -40,9 +40,9 @@ const OperationEditDrawer = ({ refetchOperations }: Props) => {
                     <WorkStartDateTimePicker
                         my="xs"
                         value={new Date(operation.start)}
-                        onChange={value =>
-                            value && setOperation({ ...operation, start: formatDateTime(value) })
-                        }
+                        onChange={value => {
+                            return value && setOperation({ ...operation, start: value.toLocaleString() });
+                        }}
                     />
                 </Stack>
                 <Checkbox

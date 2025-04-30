@@ -79,7 +79,7 @@ export const Schedule = () => {
                     </Group>
                 </Group>
                 <div>{oper.operationType?.name}</div>
-                <div>{oper.product.productType?.name}</div>
+                <div>{oper.work.workType?.name}</div>
             </Stack>
         );
     };

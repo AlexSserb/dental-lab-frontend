@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 
 import { Button, Center, Divider, Flex, Stack, Text, Title } from "@mantine/core";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
-import { formatDate, formatDateTime, formatStrTime } from "utils/formatDateTime";
+import { formatDate, formatStrTime } from "utils/formatDateTime";
 import { getDepartmentIdByCode, getDepartmentName } from "utils/getDepartmentInfo";
 import { showErrorNotification } from "utils/notifications";
 import { useAssignOperations } from "../hooks/useAssignOperations";
@@ -17,8 +17,8 @@ import getHeaderToolbar from "../utils/getHeaderToolbar";
 import { EventContentArg, EventInput, EventSourceFuncArg } from "fullcalendar";
 import {
     AccountsService,
-    OperationForProduct,
     OperationForTechSchedule,
+    OperationForWork,
     OperationsService,
     UserProfile,
 } from "../../../../client";
@@ -28,10 +28,10 @@ import TitleWithBackButton from "../../../../components/TitleWithBackButton/Titl
 import { notifications } from "@mantine/notifications";
 
 export function AssignOperationsPage() {
-    const { operationsToAssign, getProductsWithOperations, selectedOrder } = useAssignOperations();
+    const { operationsToAssign, getWorksWithOperations, selectedOrder } = useAssignOperations();
 
-    const [currOperation, setCurrOperation] = useState<OperationForProduct | null>(null);
-    const [execStart, setExecStart] = useState<Date | null>(new Date());
+    const [currOperation, setCurrOperation] = useState<OperationForWork | null>(null);
+    const [execStart, setExecStart] = useState<string | null>(null);
     const [tech, setTech] = useState<UserProfile | null>(null);
 
     const calendarRef = useRef<FullCalendar | null>(null);
@@ -65,7 +65,7 @@ export function AssignOperationsPage() {
                 execStart: dateStart.toUTCString(),
             },
         })
-            .then(() => getProductsWithOperations())
+            .then(() => getWorksWithOperations())
             .catch(err => console.log(err));
     };
 
@@ -91,11 +91,11 @@ export function AssignOperationsPage() {
         }
     }
 
-    const selectOperation = (operation: OperationForProduct) => {
+    const selectOperation = (operation: OperationForWork) => {
         setCurrOperation(operation);
         setTech(operation.tech ?? null);
-        if (operation.execStart) setExecStart(new Date(operation.execStart));
-        else setExecStart(new Date());
+        if (operation.execStart) setExecStart(operation.execStart);
+        else setExecStart(null);
 
         const groupId = getDepartmentIdByCode(operation.operationType.group);
         AccountsService.getTechnicians({ groupId })
@@ -113,7 +113,7 @@ export function AssignOperationsPage() {
         } else {
             if (!execStart) return;
             currOperation.tech = tech;
-            currOperation.execStart = formatDateTime(execStart);
+            currOperation.execStart = new Date(execStart).toUTCString();
             OperationsService.assignOperation({
                 requestBody: {
                     id: currOperation.id,
@@ -121,7 +121,7 @@ export function AssignOperationsPage() {
                     execStart: currOperation.execStart,
                 },
             })
-                .then(() => getProductsWithOperations())
+                .then(() => getWorksWithOperations())
                 .catch(err => console.log(err));
         }
     };
@@ -191,9 +191,9 @@ export function AssignOperationsPage() {
                                 </Text>
                                 <WorkStartDateTimePicker
                                     my="xs"
-                                    value={execStart}
+                                    value={execStart ? new Date(execStart) : null}
                                     label="Начало выполнения"
-                                    onChange={value => setExecStart(value)}
+                                    onChange={value => value && setExecStart(value.toLocaleString())}
                                 />
                                 <TechSelect
                                     onChange={setTech}
@@ -239,7 +239,7 @@ export function AssignOperationsPage() {
                         selectable={true}
                         initialView={isMobile ? "timeGridDay" : "timeGridWeek"}
                         weekends={false}
-                        timeZone={"UTC"}
+                        timeZone={"local"}
                         allDaySlot={false}
                         ref={calendarRef}
                         events={(fetchInfo, successCallback) =>

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { OperationForProduct, ProductsService } from "../../../../client";
+import { OperationForWork, WorksService } from "../../../../client";
 import { useOrdersContext } from "../../../../contexts/OrdersContext/OrdersContext.tsx";
 
 export function useAssignOperations() {
     const { selectedOrder } = useOrdersContext();
-    let [operationsToAssign, setOperationsToAssign] = useState<OperationForProduct[]>([]);
+    let [operationsToAssign, setOperationsToAssign] = useState<OperationForWork[]>([]);
 
-    const processOperation = (operation: OperationForProduct): OperationForProduct => {
+    const processOperation = (operation: OperationForWork): OperationForWork => {
         if (!operation.execStart) {
             return operation;
         }
@@ -16,17 +16,17 @@ export function useAssignOperations() {
         };
     };
 
-    const getProductsWithOperations = () => {
+    const getWorksWithOperations = () => {
         if (!selectedOrder) return;
         operationsToAssign = [];
-        ProductsService.getWithOperations({
+        WorksService.getWithOperations({
             orderId: selectedOrder?.id,
         })
-            .then(products => {
-                const operations: OperationForProduct[] = [];
-                products.forEach(product =>
+            .then(works => {
+                const operations: OperationForWork[] = [];
+                works.forEach(work =>
                     operations.push(
-                        ...product.operations.map(operation =>
+                        ...work.operations.map(operation =>
                             processOperation(operation),
                         ),
                     ),
@@ -39,8 +39,8 @@ export function useAssignOperations() {
     };
 
     useEffect(() => {
-        getProductsWithOperations();
+        getWorksWithOperations();
     }, []);
 
-    return { operationsToAssign, getProductsWithOperations, selectedOrder };
+    return { operationsToAssign, getWorksWithOperations, selectedOrder };
 }

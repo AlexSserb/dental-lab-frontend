@@ -5,6 +5,6 @@
 import type { DiscountSetter } from './DiscountSetter';
 export type OrderDiscountSetter = {
     orderDiscountData: DiscountSetter;
-    productsDiscountsData: Array<DiscountSetter>;
+    worksDiscountsData: Array<DiscountSetter>;
 };
 

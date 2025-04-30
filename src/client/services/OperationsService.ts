@@ -81,23 +81,6 @@ export class OperationsService {
         });
     }
     /**
-     * @returns FullOperation
-     * @throws ApiError
-     */
-    public static getForProduct({
-        productId,
-    }: {
-        productId: string,
-    }): CancelablePromise<Array<FullOperation>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/operations/operations-for-product/{productId}/',
-            path: {
-                'productId': productId,
-            },
-        });
-    }
-    /**
      * @returns OperationForSchedule
      * @throws ApiError
      */
@@ -148,6 +131,23 @@ export class OperationsService {
             url: '/operations/operations-for-tech/',
             query: {
                 'page': page,
+            },
+        });
+    }
+    /**
+     * @returns FullOperation
+     * @throws ApiError
+     */
+    public static getForWork({
+        workId,
+    }: {
+        workId: string,
+    }): CancelablePromise<Array<FullOperation>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/operations/operations-for-work/{workId}/',
+            path: {
+                'workId': workId,
             },
         });
     }

@@ -9,7 +9,7 @@
 <a name="introduction"></a>
 ## Introduction
 
-The system is designed for a dental laboratory. The laboratory receives orders from clients (doctors). Each order consists of products. To perform each product, several dental technicians must perform a sequence of operations. After completing all the work, the doctor accepts and pays for the products.
+The system is designed for a dental laboratory. The laboratory receives orders from clients (doctors). Each order consists of works. To perform each work, several dental technicians must perform a sequence of operations. After completing all the work, the doctor accepts and pays for the order.
 
 There are 3 roles in the system:
 1. *Doctor*. The doctor can register in the system, place orders and view the progress of his orders.

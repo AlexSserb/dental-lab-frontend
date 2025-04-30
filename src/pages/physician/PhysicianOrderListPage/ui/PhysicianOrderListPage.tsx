@@ -17,7 +17,7 @@ import {
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import styles from "pages/physician/PhysicianOrderListPage/styles/PhysicianOrderListStyles.module.css";
 import usePhysicianOrderList from "../hooks/usePhysicianOrderList";
-import { ProductRow } from "./ProductRow";
+import { WorkRow } from "./WorkRow.tsx";
 import { isOrderCompleted, isOrderFresh } from "../../../../utils/checkStatus.ts";
 import { ModalReportAboutDefect } from "../../../../modals/ModalReportAboutDefect/ui/ModalReportAboutDefect.tsx";
 
@@ -26,7 +26,7 @@ export const PhysicianOrderListPage = () => {
         orders,
         page,
         totalPages,
-        products,
+        works,
         currOrder,
         handleChangePage,
         getOrderInfo,
@@ -59,10 +59,10 @@ export const PhysicianOrderListPage = () => {
         ));
     };
 
-    const renderProducts = () => {
-        return products.map((product, index) => (
-            <ProductRow
-                product={product}
+    const renderWorks = () => {
+        return works.map((work, index) => (
+            <WorkRow
+                work={work}
                 rowIndex={index + 1}
                 currOrder={currOrder}
             />
@@ -125,21 +125,21 @@ export const PhysicianOrderListPage = () => {
                         </Title>
                     </Center>
                     <Stack gap={15}>
-                        {products.length > 0 && (
+                        {works.length > 0 && (
                             <Paper>
                                 <ScrollArea scrollbars="x">
                                     <Table withTableBorder withColumnBorders>
                                         <Table.Thead>
                                             <Table.Tr>
                                                 <Table.Td>№</Table.Td>
-                                                <Table.Td>Тип изделия</Table.Td>
+                                                <Table.Td>Тип работы</Table.Td>
                                                 <Table.Td>Статус</Table.Td>
                                                 <Table.Td w="10%">
                                                     Кол-во
                                                 </Table.Td>
                                                 <Table.Td>Цена</Table.Td>
                                                 <Table.Td>
-                                                    Скидка на изделие
+                                                    Скидка на работу
                                                 </Table.Td>
                                                 <Table.Td>Рез. скидка</Table.Td>
                                                 <Table.Td>Сумма</Table.Td>
@@ -147,7 +147,7 @@ export const PhysicianOrderListPage = () => {
                                             </Table.Tr>
                                         </Table.Thead>
                                         <Table.Tbody>
-                                            {renderProducts()}
+                                            {renderWorks()}
                                         </Table.Tbody>
                                     </Table>
                                 </ScrollArea>
@@ -217,7 +217,7 @@ export const PhysicianOrderListPage = () => {
                         {currOrder && isOrderCompleted(currOrder?.status.number) && (
                             <ModalReportAboutDefect
                                 order={currOrder}
-                                products={products}
+                                works={works}
                                 refetchOrder={refetch}
                             />
                         )}

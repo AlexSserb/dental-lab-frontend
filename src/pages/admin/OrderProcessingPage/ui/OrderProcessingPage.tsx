@@ -3,7 +3,7 @@ import { IconInfoCircle } from "@tabler/icons-react";
 import { DiscountInput } from "components/DiscountInput";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import useOrderProcessing from "../hooks/useOrderProcessing";
-import { getOrderCost, getProductCost } from "../utils/getCost";
+import { getOrderCost, getWorkCost } from "../utils/getCost";
 import OperationItem from "./OperationItem";
 import { TransparentContainer } from "components/TransparentContainer";
 import TitleWithBackButton from "../../../../components/TitleWithBackButton/TitleWithBackButton.tsx";
@@ -16,25 +16,25 @@ const blockStyle = {
 
 export const OrderProcessingPage = () => {
     const {
-        products,
-        curProdIdx,
-        setCurProdIdx,
+        works,
+        curWorkIdx,
+        setCurWorkIdx,
         submitOrder,
         handleOrderDiscountChanged,
-        handleProductDiscountChanged,
+        handleWorkDiscountChanged,
     } = useOrderProcessing();
 
     const { selectedOrder: order } = useOrdersContext();
 
-    const renderProducts = () => {
-        return products.map((product, index) => (
-            <Table.Tr key={product.id}>
-                <Table.Td>{product.productType.name}</Table.Td>
-                <Table.Td>{getProductCost(product, order).toFixed(2)}</Table.Td>
-                <Table.Td>
+    const renderWorks = () => {
+        return works.map((work, index) => (
+            <Table.Tr key={work.id}>
+                <Table.Td>{work.workType.name}</Table.Td>
+                <Table.Td>{getWorkCost(work, order).toFixed(2)}</Table.Td>
+                <Table.Td w={1}>
                     <Button
                         variant="contained"
-                        onClick={() => setCurProdIdx(index)}>
+                        onClick={() => setCurWorkIdx(index)}>
                         <IconInfoCircle />
                     </Button>
                 </Table.Td>
@@ -43,7 +43,7 @@ export const OrderProcessingPage = () => {
     };
 
     const renderOperations = () => {
-        return products[curProdIdx].operations
+        return works[curWorkIdx].operations
             .sort((a, b) => a.ordinalNumber - b.ordinalNumber)
             .map(operation => (
                 <OperationItem operation={operation} key={operation.id} />
@@ -65,7 +65,7 @@ export const OrderProcessingPage = () => {
                     </Text>
                     <Text>Дата оформления: {order?.orderDate}</Text>
                     <Text>
-                        Сумма заказа: {getOrderCost(products, order).toFixed(2)}{" "}
+                        Сумма заказа: {getOrderCost(works, order).toFixed(2)}{" "}
                         руб.
                     </Text>
                     <Group align="center">
@@ -89,81 +89,81 @@ export const OrderProcessingPage = () => {
                     <Divider />
                     <Center>
                         <Text>
-                            <b>Список изделий</b>
+                            <b>Список работ</b>
                         </Text>
                     </Center>
                     <Divider />
-                    {products.length > 0 ? (
+                    {works.length > 0 ? (
                         <Table withTableBorder withColumnBorders>
                             <Table.Thead>
                                 <Table.Tr>
-                                    <Table.Td>Тип изделия</Table.Td>
+                                    <Table.Td>Тип работы</Table.Td>
                                     <Table.Td>Итоговая сумма (руб)</Table.Td>
                                     <Table.Td></Table.Td>
                                 </Table.Tr>
                             </Table.Thead>
-                            <Table.Tbody>{renderProducts()}</Table.Tbody>
+                            <Table.Tbody>{renderWorks()}</Table.Tbody>
                         </Table>
                     ) : (
-                        <p>Информации об изделиях нет</p>
+                        <p>Информации о работах нет</p>
                     )}
                 </Stack>
             </RoundedBoxContainer>
         );
     };
 
-    const renderProduct = () => {
+    const renderWork = () => {
         return (
             <RoundedBoxContainer>
                 <Stack style={blockStyle}>
                     <Center>
                         <Title order={4}>
-                            <b>Информация об изделии</b>
+                            <b>Информация о работе</b>
                         </Title>
                     </Center>
                     <Divider />
-                    {products.length > 0 ? (
+                    {works.length > 0 ? (
                         <>
                             <Text>
-                                Тип изделия:{" "}
-                                {products[curProdIdx].productType.name}
+                                Тип работы:{" "}
+                                {works[curWorkIdx].workType.name}
                             </Text>
                             <Text>
-                                Стоимость 1-го изделия:{" "}
-                                {products[curProdIdx].productType.cost?.toFixed(
+                                Стоимость 1-ой работы:{" "}
+                                {works[curWorkIdx].workType.cost?.toFixed(
                                     2,
                                 )}{" "}
                                 руб.
                             </Text>
                             <Text>
-                                Количество: {products[curProdIdx].amount}
+                                Количество: {works[curWorkIdx].amount}
                             </Text>
                             <Text>
                                 Сумма:{" "}
                                 {(
-                                    (products[curProdIdx].productType.cost ?? 0) *
-                                    products[curProdIdx].amount
+                                    (works[curWorkIdx].workType.cost ?? 0) *
+                                    works[curWorkIdx].amount
                                 ).toFixed(2)}{" "}
                                 руб.
                             </Text>
                             <Group align="center">
-                                <Text>Скидка на изделие (%):</Text>
+                                <Text>Скидка на работу (%):</Text>
                                 <DiscountInput
-                                    onChange={handleProductDiscountChanged}
-                                    value={products[curProdIdx].discount}
+                                    onChange={handleWorkDiscountChanged}
+                                    value={works[curWorkIdx].discount}
                                 />
                             </Group>
                             <Text>
                                 Результирующая скидка (%):{" "}
                                 {Math.max(
-                                    products[curProdIdx].discount,
+                                    works[curWorkIdx].discount,
                                     order?.discount ?? 0,
                                 )}
                             </Text>
                             <Text>
                                 Итоговая сумма:{" "}
-                                {getProductCost(
-                                    products[curProdIdx],
+                                {getWorkCost(
+                                    works[curWorkIdx],
                                     order,
                                 ).toFixed(2)}{" "}
                                 руб.
@@ -171,7 +171,7 @@ export const OrderProcessingPage = () => {
                         </>
                     ) : (
                         <Center>
-                            <Text>Нет изделий в заказе</Text>
+                            <Text>Нет работ в заказе</Text>
                         </Center>
                     )}
                     <Divider />
@@ -181,8 +181,8 @@ export const OrderProcessingPage = () => {
                         </Text>
                     </Center>
                     <Divider />
-                    {products.length > 0 &&
-                    products[curProdIdx]?.operations.length > 0 ? (
+                    {works.length > 0 &&
+                    works[curWorkIdx]?.operations.length > 0 ? (
                         <Table withTableBorder withColumnBorders>
                             <Table.Thead>
                                 <Table.Tr>
@@ -206,7 +206,7 @@ export const OrderProcessingPage = () => {
     return (
         <TransparentContainer>
             {renderOrder()}
-            {renderProduct()}
+            {renderWork()}
         </TransparentContainer>
     );
 };

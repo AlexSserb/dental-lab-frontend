@@ -21,45 +21,63 @@ import useCreateOrderPage from "../hooks/useCreateOrderPage";
 import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import useFillJawArrays from "../../../../components/ToothMarks/hooks/useFillJawArrays.tsx";
 import CustomerSelect from "../../../../components/CustomerSelect/CustomerSelect.tsx";
-import ProductTypeSelect from "../../../../components/ProductTypeSelect/ProductTypeSelect.tsx";
+import WorkTypeSelect from "../../../../components/WorkTypeSelect/WorkTypeSelect.tsx";
 
 export const CreateOrderPage = () => {
     const {
-        listOfProducts,
+        listOfWorks,
         handleDelete,
-        setSelectedProductType,
-        numberOfProducts,
-        setNumberOfProducts,
+        setSelectedWorkType,
+        numberOfWorks,
+        setNumberOfWorks,
         selectedCustomer,
         setSelectedCustomer,
         comment,
         setComment,
         getToothMark,
         orderCost,
-        saveProduct,
+        saveWork,
         sendOrder,
     } = useCreateOrderPage();
 
     const { upperJaw, lowerJaw } = useFillJawArrays();
 
-    const deadline = new Date();
-    deadline.setDate(deadline.getDate() + 5);
+    const addWorkdays = (startDate: Date, workdays: number) => {
+        const date = new Date(startDate);
+        let daysAdded = 0;
 
-    const renderProducts = () => {
-        return listOfProducts.map((product, i) => (
+        while (daysAdded < workdays) {
+            date.setDate(date.getDate() + 1); // Add 1 day
+
+            // Check if it's a weekday (0=Sunday, 1=Monday, ..., 6=Saturday)
+            if (date.getDay() !== 0 && date.getDay() !== 6) {
+                daysAdded++;
+            }
+        }
+
+        return date;
+    };
+
+    const getDeadline = () => {
+        const curr = new Date();
+        return addWorkdays(curr, 7);
+    };
+
+    const renderWorks = () => {
+        return listOfWorks.map((work, i) => (
             <Table.Tr key={i}>
                 <Table.Td>{i + 1}</Table.Td>
-                <Table.Td>{product.productTypeName}</Table.Td>
-                <Table.Td>{product.amount}</Table.Td>
-                <Table.Td>{product.productTypeCost.toFixed(2)}</Table.Td>
-                <Table.Td>{product.sumCost.toFixed(2)}</Table.Td>
+                <Table.Td>{work.workTypeName}</Table.Td>
+                <Table.Td>{work.amount}</Table.Td>
+                <Table.Td>{work.workTypeCost.toFixed(2)}</Table.Td>
+                <Table.Td>{work.sumCost.toFixed(2)}</Table.Td>
                 <Table.Td>
-                    <ToothMarks teethList={product.teeth} />
+                    <ToothMarks teethList={work.teeth} />
                 </Table.Td>
                 <Table.Td>
                     <UnstyledButton
                         className="px-0"
-                        onClick={() => handleDelete(product)}>
+                        onClick={() => handleDelete(work)}>
                         <IconSquareX />
                     </UnstyledButton>
                 </Table.Td>
@@ -101,7 +119,7 @@ export const CreateOrderPage = () => {
 
                 <Box>
                     <Flex gap={10}>
-                        <ProductTypeSelect onChange={setSelectedProductType} />
+                        <WorkTypeSelect onChange={setSelectedWorkType} />
 
                         <TextInput
                             w="100%"
@@ -110,9 +128,9 @@ export const CreateOrderPage = () => {
                             min="1"
                             max="32"
                             step="1"
-                            value={numberOfProducts}
+                            value={numberOfWorks}
                             onChange={e =>
-                                setNumberOfProducts(Number(e.target.value))
+                                setNumberOfWorks(Number(e.target.value))
                             }
                         />
                     </Flex>
@@ -126,14 +144,14 @@ export const CreateOrderPage = () => {
                         type="button"
                         variant="contained"
                         color="success"
-                        onClick={() => saveProduct()}>
-                        Добавить изделие
+                        onClick={() => saveWork()}>
+                        Добавить работу
                     </Button>
                     <Divider my={20} />
                 </Box>
 
                 <Box>
-                    {listOfProducts.length > 0 ? (
+                    {listOfWorks.length > 0 ? (
                         <Stack>
                             <Center>
                                 <Title order={3}>Данные о заказе</Title>
@@ -154,8 +172,8 @@ export const CreateOrderPage = () => {
                                 <TextInput
                                     label={"Крайний срок выполнения"}
                                     w={"100%"}
-                                    value={deadline.toLocaleDateString("ru")}
-                                    disabled
+                                    value={getDeadline().toLocaleDateString("ru")}
+                                    readOnly
                                 />
                             </Flex>
                             <Text>
@@ -175,7 +193,7 @@ export const CreateOrderPage = () => {
                                         <Table.Thead>
                                             <Table.Tr>
                                                 <Table.Th>№</Table.Th>
-                                                <Table.Th>Тип изделия</Table.Th>
+                                                <Table.Th>Тип работы</Table.Th>
                                                 <Table.Th>Кол-во</Table.Th>
                                                 <Table.Th>
                                                     Цена за 1 шт.
@@ -186,7 +204,7 @@ export const CreateOrderPage = () => {
                                             </Table.Tr>
                                         </Table.Thead>
                                         <Table.Tbody>
-                                            {renderProducts()}
+                                            {renderWorks()}
                                         </Table.Tbody>
                                     </Table>
                                 </ScrollArea>
@@ -195,7 +213,7 @@ export const CreateOrderPage = () => {
                     ) : (
                         <Center>
                             <Title order={5}>
-                                Еще ни одного изделия для заказа не добавлено
+                                Еще ни одной работы для заказа не добавлено
                             </Title>
                         </Center>
                     )}

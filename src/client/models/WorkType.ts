@@ -2,8 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type ProductStatus = {
+export type WorkType = {
     readonly id: string;
     name: string;
+    cost?: number;
 };
 

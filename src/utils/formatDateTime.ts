@@ -20,3 +20,19 @@ export const formatStrTime = (time: string) => {
 export const formatTime = (date: Date) => {
     return date.toTimeString().substring(0, 5);
 };
+
+export const strToDate = (strDate?: string | null | Date): Date | null | undefined => {
+    if (typeof strDate !== "string") return strDate;
+    const [day, month, year, time] = strDate.split(/[.\s]/);
+    const [hours, minutes] = time.split(":");
+
+    const date = new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+        parseInt(day),
+        parseInt(hours),
+        parseInt(minutes),
+    );
+    console.log(date);
+    return date;
+};

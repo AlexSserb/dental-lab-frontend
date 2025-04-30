@@ -17,7 +17,7 @@ const columns: MRT_ColumnDef<TableRow>[] = [
         ),
     },
     {
-        accessorKey: "date",
+        accessorKey: "order.orderDate",
         header: "Дата оформления",
         size: 0,
     },

@@ -4,12 +4,12 @@
 /* eslint-disable */
 import type { OperationStatus } from './OperationStatus';
 import type { OperationType } from './OperationType';
-import type { Product } from './Product';
+import type { Work } from './Work';
 export type Operation = {
     readonly id: string;
     operationType: OperationType;
     operationStatus: OperationStatus;
-    product: Product;
+    work: Work;
     execStart?: string | null;
     ordinalNumber: number;
     isExecStartEditable?: boolean;

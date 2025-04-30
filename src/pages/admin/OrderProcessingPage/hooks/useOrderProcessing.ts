@@ -1,31 +1,31 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { OrdersService, ProductAndOperations, ProductsService } from "../../../../client";
+import { OrdersService, WorkAndOperations, WorksService } from "../../../../client";
 import { useOrdersContext } from "../../../../contexts/OrdersContext/OrdersContext.tsx";
 
 function useOrderProcessing() {
     const { selectedOrder: order, setSelectedOrder: setOrder } = useOrdersContext();
-    const [products, setProducts] = useState<ProductAndOperations[]>([]);
-    const [curProdIdx, setCurProdIdx] = useState(0);
+    const [works, setWorks] = useState<WorkAndOperations[]>([]);
+    const [curWorkIdx, setCurWorkIdx] = useState(0);
 
     const navigate = useNavigate();
 
-    const getProductsWithOperations = () => {
+    const getWorksWithOperations = () => {
         if (!order) return;
-        ProductsService.getWithOperations({
+        WorksService.getWithOperations({
             orderId: order.id,
         })
-            .then(productsAndOperations => {
-                setProducts(productsAndOperations);
+            .then(worksAndOperations => {
+                setWorks(worksAndOperations);
             })
             .catch(err => {
-                setProducts([]);
+                setWorks([]);
                 console.log(err);
             });
     };
 
     useEffect(() => {
-        getProductsWithOperations();
+        getWorksWithOperations();
     }, []);
 
     const handleOrderDiscountChanged = (value: string | number) => {
@@ -35,20 +35,20 @@ function useOrderProcessing() {
         }
     };
 
-    const handleProductDiscountChanged = (value: string | number) => {
+    const handleWorkDiscountChanged = (value: string | number) => {
         const discount = Number(value);
         if (discount >= 0 && discount < 100) {
-            products[curProdIdx].discount = discount;
-            setProducts([...products]);
+            works[curWorkIdx].discount = discount;
+            setWorks([...works]);
         }
     };
 
     const submitOrder = () => {
         if (!order) return;
 
-        const productsDiscountsData = products.map(product => ({
-            ...product,
-            discount: product.discount ?? 0,
+        const worksDiscountsData = works.map(work => ({
+            ...work,
+            discount: work.discount ?? 0,
         }));
         const orderDiscountData = {
             ...order,
@@ -58,7 +58,7 @@ function useOrderProcessing() {
         OrdersService.confirmOrder({
             requestBody: {
                 orderDiscountData,
-                productsDiscountsData,
+                worksDiscountsData,
             },
         })
             .then(order => {
@@ -71,12 +71,12 @@ function useOrderProcessing() {
     };
 
     return {
-        products,
-        curProdIdx,
-        setCurProdIdx,
+        works,
+        curWorkIdx,
+        setCurWorkIdx,
         submitOrder,
         handleOrderDiscountChanged,
-        handleProductDiscountChanged,
+        handleWorkDiscountChanged,
     };
 }
 
