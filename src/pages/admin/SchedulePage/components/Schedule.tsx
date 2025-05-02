@@ -1,5 +1,5 @@
 import FullCalendar from "@fullcalendar/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { OperationForSchedule, OperationsService } from "../../../../client";
 import { Box, Button, em, Group, rem, Stack, Tooltip } from "@mantine/core";
 import { formatDate, formatTime } from "../../../../utils/formatDateTime.ts";
@@ -16,14 +16,25 @@ import { EventImpl } from "@fullcalendar/core/internal";
 import { DateSpanApi } from "@fullcalendar/core";
 import techIdToOperationGroup from "../../../../utils/techIdToOperationGroup.ts";
 import InlineButton from "../../../../components/InlineButton/InlineButton.tsx";
+import generateRestBackgroundEvents from "../../../../utils/generateRestBackgroundEvents.ts";
+import { BackgroundEvent } from "../../../../types/BackgroundEvent.ts";
 
 export const Schedule = () => {
     const calendarRef = useRef<FullCalendar | null>(null);
     const calendarApi = calendarRef.current?.getApi();
 
-    const [currDate, setCurrDate] = useState<Date | null>(null);
+    const [currDate, setCurrDate] = useState<Date | null>(new Date());
     let operations: OperationForSchedule[] = [];
     const { techs } = useTechniciansList();
+
+    const [restingEvents, setRestingEvents] = useState<BackgroundEvent[]>([]);
+
+    useEffect(() => {
+        if (currDate && techs) {
+            const resources = techs.map(tech => tech.email);
+            setRestingEvents(generateRestBackgroundEvents(currDate, resources));
+        }
+    }, [currDate, techs]);
 
     const [isOptimizedPlanShowed, setIsOptimizedPlanShowed] = useState<boolean>(false);
 
@@ -40,6 +51,8 @@ export const Schedule = () => {
     };
 
     const renderEventOperationContent = (eventInfo: any) => {
+        if (eventInfo.event.display === "background") return;
+
         const oper = eventInfo.event.extendedProps;
         const operInfo: OperationForSchedule = {
             ...oper,
@@ -90,7 +103,7 @@ export const Schedule = () => {
                 .then(operationsForSchedule => {
                     if (operationsForSchedule.length === 0) operations = [];
                     else operations = operationsForSchedule;
-                    successCallback(operations);
+                    successCallback([...operations, ...restingEvents]);
                 })
                 .catch(err => console.log(err));
             return;
@@ -103,7 +116,7 @@ export const Schedule = () => {
             .then(operationsForSchedule => {
                 if (operationsForSchedule.length === 0) operations = [];
                 else operations = operationsForSchedule;
-                successCallback(operations);
+                successCallback([...operations, ...restingEvents]);
             })
             .catch(err => console.log(err));
     }
@@ -266,7 +279,7 @@ export const Schedule = () => {
                         updateOperation(event.event as unknown as OperationForSchedule, refetchOperations, resourceId);
                     }}
                     slotMinTime={"8:00"}
-                    slotMaxTime={"19:00"}
+                    slotMaxTime={"17:00"}
                     snapDuration={"00:05"}
                     slotDuration={"00:15"}
 
