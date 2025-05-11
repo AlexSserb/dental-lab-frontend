@@ -31,7 +31,7 @@ const OperationEditDrawer = ({ refetchOperations }: Props) => {
                 <Text>Тип операции: {operation.operationType.name}</Text>
                 <Text>
                     Время выполнения:{" "}
-                    {formatStrTime(operation.operationType.execTime)}
+                    {formatStrTime(operation.execTime)}
                 </Text>
                 <Text>Статус операции: {operation.operationStatus.name}</Text>
                 <Divider />

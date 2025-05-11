@@ -1,22 +1,9 @@
 import { Accordion, Divider, Flex, Group, Stack, Text } from "@mantine/core";
 import { ToothMarks } from "components/ToothMarks";
 import { ModalSetOperationStatus } from "modals/ModalSetOperStatus";
-import { formatDateTime } from "../../../../utils/formatDateTime.ts";
+import { formatDateTime, formatStrTime } from "../../../../utils/formatDateTime.ts";
 import { Operation } from "../../../../client";
 import { Option } from "../../../../types/Option.ts";
-
-const formatExecTime = (execTime: string) => {
-    const hours = Number(execTime.substring(0, 2));
-    const minutes = Number(execTime.substring(3, 5));
-    if (hours === 0) {
-        return <>{minutes} мин.</>;
-    }
-    return (
-        <>
-            {hours} ч. {minutes} мин.
-        </>
-    );
-};
 
 const getOperExecStart = (oper: Operation) => {
     return oper.execStart ? (
@@ -34,11 +21,11 @@ type OperationItemProps = {
 };
 
 export function OperationItem({
-    operation,
-    operationStatuses,
-    page,
-    loadOperations,
-}: OperationItemProps) {
+                                  operation,
+                                  operationStatuses,
+                                  page,
+                                  loadOperations,
+                              }: OperationItemProps) {
     return (
         <Accordion.Item key={operation.id} value={operation.id}>
             <Accordion.Control>
@@ -56,7 +43,7 @@ export function OperationItem({
                         {getOperExecStart(operation)}
                         <Text>
                             На выполнение:{" "}
-                            {formatExecTime(operation.operationType.execTime)}
+                            {formatStrTime(operation.execTime)}
                         </Text>
                     </Stack>
                 </Group>

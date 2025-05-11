@@ -184,10 +184,7 @@ export function AssignOperationsPage() {
                                 </Text>
                                 <Text>
                                     Время выполнения:{" "}
-                                    {formatStrTime(
-                                        currOperation?.operationType
-                                            ?.execTime,
-                                    )}
+                                    {formatStrTime(currOperation.execTime)}
                                 </Text>
                                 <WorkStartDateTimePicker
                                     my="xs"

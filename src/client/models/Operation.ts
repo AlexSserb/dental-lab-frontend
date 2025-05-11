@@ -13,5 +13,6 @@ export type Operation = {
     execStart?: string | null;
     ordinalNumber: number;
     isExecStartEditable?: boolean;
+    readonly execTime: string;
 };
 

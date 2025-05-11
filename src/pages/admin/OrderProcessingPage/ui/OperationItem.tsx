@@ -11,7 +11,7 @@ function OperationItem({ operation }: OperationItemProps) {
         <Table.Tr key={operation.id}>
             <Table.Td>{operation.ordinalNumber}</Table.Td>
             <Table.Td>{operation.operationType.name}</Table.Td>
-            <Table.Td>{formatStrTime(operation.operationType.execTime)}</Table.Td>
+            <Table.Td>{formatStrTime(operation.execTime)}</Table.Td>
         </Table.Tr>
     );
 }

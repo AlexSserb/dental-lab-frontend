@@ -12,5 +12,6 @@ export type OperationForWork = {
     tech: UserProfile;
     execStart?: string | null;
     ordinalNumber: number;
+    readonly execTime: string;
 };
 

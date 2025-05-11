@@ -5,7 +5,8 @@
 export type OperationType = {
     readonly id: string;
     name: string;
-    execTime: string;
+    execTimePerItem: string;
+    fixedExecTime: string;
     /**
      * * `MO` - Модели
      * * `CA` - CAD\CAM

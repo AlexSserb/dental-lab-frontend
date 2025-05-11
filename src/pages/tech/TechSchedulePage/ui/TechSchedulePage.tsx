@@ -51,6 +51,7 @@ export const TechSchedulePage = () => {
                         operationStatus: oper.operationStatus,
                         work: oper.work,
                         editable: oper.editable,
+                        execTime: oper.execTime,
                     };
                     setOperation(operInfo);
                     open();
@@ -81,6 +82,10 @@ export const TechSchedulePage = () => {
             .then(operationsForSchedule => {
                 if (operationsForSchedule.length === 0) operations = [];
                 else operations = operationsForSchedule;
+
+                if (!isEditable) {
+                    operations = operations.map(operation => ({ ...operation, editable: false }));
+                }
                 successCallback(operations);
             })
             .catch(err => console.log(err));
@@ -94,7 +99,7 @@ export const TechSchedulePage = () => {
                 <Text>Тип операции: {operation.operationType.name}</Text>
                 <Text>
                     Время выполнения:{" "}
-                    {formatStrTime(operation.operationType.execTime)}
+                    {formatStrTime(operation.execTime)}
                 </Text>
                 <Text>Статус операции: {operation.operationStatus.name}</Text>
                 <Text>Начало выполнения:</Text>

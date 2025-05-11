@@ -36,7 +36,7 @@ export function OperationItem({ operation }: OperationItemProps) {
                     </Stack>
                     <Stack>
                         <Text>
-                            Время выполнения: {formatStrTime(operation.operationType.execTime)}
+                            Время выполнения: {formatStrTime(operation.execTime)}
                         </Text>
                         {operation.tech ? (
                             <Text>

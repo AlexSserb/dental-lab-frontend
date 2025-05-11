@@ -13,6 +13,7 @@ export type OperationForSchedule = {
     operationStatus: OperationStatus;
     work: Work;
     editable: boolean;
+    execTime: string;
     resourceId: string;
     error: boolean;
     errorDescription: string;

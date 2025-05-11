@@ -13,11 +13,11 @@ interface Props {
 }
 
 export const ModalSetOperationStatus = ({
-                                       operation,
-                                       page,
-                                       operationStatuses,
-                                       loadOperations,
-                                   }: Props) => {
+                                            operation,
+                                            page,
+                                            operationStatuses,
+                                            loadOperations,
+                                        }: Props) => {
     const [open, setOpen] = useState(false);
     const [selectedOperationStatus, setSelectedOperationStatus] = useState<
         string | null
@@ -30,7 +30,7 @@ export const ModalSetOperationStatus = ({
             notifications.show({
                 title: "Error",
                 message: "Статус операции не выбран.",
-            })
+            });
             return;
         }
 
@@ -76,8 +76,8 @@ export const ModalSetOperationStatus = ({
                     <Text>Вид операции: {operation.operationType.name}</Text>
                     <Text>
                         Время выполнения:{" "}
-                        {operation.operationType.execTime.substring(0, 2)}:
-                        {operation.operationType.execTime.substring(3, 5)}
+                        {operation.execTime.substring(0, 2)}:
+                        {operation.execTime.substring(3, 5)}
                     </Text>
 
                     <Divider />

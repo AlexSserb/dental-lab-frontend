@@ -13,5 +13,6 @@ export type OperationForTechSchedule = {
     operationStatus: OperationStatus;
     work: Work;
     editable: boolean;
+    execTime: string;
 };
 

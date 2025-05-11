@@ -11,10 +11,10 @@ type OperationItemProps = {
 };
 
 function OperationItem({
-    operation,
-    getOperationStyle,
-    selectOperation,
-}: OperationItemProps) {
+                           operation,
+                           getOperationStyle,
+                           selectOperation,
+                       }: OperationItemProps) {
     return (
         <Box className={getOperationStyle(operation.id)}>
             <Box>
@@ -24,7 +24,7 @@ function OperationItem({
                 </Text>
                 <Text>
                     Время выполнения:{" "}
-                    {formatStrTime(operation.operationType.execTime)}
+                    {formatStrTime(operation.execTime)}
                 </Text>
                 {operation.tech ? (
                     <Text>
