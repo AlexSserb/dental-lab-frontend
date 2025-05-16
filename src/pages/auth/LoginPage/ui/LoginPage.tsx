@@ -1,16 +1,8 @@
-import {
-    Alert,
-    Anchor,
-    Button,
-    Center,
-    Paper,
-    Stack,
-    TextInput,
-    Title,
-} from "@mantine/core";
+import { Alert, Anchor, Button, Center, Paper, Spoiler, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { LoginData } from "../types/LoginData";
 import useLogin from "../hooks/useLogin";
+import InlineButton from "../../../../components/InlineButton/InlineButton.tsx";
 
 export function LoginPage() {
     const { message, loginUser } = useLogin();
@@ -28,6 +20,31 @@ export function LoginPage() {
         },
     });
 
+    const loginDemonstrationButtons = (
+        <Spoiler mt={10} maxHeight={0} showLabel="Вход для демонстрации" hideLabel="Скрыть">
+            <Stack>
+                <InlineButton
+                    variant={"outline"}
+                    onClick={() => loginUser({ email: "admin@gmail.com", password: "12345678" })}
+                >
+                    <Text>Войти за администратора</Text>
+                </InlineButton>
+                <InlineButton
+                    variant={"outline"}
+                    onClick={() => loginUser({ email: "tech1@gmail.com", password: "12345678" })}
+                >
+                    <Text>Войти за техника</Text>
+                </InlineButton>
+                <InlineButton
+                    variant={"outline"}
+                    onClick={() => loginUser({ email: "doctor@gmail.com", password: "12345678" })}
+                >
+                    <Text>Войти за клиента-врача</Text>
+                </InlineButton>
+            </Stack>
+        </Spoiler>
+    );
+
     return (
         <Center>
             <Paper w="30%" miw="380" shadow="md" radius="sm" px={50} py={30}>
@@ -37,7 +54,7 @@ export function LoginPage() {
                     </Center>
                     <form
                         onSubmit={form.onSubmit((values: LoginData) =>
-                            loginUser(values)
+                            loginUser(values),
                         )}>
                         <TextInput
                             size="md"
@@ -66,6 +83,7 @@ export function LoginPage() {
                                 {message}
                             </Alert>
                         )}
+                        {loginDemonstrationButtons}
                         <Center mt={20}>
                             <Button size="md" type="submit">
                                 Войти
