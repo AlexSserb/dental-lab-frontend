@@ -20,6 +20,7 @@ import usePhysicianOrderList from "../hooks/usePhysicianOrderList";
 import { WorkRow } from "./WorkRow.tsx";
 import { isOrderCompleted, isOrderFresh } from "../../../../utils/checkStatus.ts";
 import { ModalReportAboutDefect } from "../../../../modals/ModalReportAboutDefect/ui/ModalReportAboutDefect.tsx";
+import OrderFilesList from "../../../../components/OrderFilesList/OrderFilesList.tsx";
 
 export const PhysicianOrderListPage = () => {
     const {
@@ -213,6 +214,9 @@ export const PhysicianOrderListPage = () => {
                                 label="Комментарий к заявлению о браке"
                                 value={currOrder?.commentAfterAccept}
                             />
+                        )}
+                        {currOrder?.files && currOrder.files.length > 0 && (
+                            <OrderFilesList files={currOrder.files} />
                         )}
                         {currOrder && isOrderCompleted(currOrder?.status.number) && (
                             <ModalReportAboutDefect

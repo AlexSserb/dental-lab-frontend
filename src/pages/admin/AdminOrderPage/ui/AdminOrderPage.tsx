@@ -24,6 +24,7 @@ import createReport from "../../../../modals/ModalSetOrderStatus/utils/createRep
 import TitleWithBackButton from "../../../../components/TitleWithBackButton/TitleWithBackButton.tsx";
 import { useOrdersContext } from "../../../../contexts/OrdersContext/OrdersContext.tsx";
 import { isOrderDefected } from "../../../../utils/checkStatus.ts";
+import OrderFilesList from "../../../../components/OrderFilesList/OrderFilesList.tsx";
 
 function ReadOnlyTextInput(props: TextInputProps) {
     return <TextInput {...props} readOnly w="100%" />;
@@ -90,7 +91,7 @@ export function AdminOrderPage() {
     };
 
     const createOrderReport = () => {
-        return createReport(order, 1, "Документ \"Наряд\"", loadOrderReport);
+        return createReport(order, 2, "Документ \"Наряд\"", loadOrderReport);
     };
 
     const createAcceptanceReport = () => {
@@ -98,7 +99,7 @@ export function AdminOrderPage() {
     };
 
     const createInvoiceForPayment = () => {
-        return createReport(order, 1, "Документ \"Счет на оплату\"", loadInvoiceForPayment);
+        return createReport(order, 2, "Документ \"Счет на оплату\"", loadInvoiceForPayment);
     };
 
     return (
@@ -189,6 +190,9 @@ export function AdminOrderPage() {
                             value={order?.commentAfterAccept}
                             readOnly
                         />
+                    )}
+                    {order?.files && order.files.length > 0 && (
+                        <OrderFilesList files={order.files} />
                     )}
                     <Divider />
                     <Flex direction="row" gap="sm">

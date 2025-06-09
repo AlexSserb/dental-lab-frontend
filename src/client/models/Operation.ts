@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { OperationStatus } from './OperationStatus';
 import type { OperationType } from './OperationType';
+import type { OrderFile } from './OrderFile';
 import type { Work } from './Work';
 export type Operation = {
     readonly id: string;
@@ -14,5 +15,7 @@ export type Operation = {
     ordinalNumber: number;
     isExecStartEditable?: boolean;
     readonly execTime: string;
+    readonly files: Array<OrderFile>;
+    readonly color: string;
 };
 

@@ -27,6 +27,7 @@ function usePhysicianOrderList() {
             page: orderPage,
         })
             .then((res) => {
+                console.log(res.results);
                 setOrders(res.results);
                 setTotalPages(res.totalPages);
                 if (currOrder) return;

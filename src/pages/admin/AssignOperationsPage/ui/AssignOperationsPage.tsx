@@ -43,6 +43,7 @@ export function AssignOperationsPage() {
     const refetchOperations = () => {
         if (calendarApi) {
             calendarApi.refetchEvents();
+            getWorksWithOperations();
         }
     };
 

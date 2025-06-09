@@ -7,5 +7,6 @@ export type DataForOrderCreation = {
     customerId: string;
     workTypes: Array<WorkFromUser>;
     comment?: string;
+    toothColor: string;
 };
 

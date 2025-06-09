@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { CancelOrder } from '../models/CancelOrder';
 import type { DataForOrderCreation } from '../models/DataForOrderCreation';
+import type { GetFileData } from '../models/GetFileData';
 import type { OrderDiscountSetter } from '../models/OrderDiscountSetter';
 import type { OrdersPaginatedList } from '../models/OrdersPaginatedList';
 import type { OrderStatus } from '../models/OrderStatus';
@@ -80,6 +81,23 @@ export class OrdersService {
         });
     }
     /**
+     * @returns GetFileData
+     * @throws ApiError
+     */
+    public static downloadFile({
+        fileId,
+    }: {
+        fileId: string,
+    }): CancelablePromise<GetFileData> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/orders/download-file/{fileId}',
+            path: {
+                'fileId': fileId,
+            },
+        });
+    }
+    /**
      * @returns any No response body
      * @throws ApiError
      */
@@ -91,6 +109,23 @@ export class OrdersService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/orders/invoice-for-payment/{orderId}/',
+            path: {
+                'orderId': orderId,
+            },
+        });
+    }
+    /**
+     * @returns any No response body
+     * @throws ApiError
+     */
+    public static ordersLoadFilesCreate({
+        orderId,
+    }: {
+        orderId: string,
+    }): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/orders/load-files/{orderId}',
             path: {
                 'orderId': orderId,
             },

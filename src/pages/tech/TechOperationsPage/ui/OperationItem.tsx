@@ -4,6 +4,8 @@ import { ModalSetOperationStatus } from "modals/ModalSetOperStatus";
 import { formatDateTime, formatStrTime } from "../../../../utils/formatDateTime.ts";
 import { Operation } from "../../../../client";
 import { Option } from "../../../../types/Option.ts";
+import OrderFilesList from "../../../../components/OrderFilesList/OrderFilesList.tsx";
+import Help from "../../../../components/Help/Help.tsx";
 
 const getOperExecStart = (oper: Operation) => {
     return oper.execStart ? (
@@ -20,12 +22,14 @@ type OperationItemProps = {
     loadOperations: (page: number) => void;
 };
 
-export function OperationItem({
-                                  operation,
-                                  operationStatuses,
-                                  page,
-                                  loadOperations,
-                              }: OperationItemProps) {
+export function OperationItem(
+    {
+        operation,
+        operationStatuses,
+        page,
+        loadOperations,
+    }: OperationItemProps,
+) {
     return (
         <Accordion.Item key={operation.id} value={operation.id}>
             <Accordion.Control>
@@ -63,6 +67,12 @@ export function OperationItem({
                                 Статус: {operation.work.workStatus.name}
                             </Text>
                             <Text>Количество: {operation.work.amount}</Text>
+                            <Group>
+                                <Text>Оттенок зубов: {operation.color}</Text>
+                                <Help message={
+                                    <Text>Цвет (оттенок) зубов по шкале Vita.</Text>
+                                } />
+                            </Group>
                             <ModalSetOperationStatus
                                 operation={operation}
                                 operationStatuses={operationStatuses}
@@ -76,6 +86,7 @@ export function OperationItem({
                         <ToothMarks teethList={operation.work.teeth} />
                     </Stack>
                 </Flex>
+                <OrderFilesList files={operation.files} />
             </Accordion.Panel>
         </Accordion.Item>
     );

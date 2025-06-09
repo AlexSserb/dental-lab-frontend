@@ -7,17 +7,38 @@ import { WorkBrief } from "types/WorkTypes/WorkBrief.ts";
 import { isMobile } from "react-device-detect";
 import { useUserContext } from "contexts/UserContext/useUserContext";
 import { OrdersService, WorkType } from "../../../../client";
+import { useForm } from "@mantine/form";
+import { FileWithPath } from "@mantine/dropzone";
+import axios from "axios";
+
+type CreateOrderForm = {
+    customerId: string | null;
+    comment: string;
+    toothColor: string;
+    files: FileWithPath[];
+}
 
 function useCreateOrderPage() {
-    const { user } = useUserContext();
+    const { user, authTokens } = useUserContext();
     const [listOfWorks, setListOfWorks] = useState<WorkBrief[]>([]);
     const [selectedWorkType, setSelectedWorkType] = useState<
         WorkType | null
     >(null);
     const [orderCost, setOrderCost] = useState(0);
     const [numberOfWorks, setNumberOfWorks] = useState<number>(1);
-    const [selectedCustomer, setSelectedCustomer] = useState<string | null>(null);
-    const [comment, setComment] = useState("");
+
+    const form = useForm<CreateOrderForm>({
+        initialValues: {
+            customerId: null,
+            comment: "",
+            toothColor: "A1",
+            files: [],
+        },
+        validate: {
+            customerId: value =>
+                !value && "Укажите организацию-заказчика",
+        },
+    });
 
     // States for dental formula
     const [markedTeeth, setMarkedTeeth] = useState<Set<number>>(new Set());
@@ -96,28 +117,48 @@ function useCreateOrderPage() {
         );
     };
 
-    const sendOrder = () => {
-        if (!selectedCustomer) {
-            notifications.show({
-                title: "Error",
-                message: "Организация-заказчик не выбран",
-            });
+    const onOrderCreatedSuccessfully = () => {
+        navigate("/");
+        notifications.show({
+            title: "Success",
+            message: "Заказ успешно оформлен!",
+        });
+    };
+
+    const loadOrderFiles = async (files: FileWithPath[], orderId: string) => {
+        if (files.length === 0) {
+            onOrderCreatedSuccessfully();
             return;
         }
-        console.log(listOfWorks);
-        OrdersService.createOrder({
-            requestBody: {
-                comment,
-                workTypes: listOfWorks,
-                customerId: selectedCustomer,
+
+        const formData = new FormData();
+        files.forEach((file) => {
+            formData.append("files", file);
+        });
+
+        axios.post("/orders/load-files/" + orderId, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${authTokens?.access}`,
             },
         })
             .then(() => {
-                navigate("/");
-                notifications.show({
-                    title: "Success",
-                    message: "Заказ успешно оформлен!",
-                });
+                onOrderCreatedSuccessfully();
+            })
+            .catch(err => console.log(err));
+    };
+
+    const sendOrder = async (values: CreateOrderForm) => {
+        OrdersService.createOrder({
+            requestBody: {
+                comment: values.comment,
+                workTypes: listOfWorks,
+                customerId: values.customerId!,
+                toothColor: values.toothColor,
+            },
+        })
+            .then(({ orderId }) => {
+                loadOrderFiles(values.files, orderId);
             })
             .catch(err => console.log(err));
     };
@@ -128,10 +169,7 @@ function useCreateOrderPage() {
         setSelectedWorkType,
         numberOfWorks,
         setNumberOfWorks,
-        selectedCustomer,
-        setSelectedCustomer,
-        comment,
-        setComment,
+        form,
         getToothMark,
         orderCost,
         saveWork,

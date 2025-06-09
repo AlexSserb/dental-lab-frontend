@@ -22,6 +22,9 @@ import { RoundedBoxContainer } from "components/RoundedBoxContainer";
 import useFillJawArrays from "../../../../components/ToothMarks/hooks/useFillJawArrays.tsx";
 import CustomerSelect from "../../../../components/CustomerSelect/CustomerSelect.tsx";
 import WorkTypeSelect from "../../../../components/WorkTypeSelect/WorkTypeSelect.tsx";
+import Help from "../../../../components/Help/Help.tsx";
+import VitaShadeSelect from "../../../../components/VitaShadeSelect/VitaShadeSelect.tsx";
+import FilesInput from "../../../../components/FilesInput/FilesInput.tsx";
 
 export const CreateOrderPage = () => {
     const {
@@ -30,10 +33,7 @@ export const CreateOrderPage = () => {
         setSelectedWorkType,
         numberOfWorks,
         setNumberOfWorks,
-        selectedCustomer,
-        setSelectedCustomer,
-        comment,
-        setComment,
+        form,
         getToothMark,
         orderCost,
         saveWork,
@@ -47,7 +47,7 @@ export const CreateOrderPage = () => {
         let daysAdded = 0;
 
         while (daysAdded < workdays) {
-            date.setDate(date.getDate() + 1); // Add 1 day
+            date.setDate(date.getDate() + 1);
 
             // Check if it's a weekday (0=Sunday, 1=Monday, ..., 6=Saturday)
             if (date.getDay() !== 0 && date.getDay() !== 6) {
@@ -109,80 +109,102 @@ export const CreateOrderPage = () => {
     };
 
     return (
-        <Center>
-            <RoundedBoxContainer width="70%" minWidth="370px" padding={20}>
-                <Center>
-                    <Title order={3} mb={15}>
-                        Оформление заказа
-                    </Title>
-                </Center>
+        <form onSubmit={form.onSubmit(values => sendOrder(values))}>
+            <Center>
+                <RoundedBoxContainer width="60%" minWidth="370px" padding={20}>
+                    <Center>
+                        <Title order={3} mb={15}>
+                            Оформление заказа
+                        </Title>
+                    </Center>
 
-                <Box>
-                    <Flex gap={10}>
-                        <WorkTypeSelect onChange={setSelectedWorkType} />
+                    <Stack gap={"xs"}>
+                        <Divider />
 
-                        <TextInput
-                            w="100%"
-                            label="Количество"
-                            type="number"
-                            min="1"
-                            max="32"
-                            step="1"
-                            value={numberOfWorks}
-                            onChange={e =>
-                                setNumberOfWorks(Number(e.target.value))
-                            }
-                        />
-                    </Flex>
-
-                    <br />
-                    <Text>Зубная формула</Text>
-                    <Group>{renderTeethMarks()}</Group>
-                    <br />
-
-                    <Button
-                        type="button"
-                        variant="contained"
-                        color="success"
-                        onClick={() => saveWork()}>
-                        Добавить работу
-                    </Button>
-                    <Divider my={20} />
-                </Box>
-
-                <Box>
-                    {listOfWorks.length > 0 ? (
-                        <Stack>
-                            <Center>
-                                <Title order={3}>Данные о заказе</Title>
-                            </Center>
-                            <Textarea
-                                label="Комментарий к заказу"
-                                maxLength={512}
-                                value={comment}
-                                onChange={e => setComment(e.target.value)}
+                        <Group gap={0}>
+                            <VitaShadeSelect
+                                w={"50%"}
+                                onChange={form.getInputProps("toothColor").onChange}
+                                value={form.getInputProps("toothColor").value}
                             />
-                            <Flex
-                                direction={{ base: "column", sm: "row" }}
-                                gap={10}>
-                                <CustomerSelect
-                                    value={selectedCustomer}
-                                    onChange={setSelectedCustomer}
-                                />
-                                <TextInput
-                                    label={"Крайний срок выполнения"}
-                                    w={"100%"}
-                                    value={getDeadline().toLocaleDateString("ru")}
-                                    readOnly
-                                />
-                            </Flex>
+                            <Help message={
+                                <Text>Выбор цвета (оттенка) зуба по шкале Vita.</Text>
+                            } />
+                        </Group>
+                        <Textarea
+                            label="Комментарий к заказу"
+                            maxLength={512}
+                            {...form.getInputProps("comment")}
+                        />
+                        <Flex
+                            direction={{ base: "column", sm: "row" }}
+                            gap={10}>
+                            <CustomerSelect
+                                {...form.getInputProps("customerId")}
+                            />
+                            <TextInput
+                                label={"Крайний срок выполнения"}
+                                w={"100%"}
+                                value={getDeadline().toLocaleDateString("ru")}
+                                readOnly
+                            />
+                        </Flex>
+                        <Box>
+                            <Divider my={20} />
+                            <FilesInput {...form.getInputProps("files")} />
+                            <Divider my={20} />
+                        </Box>
+                    </Stack>
+                    <Box>
+                        <Flex gap={10}>
+                            <WorkTypeSelect onChange={setSelectedWorkType} />
+
+                            <TextInput
+                                w="100%"
+                                label="Количество"
+                                type="number"
+                                min="1"
+                                max="32"
+                                step="1"
+                                value={numberOfWorks}
+                                onChange={e =>
+                                    setNumberOfWorks(Number(e.target.value))
+                                }
+                            />
+                        </Flex>
+
+                        <br />
+                        <Text>Зубная формула</Text>
+                        <Group gap={0} align={"flex-start"}>
+                            {renderTeethMarks()}
+                            <Help message={
+                                <Stack gap={"sm"}>
+                                    <Text>Выбор номеров зубов по международной двухцифровой системе Виола.</Text>
+                                    <Text>Первая цифра номера обозначает четверть челюсти.</Text>
+                                    <Text>Вторая цифра обозначает номер зуба на данной четверти.</Text>
+                                </Stack>
+                            } />
+                        </Group>
+                        <br />
+
+                        <Button
+                            type="button"
+                            variant="contained"
+                            color="success"
+                            onClick={() => saveWork()}>
+                            Добавить работу
+                        </Button>
+                    </Box>
+                    {listOfWorks.length > 0 && (
+                        <Stack>
+                            <Divider my={20} />
                             <Text>
                                 Сумма: {orderCost.toFixed(2)} руб.
                             </Text>
                             <Button
                                 variant="contained"
-                                type="button"
-                                onClick={() => sendOrder()}>
+                                type="submit"
+                            >
                                 <Title order={4} p={10}>
                                     Заказать
                                 </Title>
@@ -210,15 +232,9 @@ export const CreateOrderPage = () => {
                                 </ScrollArea>
                             </Paper>
                         </Stack>
-                    ) : (
-                        <Center>
-                            <Title order={5}>
-                                Еще ни одной работы для заказа не добавлено
-                            </Title>
-                        </Center>
                     )}
-                </Box>
-            </RoundedBoxContainer>
-        </Center>
+                </RoundedBoxContainer>
+            </Center>
+        </form>
     );
 };

@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Customer } from './Customer';
+import type { OrderFile } from './OrderFile';
 import type { OrderStatus } from './OrderStatus';
 import type { UserProfile } from './UserProfile';
 export type OrderWithPhysician = {
@@ -16,5 +17,6 @@ export type OrderWithPhysician = {
     customer: Customer;
     deadline: string;
     commentAfterAccept?: string;
+    files: Array<OrderFile>;
 };
 
