@@ -24,10 +24,10 @@ function useLogin() {
                 console.log(err);
                 if (!err.response) {
                     setMessage("Ошибка. Не удалось подключиться к серверу.");
-                } else if (err.response.status === 401) {
-                    setMessage("Неверный почтовый адрес или пароль.");
                 } else {
-                    setMessage("Ошибка входа в систему.");
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
+                    setMessage(err.response.data.detail);
                 }
             });
     };
