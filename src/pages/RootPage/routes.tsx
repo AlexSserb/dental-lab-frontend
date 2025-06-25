@@ -13,6 +13,15 @@ import { TechSchedulePage } from "pages/tech/TechSchedulePage";
 import { Route, Routes } from "react-router-dom";
 import { SchedulePage } from "../admin/SchedulePage";
 import { OrdersContextProvider } from "../../contexts/OrdersContext/OrdersContext.tsx";
+import { AboutPage } from "../general/AboutPage";
+import { UserManualPage } from "../general/UserManualPage";
+
+export const commonRoutes = (
+    <>
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/user-manual" element={<UserManualPage />} />
+    </>
+);
 
 export const routesUnauthorized = (
     <Routes>
@@ -28,6 +37,7 @@ export const routesPhysician = (
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/create-order" element={<CreateOrderPage />} />
+        {commonRoutes}
     </Routes>
 );
 
@@ -37,6 +47,7 @@ export const routesTech = (
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/schedule" element={<TechSchedulePage />} />
+        {commonRoutes}
     </Routes>
 );
 
@@ -55,6 +66,7 @@ export const routesAdmin = (
             <Route path="/process-order" element={<OrderProcessingPage />} />
             <Route path="/assign-operations" element={<AssignOperationsPage />} />
             <Route path="/schedule" element={<SchedulePage />} />
+            {commonRoutes}
         </Routes>
     </OrdersContextProvider>
 );

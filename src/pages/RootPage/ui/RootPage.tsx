@@ -4,17 +4,8 @@ import { Header } from "components/Header";
 import { NavBar } from "components/NavBar";
 import { useUserContext } from "contexts/UserContext/useUserContext";
 import { BrowserRouter } from "react-router-dom";
-import {
-    routesAdmin,
-    routesPhysician,
-    routesTech,
-    routesUnauthorized,
-} from "../routes";
-import {
-    isLabAdmin,
-    isPhysician,
-    isRegularTech,
-} from "utils/permissions";
+import { routesAdmin, routesPhysician, routesTech, routesUnauthorized } from "../routes";
+import { isLabAdmin, isPhysician, isRegularTech } from "utils/permissions";
 
 import styles from "pages/RootPage/styles/RootPageStyles.module.scss";
 import { getPages } from "../pages";

@@ -1,4 +1,4 @@
-import { Button, Center, Divider, Group, List, MultiSelect, Stack, Text, TextInput, Title } from "@mantine/core";
+import { Button, Center, Divider, Flex, Group, List, MultiSelect, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { IconCircleCheck, IconEdit } from "@tabler/icons-react";
 import useProfile from "../hooks/useProfile";
@@ -152,6 +152,22 @@ export function ProfilePage() {
                             onClick={() => handleClickLogoutUser()}>
                             Выйти
                         </Button>
+                        <Flex gap={"xs"}>
+                            <Button
+                                variant="outline"
+                                onClick={() => navigate("/about")}
+                                flex={1}
+                            >
+                                О системе
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={() => navigate("/user-manual")}
+                                flex={1}
+                            >
+                                Руководство пользователя
+                            </Button>
+                        </Flex>
                     </>
                 ) : (
                     userData.group !== "Врач" && (
