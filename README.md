@@ -93,7 +93,7 @@ There are 3 roles in the system:
 
     4.1. In the frontend repo copy `.env.example` file as `.env` and update with the following fields with your backend server credentials:
     ```
-    VITE_API_URL=http://example.com/
+    VITE_API_URL=http://localhost:8000/api
     ```
 
     4.2. Start the frontend server.

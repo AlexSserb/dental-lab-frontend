@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_LAB_ADMIN_EMAIL: ${VITE_LAB_ADMIN_EMAIL:-}
+        VITE_LAB_ADMIN_NUMBER: ${VITE_LAB_ADMIN_NUMBER:-}
+        VITE_SYS_DEV_EMAIL: ${VITE_SYS_DEV_EMAIL:-}
+    container_name: dental-lab-frontend
+    ports:
+      - "80:80"
