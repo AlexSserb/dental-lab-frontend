@@ -4,8 +4,10 @@
 /* eslint-disable */
 import type { CancelOrder } from '../models/CancelOrder';
 import type { DataForOrderCreation } from '../models/DataForOrderCreation';
+import type { DraftFromTextRequest } from '../models/DraftFromTextRequest';
 import type { GetFileData } from '../models/GetFileData';
 import type { OrderDiscountSetter } from '../models/OrderDiscountSetter';
+import type { OrderDraftResponse } from '../models/OrderDraftResponse';
 import type { OrdersPaginatedList } from '../models/OrdersPaginatedList';
 import type { OrderStatus } from '../models/OrderStatus';
 import type { OrderWithPhysician } from '../models/OrderWithPhysician';
@@ -95,6 +97,22 @@ export class OrdersService {
             path: {
                 'fileId': fileId,
             },
+        });
+    }
+    /**
+     * @returns OrderDraftResponse
+     * @throws ApiError
+     */
+    public static draftOrderFromText({
+        requestBody,
+    }: {
+        requestBody: DraftFromTextRequest,
+    }): CancelablePromise<OrderDraftResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/orders/draft-from-text/',
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
     /**

@@ -24,6 +24,8 @@ import CustomerSelect from "../../../../components/CustomerSelect/CustomerSelect
 import WorkTypeSelect from "../../../../components/WorkTypeSelect/WorkTypeSelect.tsx";
 import Help from "../../../../components/Help/Help.tsx";
 import VitaShadeSelect from "../../../../components/VitaShadeSelect/VitaShadeSelect.tsx";
+import AiDraftInput from "../../../../components/AiDraftInput/AiDraftInput.tsx";
+import { DateInput } from "@mantine/dates";
 import FilesInput from "../../../../components/FilesInput/FilesInput.tsx";
 
 export const CreateOrderPage = () => {
@@ -38,6 +40,7 @@ export const CreateOrderPage = () => {
         orderCost,
         saveWork,
         sendOrder,
+        applyDraft,
     } = useCreateOrderPage();
 
     const { upperJaw, lowerJaw } = useFillJawArrays();
@@ -119,6 +122,7 @@ export const CreateOrderPage = () => {
                     </Center>
 
                     <Stack gap={"xs"}>
+                        <AiDraftInput onDraft={applyDraft} />
                         <Divider />
 
                         <Group gap={0}>
@@ -142,11 +146,13 @@ export const CreateOrderPage = () => {
                             <CustomerSelect
                                 {...form.getInputProps("customerId")}
                             />
-                            <TextInput
+                            <DateInput
                                 label={"Крайний срок выполнения"}
                                 w={"100%"}
-                                value={getDeadline().toLocaleDateString("ru")}
-                                readOnly
+                                valueFormat="DD.MM.YYYY"
+                                minDate={new Date()}
+                                value={form.values.deadline ?? getDeadline()}
+                                onChange={value => form.setFieldValue("deadline", value)}
                             />
                         </Flex>
                         <Box>

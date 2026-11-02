@@ -8,5 +8,6 @@ export type DataForOrderCreation = {
     workTypes: Array<WorkFromUser>;
     comment?: string;
     toothColor: string;
+    deadline?: string;
 };
 
