@@ -5,6 +5,7 @@
 * [Technologies](#technologies)
 * [Tools](#tools)
 * [Installation](#installation)
+* [Running with Docker](#docker)
 
 <a name="introduction"></a>
 ## Introduction
@@ -101,3 +102,33 @@ There are 3 roles in the system:
     npm i
     npm start
     ```
+
+<a name="docker"></a>
+## Running with Docker
+
+The recommended way to run the whole system is Docker Compose: the backend repo runs PostgreSQL and the Django API, the frontend repo builds the static bundle and serves it with nginx.
+
+**Prerequisites:** Docker Engine 24+ with the Compose v2 plugin (`docker compose`).
+
+1. Clone both repositories side by side (see [Installation](#installation)).
+
+2. Start the backend and database.
+    ```commandline
+    cd dental-lab-backend
+    cp .env.example .env
+    ```
+    Edit `.env`: set `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD` and a strong random `SECRET_KEY`. `DATABASE_HOST` is overridden to `db` by Compose. For anything other than local development, set `DEBUG=False`, `LOAD_DEMO_DATA=false`, and add your host/domain to `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS` and `CSRF_TRUSTED_ORIGINS`.
+    ```commandline
+    docker compose up -d --build
+    ```
+    On start the entrypoint applies migrations, collects static files and loads reference data (plus demo data if `LOAD_DEMO_DATA=true`). The API is available at `http://localhost:8000`.
+
+3. Start the frontend.
+    ```commandline
+    cd ../dental-lab-frontend
+    cp .env.example .env
+    docker compose up -d --build
+    ```
+    The app is served at `http://localhost` (port 80).
+
+    > `VITE_*` variables are inlined into the bundle **at build time**. Set `VITE_API_URL` to the address the *browser* uses to reach the backend (not a Docker-internal hostname), and re-run `docker compose up -d --build` after changing any of them.
