@@ -18,5 +18,9 @@ export function getPages(user: User | undefined): PageInfo[] {
         pages.push({ title: "Расписание", path: "/schedule", state: {} });
     }
 
+    if (isRegularTech(user) || isLabAdmin(user)) {
+        pages.push({ title: "База знаний", path: "/knowledge-base", state: {} });
+    }
+
     return pages;
 }

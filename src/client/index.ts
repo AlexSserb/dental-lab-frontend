@@ -21,6 +21,9 @@ export type { DraftFromTextRequest } from './models/DraftFromTextRequest';
 export type { DraftWork } from './models/DraftWork';
 export type { FullOperation } from './models/FullOperation';
 export type { GetFileData } from './models/GetFileData';
+export type { KnowledgeAskRequest } from './models/KnowledgeAskRequest';
+export type { KnowledgeAskResponse } from './models/KnowledgeAskResponse';
+export type { KnowledgeSource } from './models/KnowledgeSource';
 export type { Message } from './models/Message';
 export type { Operation } from './models/Operation';
 export type { OperationEvent } from './models/OperationEvent';
@@ -54,6 +57,7 @@ export type { WorkType } from './models/WorkType';
 
 export { AccountsService } from './services/AccountsService';
 export { DefaultService } from './services/DefaultService';
+export { KnowledgeService } from './services/KnowledgeService';
 export { OperationsService } from './services/OperationsService';
 export { OrdersService } from './services/OrdersService';
 export { WorksService } from './services/WorksService';

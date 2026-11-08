@@ -132,3 +132,10 @@ The recommended way to run the whole system is Docker Compose: the backend repo 
     The app is served at `http://localhost` (port 80).
 
     > `VITE_*` variables are inlined into the bundle **at build time**. Set `VITE_API_URL` to the address the *browser* uses to reach the backend (not a Docker-internal hostname), and re-run `docker compose up -d --build` after changing any of them.
+
+<a name="knowledge-base"></a>
+## Knowledge base page
+
+Technicians and the laboratory administrator get a "База знаний" page (`/knowledge-base`, `src/pages/general/KnowledgeBasePage`) where they ask questions to the laboratory knowledge base (RAG, see the backend README). The page shows the answer and the source fragments it was built from; fragments the model actually referred to are marked "в ответе". A department filter narrows the search, and a question still in flight is cancelled when a new one is asked.
+
+The API client for it (`KnowledgeService`, `KnowledgeAsk*`, `KnowledgeSource`) is generated like the rest: with the backend running, `npm run generate-client`.
