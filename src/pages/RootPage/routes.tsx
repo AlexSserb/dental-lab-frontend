@@ -15,6 +15,7 @@ import { SchedulePage } from "../admin/SchedulePage";
 import { OrdersContextProvider } from "../../contexts/OrdersContext/OrdersContext.tsx";
 import { AboutPage } from "../general/AboutPage";
 import { UserManualPage } from "../general/UserManualPage";
+import { KnowledgeBasePage } from "../general/KnowledgeBasePage";
 
 export const commonRoutes = (
     <>
@@ -47,6 +48,7 @@ export const routesTech = (
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/schedule" element={<TechSchedulePage />} />
+        <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
         {commonRoutes}
     </Routes>
 );
@@ -66,6 +68,7 @@ export const routesAdmin = (
             <Route path="/process-order" element={<OrderProcessingPage />} />
             <Route path="/assign-operations" element={<AssignOperationsPage />} />
             <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
             {commonRoutes}
         </Routes>
     </OrdersContextProvider>
