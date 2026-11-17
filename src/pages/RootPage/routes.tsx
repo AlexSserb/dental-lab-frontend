@@ -2,6 +2,8 @@ import { AdminOperationsPage } from "pages/admin/AdminOperationsPage";
 import { AdminOrderListPage } from "pages/admin/AdminOrderListPage";
 import { AdminOrderPage } from "pages/admin/AdminOrderPage";
 import { AssignOperationsPage } from "pages/admin/AssignOperationsPage";
+import { DefectTriageListPage } from "pages/admin/DefectTriageListPage";
+import { DefectTriageReviewPage } from "pages/admin/DefectTriageReviewPage";
 import { OrderProcessingPage } from "pages/admin/OrderProcessingPage";
 import { LoginPage } from "pages/auth/LoginPage";
 import { ProfilePage } from "pages/auth/ProfilePage";
@@ -68,6 +70,8 @@ export const routesAdmin = (
             <Route path="/process-order" element={<OrderProcessingPage />} />
             <Route path="/assign-operations" element={<AssignOperationsPage />} />
             <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/defect-triage" element={<DefectTriageListPage />} />
+            <Route path="/defect-triage/:id" element={<DefectTriageReviewPage />} />
             <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
             {commonRoutes}
         </Routes>

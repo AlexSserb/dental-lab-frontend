@@ -214,7 +214,8 @@ export class OrdersService {
         });
     }
     /**
-     * @returns any No response body
+     * Report a defect: creates a triage and returns 202 with its id (does not change any statuses)
+     * @returns any Defect triage created (SUBMITTED); the worker will process it
      * @throws ApiError
      */
     public static reportDefect({
@@ -227,6 +228,10 @@ export class OrdersService {
             url: '/orders/report-defect',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                400: `Validation error`,
+                409: `An unfinished triage already exists for this order`,
+            },
         });
     }
     /**

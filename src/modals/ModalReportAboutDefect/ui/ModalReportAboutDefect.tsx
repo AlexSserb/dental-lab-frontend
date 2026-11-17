@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Box, Button, Modal, Radio, Stack, Table, Textarea } from "@mantine/core";
 import { useDisclosure, useSet } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { Order, OrdersService, Work } from "../../../client";
 
 type Props = {
@@ -28,10 +29,21 @@ export const ModalReportAboutDefect = ({ order, works, refetchOrder }: Props) =>
             },
         })
             .then(() => {
+                notifications.show({
+                    title: "Дефект отправлен",
+                    message: "Разбор дефекта создан — администратор лаборатории рассмотрит его.",
+                    color: "green",
+                });
                 refetchOrder(order);
                 handleCloseModal();
             })
-            .catch(err => console.log(err));
+            .catch(() => {
+                notifications.show({
+                    title: "Ошибка",
+                    message: "Не удалось отправить сообщение о дефекте. Попробуйте ещё раз.",
+                    color: "red",
+                });
+            });
     };
 
     const renderWorks = () => (
