@@ -16,6 +16,7 @@ export function getPages(user: User | undefined): PageInfo[] {
 
     if (isLabAdmin(user)) {
         pages.push({ title: "Расписание", path: "/schedule", state: {} });
+        pages.push({ title: "Разборы дефектов", path: "/defect-triage", state: {} });
     }
 
     if (isRegularTech(user) || isLabAdmin(user)) {
